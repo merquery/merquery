@@ -17,7 +17,7 @@ import { PoolConnection, QueryOptions } from "mysql";
 import { FromPart, TableFromPart, SubQueryFromPart } from "../../../FromPart";
 import * as SqlString from "sqlstring";
 import {
-  buildGravisList,
+  buildIdentifier,
   buildMysqlSelectQuery
 } from "./buildMysqlSelectQuery";
 
@@ -53,7 +53,7 @@ export class MysqlQueryRunner implements QueryRunner {
 
   fetchTableColumns(schema: string, tableName: string): Promise<TableColumn[]> {
     return this.query(
-      `SHOW FULL COLUMNS FROM ${buildGravisList(schema, tableName)}`
+      `SHOW FULL COLUMNS FROM ${buildIdentifier(schema, tableName)}`
     );
   }
 

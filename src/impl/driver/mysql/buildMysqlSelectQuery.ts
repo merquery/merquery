@@ -30,12 +30,12 @@ function buildConditionOperatorString(condOperator: ConditionOperator) {
   }
 }
 
-export function buildGravisList(...parts: string[]) {
-  return parts.map(wrapGravis).join(".");
+export function buildIdentifier(...parts: string[]) {
+  return SqlString.escapeId(parts.join("."));
 }
 
 function buildTableField<T>(field: TableField<any, T>) {
-  return buildGravisList(
+  return buildIdentifier(
     ...[...buildFieldOwnerName(field.table), field.column]
   );
 }
@@ -105,7 +105,7 @@ function buildTopLevelCondition(condition: ConditionCollection) {
 }
 
 function buildTable<R extends Row>(table: Table<R>) {
-  return buildGravisList(table.schema, table.name);
+  return buildIdentifier(table.schema, table.name);
 }
 
 function buildTableFromPart(fromPart: TableFromPart<any>) {
@@ -125,7 +125,7 @@ function buildFromPart(tableLike: TableLikeOrTableLikeAlias<any>): string {
     case "Table":
       return buildTable(tableLike);
     case "TableLikeAlias":
-      return `${buildFromPart(tableLike.table)} AS ${buildGravisList(
+      return `${buildFromPart(tableLike.table)} AS ${buildIdentifier(
         tableLike.alias
       )}`;
     case "SubQueryTable":
