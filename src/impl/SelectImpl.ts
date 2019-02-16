@@ -49,7 +49,7 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  asSubquery(): SubQuery<R> {
+  asSubQuery(): SubQuery<R> {
     return { state: this.getState() };
   }
   async fetchOne(): Promise<R | undefined> {
