@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "lodash": "^4.17.11",
+    "mysql": "^2.16.0",
+    "sqlstring": "^2.3.1",
+    "typescript": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.3",
+    "@types/jest-diff": "^20.0.0",
+    "@types/lodash": "^4.14.120",
+    "@types/mysql": "^2.15.5",
+    "@types/sqlstring": "^2.2.1",
+    "jest": ">=22.0.0 <24.0.0",
+    "ts-jest": "^23.10.5"
+  },
+  "scripts": {
+    "test": "jest --watch",
+    "coverage": "jest --coverage"
+  }
+}
