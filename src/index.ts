@@ -1,4 +1,4 @@
-import { DSLContextImpl } from "./impl/DSLContextImpl";
+import { DSLContextImpl } from "./impl/dsl/DSLContextImpl";
 import { Table, subQueryTable } from "./TableLike";
 import { Row } from "./Row";
 import { TableField, fieldOf } from "./Field";
@@ -9,7 +9,7 @@ import { generate } from "./impl/generate";
 import { createConnection } from "mysql";
 import { i } from "./Util";
 import { MysqlDriver } from "./impl/driver/mysql/MysqlDriver";
-import { DSL } from "./impl/DSL";
+import { DSL } from "./impl/dsl/DSL";
 import { RowUtility } from "./impl/RowUtility";
 import { EVENT, USER, EventRow } from "./testutil/TestSchema";
 
@@ -26,10 +26,16 @@ async function main() {
     dsl
       .select(EVENT.ID)
       .from(EVENT)
-      .asSubquery(),
+      .asSubQuery(),
     "test"
   );
   const eventId = fieldOf(table, USER.ID);
+
+  const aa = dsl
+    .insertInto(USER, USER.ID, USER.NAME)
+    .values(2, "Test")
+    .values(3, "Bob")
+    .execute();
 
   const result = dsl
     .select(eventId)

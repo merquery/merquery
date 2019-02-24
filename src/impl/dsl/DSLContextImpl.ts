@@ -1,19 +1,30 @@
-import { DSLContext } from "../DSLContext";
-import { Table } from "../TableLike";
-import { SelectWhereStep } from "../SelectWhereStep";
+import { DSLContext } from "../../DSLContext";
+import { Table } from "../../TableLike";
+import { SelectWhereStep } from "../../SelectWhereStep";
 import { SelectImpl } from "./SelectImpl";
-import { Row } from "../Row";
-import { QueryRunner } from "../QueryRunner";
-import { SelectJoinStep } from "../SelectJoinStep";
-import { TransactionContext } from "../TransactionContext";
-import { MysqlQueryRunner } from "./driver/mysql/MysqlQueryRunner";
-import { DSLConfig } from "../DSLConfig";
-import { ResultQuery } from "../ResultQuery";
-import { SelectFromStep } from "../SelectFromStep";
-import { Field } from "../Field";
-import { SubQuery } from "../SubQuery";
+import { Row } from "../../Row";
+import { QueryRunner } from "../../QueryRunner";
+import { SelectJoinStep } from "../../SelectJoinStep";
+import { TransactionContext } from "../../TransactionContext";
+import { MysqlQueryRunner } from "../driver/mysql/MysqlQueryRunner";
+import { DSLConfig } from "../../DSLConfig";
+import { ResultQuery } from "../../ResultQuery";
+import { SelectFromStep } from "../../SelectFromStep";
+import { Field, TableField } from "../../Field";
+import { SubQuery } from "../../SubQuery";
+import { InsertImpl } from "./InsertImpl";
+import { InsertValuesStep1 } from "../../InsertValuesStep1";
+import { InsertValuesStep2 } from "../../InsertValuesStep2";
+import { InsertValuesStep3 } from "../../InsertValuesStep3";
 
 export class DSLContextImpl implements DSLContext {
+  insertInto<R extends Row>(
+    table: Table<R>,
+    ...fields: TableField<R, any>[]
+  ): InsertImpl<R, any, any, any> {
+    return InsertImpl.initial(this.queryRunner, table, ...fields);
+  }
+
   select(...field: Field<any>[]): SelectFromStep<Row> {
     return SelectImpl.initial<Row>(this.queryRunner).select(...field);
   }

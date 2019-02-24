@@ -4,7 +4,7 @@ import { Field, val } from "./Field";
 import { ConditionWithOperator } from "./ConditionWithOperator";
 import { ConditionBuilderFinalStep } from "./ConditionBuilderFinalStep";
 
-export type Comperator = "=";
+export type Comperator = "=" | ">=" | "<=";
 
 export interface ComperatorCondition {
   kind: "ComperatorCondition";
