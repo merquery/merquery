@@ -16,10 +16,10 @@ import { ResultRow } from "../../../QueryResult";
 import { PoolConnection, QueryOptions } from "mysql";
 import { FromPart, TableFromPart, SubQueryFromPart } from "../../../FromPart";
 import * as SqlString from "sqlstring";
-import {
-  buildIdentifier,
-  buildMysqlSelectQuery
-} from "./buildMysqlSelectQuery";
+import { buildMysqlSelectQuery } from "./querybuilding/buildMysqlSelectQuery";
+import { InsertState } from "../../../InsertState";
+import { buildMysqlInsertQuery } from "./querybuilding/buildMysqlInsertQuery";
+import { buildIdentifier } from "./querybuilding/buildIdentifier";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
@@ -38,6 +38,11 @@ export class MysqlQueryRunner implements QueryRunner {
   private isTransactionActive: boolean = false;
 
   constructor(private driver: MysqlDriver) {}
+
+  executeInsertState(query: InsertState<any>): Promise<void> {
+    const q = buildMysqlInsertQuery(query);
+    return this.query(q).then(() => {});
+  }
 
   representSelectStateAsSqlString(state: SelectState<any>): string {
     return buildMysqlSelectQuery(state);
