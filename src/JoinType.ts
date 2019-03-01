@@ -1,4 +1,5 @@
 export enum JoinType {
   Left = "LEFT",
-  Inner = "INNER"
+  Inner = "INNER",
+  Right = "RIGHT"
 }

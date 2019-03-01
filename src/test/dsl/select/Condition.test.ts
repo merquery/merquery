@@ -1,9 +1,9 @@
-import { StubQueryRunner, TestDSL } from "../../testutil/TestUtil";
-import { SelectState } from "../../SelectState";
-import { EVENT } from "../../testutil/TestSchema";
-import { eq, eqValue } from "../../Condition";
-import { ConditionWithOperator } from "../../ConditionWithOperator";
-import { ConditionOperator } from "../../ConditionOperator";
+import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import { SelectState } from "../../../SelectState";
+import { EVENT } from "../../../testutil/TestSchema";
+import { eq, eqValue } from "../../../Condition";
+import { ConditionWithOperator } from "../../../ConditionWithOperator";
+import { ConditionOperator } from "../../../ConditionOperator";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
   const condition = eqValue(EVENT.ID, 1);
