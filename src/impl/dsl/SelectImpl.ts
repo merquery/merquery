@@ -97,6 +97,19 @@ export class SelectImpl<R extends Row>
     });
   }
 
+  innerJoin(table: Table<any>): SelectJoinOnStep<R> {
+    return this.create({
+      ...this.state,
+      temporaryJoinedTable: { table: table, joinType: JoinType.Inner }
+    });
+  }
+  rightJoin(table: Table<any>): SelectJoinOnStep<R> {
+    return this.create({
+      ...this.state,
+      temporaryJoinedTable: { table: table, joinType: JoinType.Right }
+    });
+  }
+
   getState(): SelectState<R> {
     return { ...this.state };
   }

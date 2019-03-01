@@ -1,6 +1,6 @@
-import { StubQueryRunner, TestDSL } from "../../testutil/TestUtil";
-import { SelectState } from "../../SelectState";
-import { EVENT } from "../../testutil/TestSchema";
+import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import { SelectState } from "../../../SelectState";
+import { EVENT } from "../../../testutil/TestSchema";
 
 test("limit sets SelectState.limit for 0", async () => {
   const queryRunner = StubQueryRunner({
