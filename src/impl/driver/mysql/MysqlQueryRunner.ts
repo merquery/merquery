@@ -42,8 +42,6 @@ export class MysqlQueryRunner implements QueryRunner {
   executeInsertState(query: InsertState<any>): Promise<void> {
     const q = buildMysqlInsertQuery(query);
 
-    console.log("Insert Query", q);
-
     return this.query(q).then(() => {});
   }
 
@@ -103,8 +101,6 @@ export class MysqlQueryRunner implements QueryRunner {
     const connection = await this.getConnection();
     return new Promise((resolve, reject) => {
       connection.query(query, (err, result) => {
-        console.log("Res", result);
-
         err ? reject(err) : resolve(result);
       });
     });
@@ -113,13 +109,9 @@ export class MysqlQueryRunner implements QueryRunner {
   async queryResult(query: string): Promise<ResultRow[]> {
     const connection = await this.getConnection();
     return new Promise((resolve, reject) => {
-      console.log(`Executing ${query}`);
-
       connection.query(
         { nestTables: true, sql: query } as QueryOptions,
         (err, result) => {
-          console.log("Res", result);
-
           err ? reject(err) : resolve(result);
         }
       );
