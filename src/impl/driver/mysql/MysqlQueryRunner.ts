@@ -41,6 +41,9 @@ export class MysqlQueryRunner implements QueryRunner {
 
   executeInsertState(query: InsertState<any>): Promise<void> {
     const q = buildMysqlInsertQuery(query);
+
+    console.log("Insert Query", q);
+
     return this.query(q).then(() => {});
   }
 

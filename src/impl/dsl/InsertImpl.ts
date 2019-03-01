@@ -8,15 +8,50 @@ import { InsertValuesStep3 } from "../../InsertValuesStep3";
 import { InsertFinalStep } from "../../InsertFinalStep";
 import { QueryRunner } from "../../QueryRunner";
 import { SubQuery } from "../../SubQuery";
+import { InsertOnDuplicateKeySetStep } from "../../InsertOnDuplicateKeySetStep";
+import { InsertOnDuplicateKeyStep } from "../../InsertOnDuplicateKeyStep";
+import { InsertOnDuplicateKeySetMoreStep } from "../../InsertOnDuplicateKeySetMoreStep";
 
 export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
   implements
     InsertValuesStep1<R, T1>,
     InsertValuesStep2<R, T1, T2>,
     InsertValuesStep3<R, T1, T2, T3>,
+    InsertOnDuplicateKeySetStep<R>,
+    InsertOnDuplicateKeyStep<R>,
+    InsertOnDuplicateKeySetMoreStep<R>,
     InsertFinalStep<R> {
-  asSubQuery(): SubQuery<R> {
-    throw new Error("Method not implemented.");
+  onDuplicateKeyUpdate() {
+    return this.create({
+      ...this.state,
+      duplicateKey: {
+        kind: "OnDuplicateKeyUpdate",
+        updates: []
+      }
+    });
+  }
+  onDuplicateKeyIgnore() {
+    return this.create({
+      ...this.state,
+      duplicateKey: {
+        kind: "OnDuplicateKeyIgnore"
+      }
+    });
+  }
+  set<T>(column: TableField<R, T>, value: T) {
+    if (
+      !this.state.duplicateKey ||
+      this.state.duplicateKey.kind !== "OnDuplicateKeyUpdate"
+    )
+      throw new Error("Invalid state");
+
+    return this.create({
+      ...this.state,
+      duplicateKey: {
+        ...this.state.duplicateKey,
+        updates: [...this.state.duplicateKey.updates, [column, value]]
+      }
+    });
   }
 
   execute(): Promise<void> {
@@ -27,15 +62,15 @@ export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
     return this.addValues(values);
   }
 
-  private addFields(...values: Field<any>[]) {
+  private addFields(values: Field<any>[]) {
     return this.create({
       ...this.state,
       values: [...this.state.values, values]
     });
   }
 
-  private addValues(...values: any[]) {
-    return this.addFields(...values.map(val));
+  private addValues(valuesArr: any[]) {
+    return this.addFields(valuesArr.map(val));
   }
 
   constructor(
