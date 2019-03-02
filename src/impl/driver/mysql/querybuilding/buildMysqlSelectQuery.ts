@@ -8,6 +8,7 @@ import { buildOrderByCollection } from "./buildOrderByCollection";
 import { buildJoinedTableWithOnCondition } from "./buildJoinedTableWithOnCondition";
 import { buildCondition } from "./buildCondition";
 import { buildHavingCondition } from "./buildHavingCondition";
+import { buildLockMode } from "./buildLockMode";
 
 export function buildMysqlSelectQuery(state: SelectState<any>): string {
   let query: string = "";
@@ -52,6 +53,10 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
     if (typeof state.offset !== "undefined") {
       query += ` OFFSET ${SqlString.escape(state.offset)}`;
     }
+  }
+
+  if (typeof state.lockMode !== "undefined") {
+    query += ` ${buildLockMode(state.lockMode)}`;
   }
 
   return query;

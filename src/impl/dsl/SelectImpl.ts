@@ -27,6 +27,8 @@ import { SubQuery } from "../../SubQuery";
 import { ConditionBuilderImpl } from "../ConditionBuilderImpl";
 import { ConditionBuilder } from "../../ConditionBuilder";
 import { SelectHavingStep } from "../../SelectHavingStep";
+import { SelectForUpdate } from "../../SelectForUpdate";
+import { LockMode } from "../../LockMode";
 
 export class SelectImpl<R extends Row>
   implements
@@ -40,7 +42,22 @@ export class SelectImpl<R extends Row>
     SelectOrderByStep<R>,
     SelectLimitStep<R>,
     SelectOffsetStep<R>,
-    SelectFinalStep<R> {
+    SelectFinalStep<R>,
+    SelectForUpdate<R> {
+  forUpdate() {
+    return this.create({
+      ...this.state,
+      lockMode: LockMode.ForUpdate
+    });
+  }
+
+  lockInShareMode() {
+    return this.create({
+      ...this.state,
+      lockMode: LockMode.LockInShareMode
+    });
+  }
+
   having(condition: Condition): SelectOrderByStep<R> {
     return this.create({
       ...this.state,
@@ -122,14 +139,14 @@ export class SelectImpl<R extends Row>
     return { ...this.state };
   }
 
-  groupBy<T>(...fields: Field<any>[]): SelectGroupByStep<R> {
+  groupBy<T>(...fields: Field<any>[]) {
     return this.create({
       ...this.state,
       groupBy: { fields: fields }
     });
   }
 
-  limit(count: number): SelectOffsetStep<R> {
+  limit(count: number) {
     if (count < 0) throw new Error("Limit needs to be nonnegative");
 
     return this.create({
@@ -138,7 +155,7 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  orderByAscending<T>(field: TableField<R, T>): SelectOrderByStep<R> {
+  orderByAscending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
       orderBy: [
@@ -148,7 +165,7 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  orderByDescending<T>(field: TableField<R, T>): SelectOrderByStep<R> {
+  orderByDescending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
       orderBy: [
@@ -158,7 +175,7 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  offset(count: number): SelectFinalStep<R> {
+  offset(count: number) {
     if (count < 0) throw new Error("Offset needs to be nonnegative");
 
     return this.create({
