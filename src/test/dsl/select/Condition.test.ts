@@ -10,7 +10,6 @@ test("where adds a condition to SelectState.conditions with AND operator", async
 
   const queryRunner = StubQueryRunner({
     executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.condition).not.toBeUndefined();
       expect(state.condition!.conditions).toEqual([
         {
           condition: condition,
