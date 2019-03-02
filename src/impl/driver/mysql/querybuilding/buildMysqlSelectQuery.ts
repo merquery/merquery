@@ -6,6 +6,8 @@ import { buildFromPartList } from "./buildFromPartList";
 import { buildFieldCollection } from "./buildFieldCollection";
 import { buildOrderByCollection } from "./buildOrderByCollection";
 import { buildJoinedTableWithOnCondition } from "./buildJoinedTableWithOnCondition";
+import { buildCondition } from "./buildCondition";
+import { buildHavingCondition } from "./buildHavingCondition";
 
 export function buildMysqlSelectQuery(state: SelectState<any>): string {
   let query: string = "";
@@ -34,6 +36,10 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
 
   if (typeof state.groupBy !== "undefined" && state.groupBy.fields.length > 0) {
     query += ` GROUP BY ${buildFieldCollection(state.groupBy.fields)}`;
+  }
+
+  if (state.having) {
+    query += ` HAVING ${buildHavingCondition(state.having)}`;
   }
 
   if (state.orderBy.length > 0) {
