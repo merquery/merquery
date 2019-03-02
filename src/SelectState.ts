@@ -10,6 +10,7 @@ import { Row } from "./Row";
 import { Field } from "./Field";
 import { FromPart } from "./FromPart";
 import { ConditionCollection, Condition } from "./Condition";
+import { LockMode } from "./LockMode";
 
 export interface SelectState<R extends Row> {
   recordTable?: Table<R>;
@@ -23,4 +24,5 @@ export interface SelectState<R extends Row> {
   joins: JoinedTableWithOnCondition[];
   columns: Field<any>[];
   having?: Condition;
+  lockMode?: LockMode;
 }
