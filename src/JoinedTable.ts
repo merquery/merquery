@@ -1,9 +1,9 @@
-import { Table } from "./TableLike";
+import { Table, TableLikeOrTableLikeAlias } from "./TableLike";
 import { JoinType } from "./JoinType";
 import { Condition } from "./Condition";
 
 export interface TemporaryJoinedTable {
-  table: Table<any>;
+  table: TableLikeOrTableLikeAlias<any>;
   joinType: JoinType;
 }
 

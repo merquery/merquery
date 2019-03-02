@@ -5,6 +5,7 @@ import { buildTopLevelCondition } from "./buildTopLevelCondition";
 import { buildFromPartList } from "./buildFromPartList";
 import { buildFieldCollection } from "./buildFieldCollection";
 import { buildOrderByCollection } from "./buildOrderByCollection";
+import { buildJoinedTableWithOnCondition } from "./buildJoinedTableWithOnCondition";
 
 export function buildMysqlSelectQuery(state: SelectState<any>): string {
   let query: string = "";
@@ -21,6 +22,10 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
 
   if (state.from.length > 0) {
     query += ` FROM ${buildFromPartList(state.from)}`;
+  }
+
+  if (state.joins.length > 0) {
+    query += ` ${state.joins.map(buildJoinedTableWithOnCondition).join(" ")}`;
   }
 
   if (state.condition && state.condition.conditions.length > 0) {
