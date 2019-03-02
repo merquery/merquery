@@ -17,7 +17,7 @@
     "tslint-config-airbnb": "^5.11.1"
   },
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
     "coverage": "jest --coverage"
   }
 }
