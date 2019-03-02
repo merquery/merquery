@@ -26,6 +26,7 @@ import { ResultRow } from "../../QueryResult";
 import { SubQuery } from "../../SubQuery";
 import { ConditionBuilderImpl } from "../ConditionBuilderImpl";
 import { ConditionBuilder } from "../../ConditionBuilder";
+import { SelectHavingStep } from "../../SelectHavingStep";
 
 export class SelectImpl<R extends Row>
   implements
@@ -35,10 +36,17 @@ export class SelectImpl<R extends Row>
     SelectWhereStep<R>,
     SelectConditionStep<R>,
     SelectGroupByStep<R>,
+    SelectHavingStep<R>,
     SelectOrderByStep<R>,
     SelectLimitStep<R>,
     SelectOffsetStep<R>,
     SelectFinalStep<R> {
+  having(condition: Condition): SelectOrderByStep<R> {
+    return this.create({
+      ...this.state,
+      having: condition
+    });
+  }
   asSqlString(): string {
     return this.queryRunner.representSelectStateAsSqlString(this.state);
   }

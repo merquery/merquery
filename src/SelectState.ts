@@ -9,7 +9,7 @@ import {
 import { Row } from "./Row";
 import { Field } from "./Field";
 import { FromPart } from "./FromPart";
-import { ConditionCollection } from "./Condition";
+import { ConditionCollection, Condition } from "./Condition";
 
 export interface SelectState<R extends Row> {
   recordTable?: Table<R>;
@@ -22,4 +22,5 @@ export interface SelectState<R extends Row> {
   temporaryJoinedTable?: TemporaryJoinedTable;
   joins: JoinedTableWithOnCondition[];
   columns: Field<any>[];
+  having?: Condition;
 }
