@@ -1,9 +1,10 @@
 language: node_js
-scripts:
-  - npm install codecov -g
-after_success:
-  - codecov
 node_js:
   - 10
   - 9
   - 8
+
+scripts:
+  - npm install codecov -g
+after_success:
+  - codecov
