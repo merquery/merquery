@@ -1,3 +1,8 @@
 import { Row } from "./Row";
-import { SubQuery } from "./SubQuery";
-export interface Query<R extends Row> {}
+export interface Query<R extends Row> {
+  /**
+   * SQL String representation of the ResultQuery
+   * @returns SQL String representation
+   */
+  asSqlString(): string;
+}

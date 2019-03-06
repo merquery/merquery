@@ -22,10 +22,4 @@ export interface ResultQuery<R extends Row> extends Query<R> {
    * @returns A promise which eventually returns an array, after it has been mapped
    */
   fetchAllMapped<M>(mapper: (row: ResultRow) => M): Promise<M[]>;
-
-  /**
-   * SQL String representation of the ResultQuery
-   * @returns SQL String representation
-   */
-  asSqlString(): string;
 }

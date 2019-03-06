@@ -5,6 +5,14 @@ export const NOT_IMPLEMENTED = () => {
   throw new Error("Not implemented");
 };
 
+export function expectState<T>(cb: (state: T) => void) {
+  const a = jest.fn(async (state: T) => {
+    return cb(state);
+  });
+
+  return a;
+}
+
 export function expectSelectState(cb: (state: SelectState<any>) => void) {
   const a = jest.fn(async (state: SelectState<any>) => {
     cb(state);
@@ -21,8 +29,11 @@ export function StubQueryRunner(props: Partial<QueryRunner>): QueryRunner {
     rollBack: NOT_IMPLEMENTED,
     release: NOT_IMPLEMENTED,
     executeSelectState: NOT_IMPLEMENTED,
+    executeUpdateState: NOT_IMPLEMENTED,
     representSelectStateAsSqlString: NOT_IMPLEMENTED,
     executeInsertState: NOT_IMPLEMENTED,
+    representInsertStateAsSqlString: NOT_IMPLEMENTED,
+    representUpdateStateAsSqlString: NOT_IMPLEMENTED,
     ...props
   };
 }

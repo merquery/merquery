@@ -16,8 +16,20 @@ import { InsertImpl } from "./InsertImpl";
 import { InsertValuesStep1 } from "../../InsertValuesStep1";
 import { InsertValuesStep2 } from "../../InsertValuesStep2";
 import { InsertValuesStep3 } from "../../InsertValuesStep3";
+import { UpdateSetStep } from "../../UpdateSetStep";
+import { UpdateImpl } from "./UpdateImpl";
 
 export class DSLContextImpl implements DSLContext {
+  private queryRunner: QueryRunner;
+
+  constructor(private config: DSLConfig) {
+    this.queryRunner = config.queryRunner || config.driver.createQueryRunner();
+  }
+
+  update<R extends Row>(table: Table<R>): UpdateSetStep<R> {
+    return UpdateImpl.initial(this.queryRunner, table);
+  }
+
   insertInto<R extends Row>(
     table: Table<R>,
     ...fields: TableField<R, any>[]
@@ -27,11 +39,6 @@ export class DSLContextImpl implements DSLContext {
 
   select(...field: Field<any>[]): SelectFromStep<Row> {
     return SelectImpl.initial<Row>(this.queryRunner).select(...field);
-  }
-  private queryRunner: QueryRunner;
-
-  constructor(private config: DSLConfig) {
-    this.queryRunner = config.queryRunner || config.driver.createQueryRunner();
   }
 
   selectFrom<R extends Row>(table: Table<R>): SelectJoinStep<R> {

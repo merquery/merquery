@@ -21,6 +21,14 @@ export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
     InsertOnDuplicateKeyStep<R>,
     InsertOnDuplicateKeySetMoreStep<R>,
     InsertFinalStep<R> {
+  constructor(
+    private state: InsertState<R>,
+    private queryRunner: QueryRunner
+  ) {}
+  asSqlString(): string {
+    return this.queryRunner.representInsertStateAsSqlString(this.state);
+  }
+
   onDuplicateKeyUpdate() {
     return this.create({
       ...this.state,
@@ -72,11 +80,6 @@ export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
   private addValues(valuesArr: any[]) {
     return this.addFields(valuesArr.map(val));
   }
-
-  constructor(
-    private state: InsertState<R>,
-    private queryRunner: QueryRunner
-  ) {}
 
   static initial<R extends Row>(
     queryRunner: QueryRunner,

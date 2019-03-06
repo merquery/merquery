@@ -44,6 +44,11 @@ export class SelectImpl<R extends Row>
     SelectOffsetStep<R>,
     SelectFinalStep<R>,
     SelectForUpdate<R> {
+  constructor(
+    private state: SelectState<R>,
+    private queryRunner: QueryRunner
+  ) {}
+
   forUpdate() {
     return this.create({
       ...this.state,
@@ -183,10 +188,6 @@ export class SelectImpl<R extends Row>
       offset: count
     });
   }
-  constructor(
-    private state: SelectState<R>,
-    private queryRunner: QueryRunner
-  ) {}
 
   static initial<R extends Row>(executor: QueryRunner) {
     return new SelectImpl<R>(
@@ -231,7 +232,7 @@ export class SelectImpl<R extends Row>
 
     return this.create({
       ...this.state,
-      condition: ConditionBuilderImpl.initial(this.state.condition)
+      condition: ConditionBuilderImpl.extend(this.state.condition)
         .and(condition)
         .getCondition()
     });
@@ -242,7 +243,7 @@ export class SelectImpl<R extends Row>
 
     return this.create({
       ...this.state,
-      condition: ConditionBuilderImpl.initial(this.state.condition)
+      condition: ConditionBuilderImpl.extend(this.state.condition)
         .or(condition)
         .getCondition()
     });
