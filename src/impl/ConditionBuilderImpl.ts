@@ -13,6 +13,10 @@ export class ConditionBuilderImpl implements ConditionBuilder {
     });
   }
 
+  static extend(condition: ConditionCollection) {
+    return new ConditionBuilderImpl(condition);
+  }
+
   constructor(private conditionCollection: ConditionCollection) {}
 
   and(condition: Condition): ConditionBuilderImpl {

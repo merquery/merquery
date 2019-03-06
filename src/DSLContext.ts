@@ -11,6 +11,7 @@ import { InsertValuesStep1 } from "./InsertValuesStep1";
 import { InsertValuesStep2 } from "./InsertValuesStep2";
 import { InsertValuesStep3 } from "./InsertValuesStep3";
 import { InsertValuesStep } from "./InsertValuesStep";
+import { UpdateSetStep } from "./UpdateSetStep";
 
 export interface DSLContext {
   selectFrom<R extends Row>(table: Table<R>): SelectJoinStep<R>;
@@ -45,4 +46,6 @@ export interface DSLContext {
     table: Table<R>,
     ...fields: TableField<R, any>[]
   ): InsertValuesStep<R>;
+
+  update<R extends Row>(table: Table<R>): UpdateSetStep<R>;
 }

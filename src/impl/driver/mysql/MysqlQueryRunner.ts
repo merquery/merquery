@@ -20,6 +20,7 @@ import { buildMysqlSelectQuery } from "./querybuilding/buildMysqlSelectQuery";
 import { InsertState } from "../../../InsertState";
 import { buildMysqlInsertQuery } from "./querybuilding/buildMysqlInsertQuery";
 import { buildIdentifier } from "./querybuilding/buildIdentifier";
+import { UpdateState } from "../../../UpdateState";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
@@ -38,6 +39,17 @@ export class MysqlQueryRunner implements QueryRunner {
   private isTransactionActive: boolean = false;
 
   constructor(private driver: MysqlDriver) {}
+
+  executeUpdateState(query: UpdateState<any>): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  representInsertStateAsSqlString(state: InsertState<any>): string {
+    throw new Error("Method not implemented.");
+  }
+  representUpdateStateAsSqlString(state: UpdateState<any>): string {
+    throw new Error("Method not implemented.");
+  }
 
   executeInsertState(query: InsertState<any>): Promise<void> {
     const q = buildMysqlInsertQuery(query);

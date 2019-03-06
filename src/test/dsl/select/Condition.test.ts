@@ -1,7 +1,7 @@
 import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
-import { eq, eqValue } from "../../../Condition";
+import { eq, eqValue, ConditionCollection } from "../../../Condition";
 import { ConditionWithOperator } from "../../../ConditionWithOperator";
 import { ConditionOperator } from "../../../ConditionOperator";
 
@@ -75,6 +75,52 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
     .selectFrom(EVENT)
     .where(firstCondition)
     .or(testCondition)
+    .fetchAll();
+
+  expect(queryRunner.executeSelectState).toBeCalled();
+});
+
+test("combinations of and or builds a ConditionCollection", async () => {
+  const t1 = eqValue(EVENT.ID, 1);
+  const t2 = eqValue(EVENT.NAME, "Test");
+  const t3 = eqValue(EVENT.ID, 5);
+  const t4 = eqValue(EVENT.NAME, "Hallo");
+
+  const queryRunner = StubQueryRunner({
+    executeSelectState: jest.fn(async (state: SelectState<any>) => {
+      expect(state.condition).toEqual({
+        kind: "ConditionCollection",
+        conditions: [
+          {
+            condition: t1,
+            operator: ConditionOperator.And
+          },
+          {
+            condition: t2,
+            operator: ConditionOperator.Or
+          },
+          {
+            condition: t3,
+            operator: ConditionOperator.And
+          },
+          {
+            condition: t4,
+            operator: ConditionOperator.And
+          }
+        ]
+      });
+
+      return [];
+    })
+  });
+
+  const dsl = TestDSL(queryRunner);
+  await dsl
+    .selectFrom(EVENT)
+    .where(t1)
+    .or(t2)
+    .and(t3)
+    .and(t4)
     .fetchAll();
 
   expect(queryRunner.executeSelectState).toBeCalled();
