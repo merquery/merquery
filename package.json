@@ -7,6 +7,10 @@
     "typescript": "^3.3.1"
   },
   "devDependencies": {
+    "@stryker-mutator/core": "^1.1.0",
+    "@stryker-mutator/html-reporter": "^1.1.0",
+    "@stryker-mutator/jest-runner": "^1.1.0",
+    "@stryker-mutator/typescript": "^1.1.0",
     "@types/jest": "^24.0.3",
     "@types/jest-diff": "^20.0.0",
     "@types/lodash": "^4.14.120",
@@ -17,7 +21,9 @@
     "tslint-config-airbnb": "^5.11.1"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage",
+    "testdev": "jest --watch --coverage",
+    "testwc": "jest",
     "coverage": "jest --coverage"
   }
 }
