@@ -149,3 +149,17 @@ test("buildCondition 2", () => {
     })
   ).toBe("(1 = 2 AND (3 = 4 OR 5 = 6) AND 9 = 10) OR 7 = 8");
 });
+
+test("buildCondition with empty collection", () => {
+  expect(
+    buildCondition(
+      {
+        kind: "ConditionCollection",
+        conditions: [
+          { operator: ConditionOperator.And, condition: eq(val(1), val(2)) }
+        ]
+      },
+      2
+    )
+  ).toBe("1 = 2");
+});
