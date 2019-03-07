@@ -42,8 +42,8 @@ export class SelectImpl<R extends Row>
     SelectOrderByStep<R>,
     SelectLimitStep<R>,
     SelectOffsetStep<R>,
-    SelectFinalStep<R>,
-    SelectForUpdate<R> {
+    SelectForUpdate<R>,
+    SelectFinalStep<R> {
   constructor(
     private state: SelectState<R>,
     private queryRunner: QueryRunner
@@ -90,6 +90,11 @@ export class SelectImpl<R extends Row>
   async fetchAllMapped<M>(mapper: (result: ResultRow) => M): Promise<M[]> {
     const results = await this.queryRunner.executeSelectState(this.state);
 
+    if (!Array.isArray(results))
+      throw new Error(
+        "executeSelectState didn't return a array. Did you forget to mock the return value?"
+      );
+
     return results.map(mapper);
   }
 
@@ -113,7 +118,7 @@ export class SelectImpl<R extends Row>
       ...this.state,
 
       joins: [
-        ...this.state.joins,
+        ...(this.state.joins || []),
         { ...this.state.temporaryJoinedTable, condition: condition }
       ],
       temporaryJoinedTable: undefined
@@ -164,7 +169,7 @@ export class SelectImpl<R extends Row>
     return this.create({
       ...this.state,
       orderBy: [
-        ...this.state.orderBy,
+        ...(this.state.orderBy || []),
         { field: field, direction: OrderDirection.Ascending }
       ]
     });
@@ -174,7 +179,7 @@ export class SelectImpl<R extends Row>
     return this.create({
       ...this.state,
       orderBy: [
-        ...this.state.orderBy,
+        ...(this.state.orderBy || []),
         { field: field, direction: OrderDirection.Descending }
       ]
     });

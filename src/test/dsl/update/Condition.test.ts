@@ -57,7 +57,7 @@ test("where().and() sets two conditions connected by and UpdateState.condition",
   });
 });
 
-test("where().and() sets two conditions connected by and UpdateState.condition", () => {
+test("where().or() sets two conditions connected by or UpdateState.condition", () => {
   const queryRunner = StubQueryRunner({
     executeUpdateState: jest.fn()
   });
