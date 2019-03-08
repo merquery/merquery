@@ -9,6 +9,7 @@ export function createSelectState<R extends Row>(
     from: [],
     joins: [],
     orderBy: [],
+    groupBy: [],
     ...state
   };
 }

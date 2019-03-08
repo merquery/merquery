@@ -18,7 +18,7 @@ export interface SelectState<R extends Row> {
   condition?: ConditionCollection;
   limit?: number;
   offset?: number;
-  groupBy?: FieldCollection;
+  groupBy: Field<any>[];
   orderBy: OrderByWithDirection[];
   temporaryJoinedTable?: TemporaryJoinedTable;
   joins: JoinedTableWithOnCondition[];

@@ -1,7 +1,6 @@
 import { SelectState } from "../../../../SelectState";
 import { TableField, ValueField, Field } from "../../../../Field";
 import * as SqlString from "sqlstring";
-import { buildTopLevelCondition } from "./buildTopLevelCondition";
 import { buildFromPartList } from "./buildFromPartList";
 import { buildFieldCollection } from "./buildFieldCollection";
 import { buildOrderByCollection } from "./buildOrderByCollection";
@@ -9,6 +8,7 @@ import { buildJoinedTableWithOnCondition } from "./buildJoinedTableWithOnConditi
 import { buildCondition } from "./buildCondition";
 import { buildHavingCondition } from "./buildHavingCondition";
 import { buildLockMode } from "./buildLockMode";
+import { buildConditions } from "./buildConditions";
 
 export function buildMysqlSelectQuery(state: SelectState<any>): string {
   let query: string = "";
@@ -17,26 +17,26 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
 
   if (state.recordTable || state.columns.length === 0) {
     query += ` *`;
-  } else if (state.columns.length > 0) {
-    query += ` ${buildFieldCollection(state.columns)}`;
   } else {
-    throw new Error("Invalid columns");
+    query += ` ${buildFieldCollection(state.columns)}`;
   }
 
   if (state.from.length > 0) {
     query += ` FROM ${buildFromPartList(state.from)}`;
+  } else {
+    throw new Error("Atleast 1 table needs to be selected");
   }
 
   if (state.joins.length > 0) {
     query += ` ${state.joins.map(buildJoinedTableWithOnCondition).join(" ")}`;
   }
 
-  if (state.condition && state.condition.conditions.length > 0) {
-    query += ` WHERE ${buildTopLevelCondition(state.condition)}`;
+  if (state.condition) {
+    query += ` WHERE ${buildConditions(state.condition)}`;
   }
 
-  if (typeof state.groupBy !== "undefined" && state.groupBy.fields.length > 0) {
-    query += ` GROUP BY ${buildFieldCollection(state.groupBy.fields)}`;
+  if (state.groupBy.length > 0) {
+    query += ` GROUP BY ${buildFieldCollection(state.groupBy)}`;
   }
 
   if (state.having) {

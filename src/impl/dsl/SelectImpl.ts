@@ -152,7 +152,7 @@ export class SelectImpl<R extends Row>
   groupBy<T>(...fields: Field<any>[]) {
     return this.create({
       ...this.state,
-      groupBy: { fields: fields }
+      groupBy: fields
     });
   }
 
@@ -200,7 +200,8 @@ export class SelectImpl<R extends Row>
         from: [],
         orderBy: [],
         joins: [],
-        columns: []
+        columns: [],
+        groupBy: []
       },
       executor
     );
