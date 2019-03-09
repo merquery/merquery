@@ -32,6 +32,8 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
   }
 
   if (state.condition) {
+    if (state.condition.conditions.length < 1)
+      throw new Error("Needs atleast 1 element as condition");
     query += ` WHERE ${buildConditions(state.condition)}`;
   }
 
