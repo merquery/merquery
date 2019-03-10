@@ -8,8 +8,7 @@ module.exports = function(config) {
     testFramwork: "jest",
     coverageAnalysis: "off",
     tsconfigFile: "tsconfig.json",
-    mutate: ["src/**/*.ts", "!src/testutil/TestSchema.ts"],
-    logLevel: "trace",
-    maxConcurrentTestRunners: 6
+    mutate: ["src/**/*.ts", "!src/testutil/TestSchema.ts", "!src/test/**/*.ts"],
+    maxConcurrentTestRunners: 4
   });
 };

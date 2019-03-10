@@ -29,6 +29,8 @@ import { ConditionBuilder } from "../../ConditionBuilder";
 import { SelectHavingStep } from "../../SelectHavingStep";
 import { SelectForUpdate } from "../../SelectForUpdate";
 import { LockMode } from "../../LockMode";
+import { OneOrMoreArrayUtil } from "../OneOrMoreArray";
+import { createSelectState } from "../createSelectState";
 
 export class SelectImpl<R extends Row>
   implements
@@ -116,11 +118,9 @@ export class SelectImpl<R extends Row>
 
     return this.create({
       ...this.state,
-
-      joins: [
-        ...(this.state.joins || []),
+      joins: OneOrMoreArrayUtil.append(this.state.joins, [
         { ...this.state.temporaryJoinedTable, condition: condition }
-      ],
+      ]),
       temporaryJoinedTable: undefined
     });
   }
@@ -195,16 +195,7 @@ export class SelectImpl<R extends Row>
   }
 
   static initial<R extends Row>(executor: QueryRunner) {
-    return new SelectImpl<R>(
-      {
-        from: [],
-        orderBy: [],
-        joins: [],
-        columns: [],
-        groupBy: []
-      },
-      executor
-    );
+    return new SelectImpl<R>(createSelectState(), executor);
   }
 
   private create(state: SelectState<R>) {

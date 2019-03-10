@@ -12,6 +12,7 @@ import {
   createSelectState,
   createSelectStateWithRecordTable
 } from "../../../impl/createSelectState";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
   const condition = eqValue(EVENT.ID, 1);
@@ -31,12 +32,12 @@ test("where adds a condition to SelectState.conditions with AND operator", async
       {
         condition: {
           kind: "ConditionCollection",
-          conditions: [
+          conditions: OneOrMoreArrayUtil.fromArray([
             {
               condition: condition,
               operator: ConditionOperator.And
             }
-          ]
+          ])
         }
       },
       EVENT
@@ -64,7 +65,7 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
       {
         condition: {
           kind: "ConditionCollection",
-          conditions: [
+          conditions: OneOrMoreArrayUtil.fromArray([
             {
               condition: firstCondition,
               operator: ConditionOperator.And
@@ -73,7 +74,7 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
               condition: testCondition,
               operator: ConditionOperator.And
             }
-          ]
+          ])
         }
       },
       EVENT
@@ -101,7 +102,7 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
       {
         condition: {
           kind: "ConditionCollection",
-          conditions: [
+          conditions: OneOrMoreArrayUtil.fromArray([
             {
               condition: firstCondition,
               operator: ConditionOperator.And
@@ -110,7 +111,7 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
               condition: testCondition,
               operator: ConditionOperator.Or
             }
-          ]
+          ])
         }
       },
       EVENT
@@ -142,7 +143,7 @@ test("combinations of and or builds a ConditionCollection", async () => {
       {
         condition: {
           kind: "ConditionCollection",
-          conditions: [
+          conditions: OneOrMoreArrayUtil.fromArray([
             {
               condition: t1,
               operator: ConditionOperator.And
@@ -159,7 +160,7 @@ test("combinations of and or builds a ConditionCollection", async () => {
               condition: t4,
               operator: ConditionOperator.And
             }
-          ]
+          ])
         }
       },
       EVENT

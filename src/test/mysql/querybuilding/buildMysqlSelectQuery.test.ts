@@ -10,22 +10,13 @@ import { val } from "../../../Field";
 import { JoinType } from "../../../JoinType";
 import { OrderDirection } from "../../../OrderDirection";
 import { LockMode } from "../../../LockMode";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
+import { ConditionWithOperator } from "../../../ConditionWithOperator";
 
 test("buildMysqlSelectQuery selects all columns when recordTable is set", () => {
   expect(
     buildMysqlSelectQuery(createSelectStateWithRecordTable({}, EVENT))
   ).toBe("SELECT * FROM `projectclub`.`event`");
-});
-
-test("buildMysqlSelectQuery throws exception when no conditions in array", () => {
-  expect(() =>
-    buildMysqlSelectQuery(
-      createSelectStateWithRecordTable(
-        { condition: { kind: "ConditionCollection", conditions: [] } },
-        EVENT
-      )
-    )
-  ).toThrowError("Needs atleast 1 element as condition");
 });
 
 test("buildMysqlSelectQuery selects all columns when column array is empty", () => {
@@ -66,7 +57,7 @@ test("buildMysqlSelectQuery with SelectState.joins adds join expression", () => 
     buildMysqlSelectQuery(
       createSelectStateWithRecordTable(
         {
-          joins: [
+          joins: OneOrMoreArrayUtil.fromArray([
             {
               condition: eq(val(1), val(2)),
               joinType: JoinType.Inner,
@@ -77,7 +68,7 @@ test("buildMysqlSelectQuery with SelectState.joins adds join expression", () => 
               joinType: JoinType.Left,
               table: USER
             }
-          ]
+          ])
         },
         EVENT
       )
@@ -94,12 +85,12 @@ test("buildMysqlSelectQuery with SelectState.condition adds where expression", (
         {
           condition: {
             kind: "ConditionCollection",
-            conditions: [
+            conditions: OneOrMoreArrayUtil.fromArray<ConditionWithOperator>([
               {
                 operator: ConditionOperator.And,
                 condition: eq(val(1), val(2))
               }
-            ]
+            ])
           }
         },
         EVENT
@@ -217,13 +208,13 @@ test("buildMysqlSelectQuery with all present builds all clauses", () => {
         columns: [EVENT.ID],
         limit: 10,
         offset: 11,
-        joins: [
+        joins: OneOrMoreArrayUtil.fromArray([
           {
             condition: eq(val(1), val(2)),
             joinType: JoinType.Left,
             table: USER
           }
-        ],
+        ]),
         orderBy: [
           {
             direction: OrderDirection.Ascending,
@@ -235,12 +226,12 @@ test("buildMysqlSelectQuery with all present builds all clauses", () => {
         groupBy: [EVENT.ID],
         condition: {
           kind: "ConditionCollection",
-          conditions: [
+          conditions: OneOrMoreArrayUtil.fromArray<ConditionWithOperator>([
             {
               condition: eq(val(1), val(2)),
               operator: ConditionOperator.And
             }
-          ]
+          ])
         }
       })
     )

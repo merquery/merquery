@@ -24,9 +24,13 @@ export namespace OneOrMoreArrayUtil {
   }
 
   export function append<T>(
-    current: OneOrMoreArray<T>,
+    current: OneOrMoreArray<T> | undefined,
     arr: T[]
   ): OneOrMoreArray<T> {
+    if (!current) {
+      return fromArray(arr);
+    }
+
     return {
       ...current,
       other: [...current.other, ...arr]
@@ -35,5 +39,9 @@ export namespace OneOrMoreArrayUtil {
 
   export function toArray<T>(oneOrMoreArray: OneOrMoreArray<T>) {
     return [oneOrMoreArray.first, ...oneOrMoreArray.other];
+  }
+
+  export function length<T>(arr: OneOrMoreArray<T>) {
+    return 1 + arr.other.length;
   }
 }

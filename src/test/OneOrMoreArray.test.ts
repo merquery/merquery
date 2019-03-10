@@ -41,3 +41,9 @@ test("toArray builds array with first element as first element in array and othe
     OneOrMoreArrayUtil.toArray(OneOrMoreArrayUtil.fromArray([1, 2, 3]))
   ).toEqual([1, 2, 3]);
 });
+
+test("toArray builds array with first element as first element in array and other elements appended to it", () => {
+  expect(OneOrMoreArrayUtil.append(undefined, [1, 2, 3])).toEqual(
+    OneOrMoreArrayUtil.fromArray([1, 2, 3])
+  );
+});

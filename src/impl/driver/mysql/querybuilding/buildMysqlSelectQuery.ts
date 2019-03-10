@@ -9,6 +9,7 @@ import { buildCondition } from "./buildCondition";
 import { buildHavingCondition } from "./buildHavingCondition";
 import { buildLockMode } from "./buildLockMode";
 import { buildConditions } from "./buildConditions";
+import { OneOrMoreArrayUtil } from "../../../OneOrMoreArray";
 
 export function buildMysqlSelectQuery(state: SelectState<any>): string {
   let query: string = "";
@@ -27,13 +28,13 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
     throw new Error("Atleast 1 table needs to be selected");
   }
 
-  if (state.joins.length > 0) {
-    query += ` ${state.joins.map(buildJoinedTableWithOnCondition).join(" ")}`;
+  if (state.joins) {
+    query += ` ${OneOrMoreArrayUtil.toArray(state.joins)
+      .map(buildJoinedTableWithOnCondition)
+      .join(" ")}`;
   }
 
   if (state.condition) {
-    if (state.condition.conditions.length < 1)
-      throw new Error("Needs atleast 1 element as condition");
     query += ` WHERE ${buildConditions(state.condition)}`;
   }
 
