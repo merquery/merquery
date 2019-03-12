@@ -22,10 +22,10 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
     query += ` ${buildFieldCollection(state.columns)}`;
   }
 
-  if (state.from.length > 0) {
-    query += ` FROM ${buildFromPartList(state.from)}`;
-  } else {
-    throw new Error("Atleast 1 table needs to be selected");
+  if (state.from) {
+    query += ` FROM ${buildFromPartList(
+      OneOrMoreArrayUtil.toArray(state.from)
+    )}`;
   }
 
   if (state.joins) {
@@ -38,16 +38,20 @@ export function buildMysqlSelectQuery(state: SelectState<any>): string {
     query += ` WHERE ${buildConditions(state.condition)}`;
   }
 
-  if (state.groupBy.length > 0) {
-    query += ` GROUP BY ${buildFieldCollection(state.groupBy)}`;
+  if (state.groupBy) {
+    query += ` GROUP BY ${buildFieldCollection(
+      OneOrMoreArrayUtil.toArray(state.groupBy)
+    )}`;
   }
 
   if (state.having) {
     query += ` HAVING ${buildHavingCondition(state.having)}`;
   }
 
-  if (state.orderBy.length > 0) {
-    query += ` ORDER BY ${buildOrderByCollection(state.orderBy)}`;
+  if (state.orderBy) {
+    query += ` ORDER BY ${buildOrderByCollection(
+      OneOrMoreArrayUtil.toArray(state.orderBy)
+    )}`;
   }
 
   if (typeof state.limit !== "undefined") {

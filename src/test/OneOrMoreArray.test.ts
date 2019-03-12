@@ -1,7 +1,7 @@
 import { OneOrMoreArrayUtil } from "../impl/OneOrMoreArray";
 
 test("justFirst builds a OneOrMoreArray with only first element", () => {
-  expect(OneOrMoreArrayUtil.justFirst("123")).toEqual({
+  expect(OneOrMoreArrayUtil.just("123")).toEqual({
     first: "123",
     other: []
   });

@@ -15,12 +15,12 @@ import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 
 export interface SelectState<R extends Row> {
   recordTable?: Table<R>;
-  from: TableLikeOrTableLikeAlias<any>[];
+  from?: OneOrMoreArray<TableLikeOrTableLikeAlias<any>>;
   condition?: ConditionCollection;
   limit?: number;
   offset?: number;
-  groupBy: Field<any>[];
-  orderBy: OrderByWithDirection[];
+  groupBy?: OneOrMoreArray<Field<any>>;
+  orderBy?: OneOrMoreArray<OrderByWithDirection>;
   temporaryJoinedTable?: TemporaryJoinedTable;
   joins?: OneOrMoreArray<JoinedTableWithOnCondition>;
   columns: Field<any>[];

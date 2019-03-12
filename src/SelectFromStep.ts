@@ -1,6 +1,9 @@
 import { Row } from "./Row";
-import { TableLike, TableLikeOrTableLikeAlias } from "./TableLike";
-import { SelectWhereStep } from "./SelectWhereStep";
-export interface SelectFromStep<R extends Row> extends SelectWhereStep<R> {
-  from(table: TableLikeOrTableLikeAlias<any>): SelectFromStep<R>;
+import { TableLikeOrTableLikeAlias } from "./TableLike";
+import { SelectJoinStep } from "./SelectJoinStep";
+export interface SelectFromStep<R extends Row> extends SelectJoinStep<R> {
+  from(
+    table: TableLikeOrTableLikeAlias<any>,
+    ...tables: TableLikeOrTableLikeAlias<any>[]
+  ): SelectJoinStep<R>;
 }

@@ -22,6 +22,7 @@
   },
   "scripts": {
     "test": "jest --coverage",
+    "testverbose": "jest --verbose",
     "testdev": "jest --watch --coverage",
     "testwc": "jest",
     "coverage": "jest --coverage"

@@ -3,6 +3,7 @@ import { DSL } from "../../../impl/dsl/DSL";
 import { EVENT } from "../../../testutil/TestSchema";
 import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
 import { OrderDirection } from "../../../OrderDirection";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("orderByAscending adds a ascending order to SelectState.orderBy", async () => {
   const queryBuilder = StubQueryRunner({
@@ -19,12 +20,10 @@ test("orderByAscending adds a ascending order to SelectState.orderBy", async () 
   expect(queryBuilder.executeSelectState).toBeCalledWith(
     createSelectStateWithRecordTable(
       {
-        orderBy: [
-          {
-            direction: OrderDirection.Ascending,
-            field: EVENT.ID
-          }
-        ]
+        orderBy: OneOrMoreArrayUtil.just({
+          direction: OrderDirection.Ascending,
+          field: EVENT.ID
+        })
       },
       EVENT
     )
@@ -46,12 +45,10 @@ test("orderByDescending adds a descending order to SelectState.orderBy", async (
   expect(queryBuilder.executeSelectState).toBeCalledWith(
     createSelectStateWithRecordTable(
       {
-        orderBy: [
-          {
-            direction: OrderDirection.Descending,
-            field: EVENT.ID
-          }
-        ]
+        orderBy: OneOrMoreArrayUtil.just({
+          direction: OrderDirection.Descending,
+          field: EVENT.ID
+        })
       },
       EVENT
     )
@@ -74,7 +71,7 @@ test("multiple orderBys adds multiple order to SelectState.orderBy", async () =>
   expect(queryBuilder.executeSelectState).toBeCalledWith(
     createSelectStateWithRecordTable(
       {
-        orderBy: [
+        orderBy: OneOrMoreArrayUtil.just(
           {
             direction: OrderDirection.Descending,
             field: EVENT.ID
@@ -83,7 +80,7 @@ test("multiple orderBys adds multiple order to SelectState.orderBy", async () =>
             direction: OrderDirection.Ascending,
             field: EVENT.ID
           }
-        ]
+        )
       },
       EVENT
     )

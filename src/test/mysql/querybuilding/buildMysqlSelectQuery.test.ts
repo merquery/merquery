@@ -20,7 +20,7 @@ test("buildMysqlSelectQuery selects all columns when recordTable is set", () => 
 });
 
 test("buildMysqlSelectQuery selects all columns when column array is empty", () => {
-  expect(buildMysqlSelectQuery(createSelectState({ from: [EVENT] }))).toBe(
+  expect(buildMysqlSelectQuery(createSelectState({}, EVENT))).toBe(
     "SELECT * FROM `projectclub`.`event`"
   );
 });
@@ -28,10 +28,7 @@ test("buildMysqlSelectQuery selects all columns when column array is empty", () 
 test("buildMysqlSelectQuery with recordTable and columns selects all columns", () => {
   expect(
     buildMysqlSelectQuery(
-      createSelectStateWithRecordTable(
-        { from: [EVENT], columns: [EVENT.ID] },
-        EVENT
-      )
+      createSelectStateWithRecordTable({ columns: [EVENT.ID] }, EVENT)
     )
   ).toBe("SELECT * FROM `projectclub`.`event`");
 });
@@ -39,17 +36,11 @@ test("buildMysqlSelectQuery with recordTable and columns selects all columns", (
 test("buildMysqlSelectQuery selects columns with column array", () => {
   expect(
     buildMysqlSelectQuery(
-      createSelectState({ from: [EVENT], columns: [EVENT.ID, EVENT.NAME] })
+      createSelectState({ columns: [EVENT.ID, EVENT.NAME] }, EVENT)
     )
   ).toBe(
     "SELECT `projectclub`.`event`.`id`, `projectclub`.`event`.`name` FROM `projectclub`.`event`"
   );
-});
-
-test("buildMysqlSelectQuery throws exception when no table selected", () => {
-  expect(() =>
-    buildMysqlSelectQuery(createSelectState({ from: [] }))
-  ).toThrowError("Atleast 1 table needs to be selected");
 });
 
 test("buildMysqlSelectQuery with SelectState.joins adds join expression", () => {
@@ -104,7 +95,7 @@ test("buildMysqlSelectQuery with SelectState.groupBy adds group by expression", 
     buildMysqlSelectQuery(
       createSelectStateWithRecordTable(
         {
-          groupBy: [EVENT.ID, EVENT.NAME]
+          groupBy: OneOrMoreArrayUtil.just(EVENT.ID, EVENT.NAME)
         },
         EVENT
       )
@@ -119,12 +110,10 @@ test("buildMysqlSelectQuery with SelectState.orderBy adds order by expression", 
     buildMysqlSelectQuery(
       createSelectStateWithRecordTable(
         {
-          orderBy: [
-            {
-              direction: OrderDirection.Ascending,
-              field: EVENT.ID
-            }
-          ]
+          orderBy: OneOrMoreArrayUtil.just({
+            direction: OrderDirection.Ascending,
+            field: EVENT.ID
+          })
         },
         EVENT
       )
@@ -203,37 +192,33 @@ test("buildMysqlSelectQuery with SelectState.lockMode adds lock mode expression"
 test("buildMysqlSelectQuery with all present builds all clauses", () => {
   expect(
     buildMysqlSelectQuery(
-      createSelectState({
-        lockMode: LockMode.ForUpdate,
-        columns: [EVENT.ID],
-        limit: 10,
-        offset: 11,
-        joins: OneOrMoreArrayUtil.fromArray([
-          {
+      createSelectState(
+        {
+          lockMode: LockMode.ForUpdate,
+          columns: [EVENT.ID],
+          limit: 10,
+          offset: 11,
+          joins: OneOrMoreArrayUtil.just({
             condition: eq(val(1), val(2)),
             joinType: JoinType.Left,
             table: USER
-          }
-        ]),
-        orderBy: [
-          {
+          }),
+          orderBy: OneOrMoreArrayUtil.just({
             direction: OrderDirection.Ascending,
             field: EVENT.ID
-          }
-        ],
-        having: eq(val(1), val(2)),
-        from: [EVENT],
-        groupBy: [EVENT.ID],
-        condition: {
-          kind: "ConditionCollection",
-          conditions: OneOrMoreArrayUtil.fromArray<ConditionWithOperator>([
-            {
+          }),
+          having: eq(val(1), val(2)),
+          groupBy: OneOrMoreArrayUtil.just(EVENT.ID),
+          condition: {
+            kind: "ConditionCollection",
+            conditions: OneOrMoreArrayUtil.just({
               condition: eq(val(1), val(2)),
               operator: ConditionOperator.And
-            }
-          ])
-        }
-      })
+            })
+          }
+        },
+        EVENT
+      )
     )
   ).toBe(
     "SELECT `projectclub`.`event`.`id` FROM `projectclub`.`event` LEFT JOIN `projectclub`.`user` ON (1 = 2) WHERE 1 = 2 GROUP BY `projectclub`.`event`.`id` HAVING 1 = 2 ORDER BY `projectclub`.`event`.`id` ASC LIMIT 10 OFFSET 11 FOR UPDATE"

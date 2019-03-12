@@ -1,7 +1,7 @@
 import { SelectWhereStep } from "../../SelectWhereStep";
 import { SelectConditionStep } from "../../SelectConditionStep";
 import { Condition, ComperatorCondition, Comperator } from "../../Condition";
-import { Table, TableLike } from "../../TableLike";
+import { Table, TableLike, TableLikeOrTableLikeAlias } from "../../TableLike";
 import { SelectFinalStep } from "../../SelectFinalStep";
 import { assertNever } from "../Util";
 import { Field, TableField, ValueField } from "../../Field";
@@ -149,10 +149,10 @@ export class SelectImpl<R extends Row>
     return { ...this.state };
   }
 
-  groupBy<T>(...fields: Field<any>[]) {
+  groupBy<T>(field: Field<any>, ...fields: Field<any>[]) {
     return this.create({
       ...this.state,
-      groupBy: fields
+      groupBy: OneOrMoreArrayUtil.fromArray([field, ...fields])
     });
   }
 
@@ -168,20 +168,18 @@ export class SelectImpl<R extends Row>
   orderByAscending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
-      orderBy: [
-        ...(this.state.orderBy || []),
+      orderBy: OneOrMoreArrayUtil.append(this.state.orderBy, [
         { field: field, direction: OrderDirection.Ascending }
-      ]
+      ])
     });
   }
 
   orderByDescending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
-      orderBy: [
-        ...(this.state.orderBy || []),
+      orderBy: OneOrMoreArrayUtil.append(this.state.orderBy, [
         { field: field, direction: OrderDirection.Descending }
-      ]
+      ])
     });
   }
 
@@ -202,17 +200,20 @@ export class SelectImpl<R extends Row>
     return new SelectImpl<R>(state, this.queryRunner);
   }
 
-  from(table: TableLike<any>) {
+  from(
+    table: TableLikeOrTableLikeAlias<any>,
+    ...tables: TableLikeOrTableLikeAlias<any>[]
+  ) {
     return this.create({
       ...this.state,
-      from: [...this.state.from, table]
+      from: OneOrMoreArrayUtil.append(this.state.from, [table, ...tables])
     });
   }
 
   fromRecordTable(table: Table<R>) {
     return this.create({
       ...this.state,
-      from: [...this.state.from, table],
+      from: OneOrMoreArrayUtil.append(this.state.from, [table]),
       recordTable: table
     });
   }

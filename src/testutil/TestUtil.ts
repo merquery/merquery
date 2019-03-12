@@ -38,6 +38,19 @@ export function StubQueryRunner(props: Partial<QueryRunner>): QueryRunner {
   };
 }
 
+export function TestSetup() {
+  const runner = StubQueryRunner({
+    executeInsertState: jest.fn(),
+    executeSelectState: jest.fn().mockResolvedValue([]),
+    executeUpdateState: jest.fn()
+  });
+
+  return {
+    dsl: TestDSL(runner),
+    runner: runner
+  };
+}
+
 export function TestDSL(runner: QueryRunner) {
   return DSL.withDriver({
     createQueryRunner: () => runner,

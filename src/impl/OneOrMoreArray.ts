@@ -4,10 +4,10 @@ export interface OneOrMoreArray<T> {
 }
 
 export namespace OneOrMoreArrayUtil {
-  export function justFirst<T>(first: T): OneOrMoreArray<T> {
+  export function just<T>(first: T, ...other: T[]): OneOrMoreArray<T> {
     return {
       first: first,
-      other: []
+      other: other
     };
   }
 
