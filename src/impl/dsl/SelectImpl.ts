@@ -1,7 +1,7 @@
 import { SelectWhereStep } from "../../SelectWhereStep";
 import { SelectConditionStep } from "../../SelectConditionStep";
 import { Condition, ComperatorCondition, Comperator } from "../../Condition";
-import { Table, TableLike } from "../../TableLike";
+import { Table, TableLike, TableLikeOrTableLikeAlias } from "../../TableLike";
 import { SelectFinalStep } from "../../SelectFinalStep";
 import { assertNever } from "../Util";
 import { Field, TableField, ValueField } from "../../Field";
@@ -29,6 +29,8 @@ import { ConditionBuilder } from "../../ConditionBuilder";
 import { SelectHavingStep } from "../../SelectHavingStep";
 import { SelectForUpdate } from "../../SelectForUpdate";
 import { LockMode } from "../../LockMode";
+import { OneOrMoreArrayUtil } from "../OneOrMoreArray";
+import { createSelectState } from "../createSelectState";
 
 export class SelectImpl<R extends Row>
   implements
@@ -42,8 +44,8 @@ export class SelectImpl<R extends Row>
     SelectOrderByStep<R>,
     SelectLimitStep<R>,
     SelectOffsetStep<R>,
-    SelectFinalStep<R>,
-    SelectForUpdate<R> {
+    SelectForUpdate<R>,
+    SelectFinalStep<R> {
   constructor(
     private state: SelectState<R>,
     private queryRunner: QueryRunner
@@ -90,6 +92,11 @@ export class SelectImpl<R extends Row>
   async fetchAllMapped<M>(mapper: (result: ResultRow) => M): Promise<M[]> {
     const results = await this.queryRunner.executeSelectState(this.state);
 
+    if (!Array.isArray(results))
+      throw new Error(
+        "executeSelectState didn't return a array. Did you forget to mock the return value?"
+      );
+
     return results.map(mapper);
   }
 
@@ -111,11 +118,9 @@ export class SelectImpl<R extends Row>
 
     return this.create({
       ...this.state,
-
-      joins: [
-        ...this.state.joins,
+      joins: OneOrMoreArrayUtil.append(this.state.joins, [
         { ...this.state.temporaryJoinedTable, condition: condition }
-      ],
+      ]),
       temporaryJoinedTable: undefined
     });
   }
@@ -144,10 +149,10 @@ export class SelectImpl<R extends Row>
     return { ...this.state };
   }
 
-  groupBy<T>(...fields: Field<any>[]) {
+  groupBy<T>(field: Field<any>, ...fields: Field<any>[]) {
     return this.create({
       ...this.state,
-      groupBy: { fields: fields }
+      groupBy: OneOrMoreArrayUtil.fromArray([field, ...fields])
     });
   }
 
@@ -163,20 +168,18 @@ export class SelectImpl<R extends Row>
   orderByAscending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
-      orderBy: [
-        ...this.state.orderBy,
+      orderBy: OneOrMoreArrayUtil.append(this.state.orderBy, [
         { field: field, direction: OrderDirection.Ascending }
-      ]
+      ])
     });
   }
 
   orderByDescending<T>(field: TableField<R, T>) {
     return this.create({
       ...this.state,
-      orderBy: [
-        ...this.state.orderBy,
+      orderBy: OneOrMoreArrayUtil.append(this.state.orderBy, [
         { field: field, direction: OrderDirection.Descending }
-      ]
+      ])
     });
   }
 
@@ -190,32 +193,27 @@ export class SelectImpl<R extends Row>
   }
 
   static initial<R extends Row>(executor: QueryRunner) {
-    return new SelectImpl<R>(
-      {
-        from: [],
-        orderBy: [],
-        joins: [],
-        columns: []
-      },
-      executor
-    );
+    return new SelectImpl<R>(createSelectState(), executor);
   }
 
   private create(state: SelectState<R>) {
     return new SelectImpl<R>(state, this.queryRunner);
   }
 
-  from(table: TableLike<any>) {
+  from(
+    table: TableLikeOrTableLikeAlias<any>,
+    ...tables: TableLikeOrTableLikeAlias<any>[]
+  ) {
     return this.create({
       ...this.state,
-      from: [...this.state.from, table]
+      from: OneOrMoreArrayUtil.append(this.state.from, [table, ...tables])
     });
   }
 
   fromRecordTable(table: Table<R>) {
     return this.create({
       ...this.state,
-      from: [...this.state.from, table],
+      from: OneOrMoreArrayUtil.append(this.state.from, [table]),
       recordTable: table
     });
   }

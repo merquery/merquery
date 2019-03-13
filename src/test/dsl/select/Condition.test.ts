@@ -1,24 +1,24 @@
-import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import {
+  StubQueryRunner,
+  TestDSL,
+  expectState
+} from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
 import { eq, eqValue, ConditionCollection } from "../../../Condition";
 import { ConditionWithOperator } from "../../../ConditionWithOperator";
 import { ConditionOperator } from "../../../ConditionOperator";
+import {
+  createSelectState,
+  createSelectStateWithRecordTable
+} from "../../../impl/createSelectState";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
   const condition = eqValue(EVENT.ID, 1);
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.condition!.conditions).toEqual([
-        {
-          condition: condition,
-          operator: ConditionOperator.And
-        }
-      ]);
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockReturnValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -27,7 +27,22 @@ test("where adds a condition to SelectState.conditions with AND operator", async
     .where(condition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        condition: {
+          kind: "ConditionCollection",
+          conditions: OneOrMoreArrayUtil.fromArray([
+            {
+              condition: condition,
+              operator: ConditionOperator.And
+            }
+          ])
+        }
+      },
+      EVENT
+    )
+  );
 });
 
 test("and adds a condition to SelectState.conditions with AND operator", async () => {
@@ -35,14 +50,7 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
   const testCondition = eqValue(EVENT.ID, 2);
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.condition).not.toBeUndefined();
-      expect(
-        state.condition!.conditions[state.condition!.conditions.length - 1]
-      ).toEqual({ condition: testCondition, operator: ConditionOperator.And });
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -52,7 +60,26 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
     .and(testCondition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        condition: {
+          kind: "ConditionCollection",
+          conditions: OneOrMoreArrayUtil.fromArray([
+            {
+              condition: firstCondition,
+              operator: ConditionOperator.And
+            },
+            {
+              condition: testCondition,
+              operator: ConditionOperator.And
+            }
+          ])
+        }
+      },
+      EVENT
+    )
+  );
 });
 
 test("or adds a condition to SelectState.conditions with OR operator", async () => {
@@ -60,14 +87,7 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
   const testCondition = eqValue(EVENT.ID, 2);
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.condition).not.toBeUndefined();
-      expect(
-        state.condition!.conditions[state.condition!.conditions.length - 1]
-      ).toEqual({ condition: testCondition, operator: ConditionOperator.Or });
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -77,7 +97,26 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
     .or(testCondition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        condition: {
+          kind: "ConditionCollection",
+          conditions: OneOrMoreArrayUtil.fromArray([
+            {
+              condition: firstCondition,
+              operator: ConditionOperator.And
+            },
+            {
+              condition: testCondition,
+              operator: ConditionOperator.Or
+            }
+          ])
+        }
+      },
+      EVENT
+    )
+  );
 });
 
 test("combinations of and or builds a ConditionCollection", async () => {
@@ -87,31 +126,7 @@ test("combinations of and or builds a ConditionCollection", async () => {
   const t4 = eqValue(EVENT.NAME, "Hallo");
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.condition).toEqual({
-        kind: "ConditionCollection",
-        conditions: [
-          {
-            condition: t1,
-            operator: ConditionOperator.And
-          },
-          {
-            condition: t2,
-            operator: ConditionOperator.Or
-          },
-          {
-            condition: t3,
-            operator: ConditionOperator.And
-          },
-          {
-            condition: t4,
-            operator: ConditionOperator.And
-          }
-        ]
-      });
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -123,5 +138,32 @@ test("combinations of and or builds a ConditionCollection", async () => {
     .and(t4)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        condition: {
+          kind: "ConditionCollection",
+          conditions: OneOrMoreArrayUtil.fromArray([
+            {
+              condition: t1,
+              operator: ConditionOperator.And
+            },
+            {
+              condition: t2,
+              operator: ConditionOperator.Or
+            },
+            {
+              condition: t3,
+              operator: ConditionOperator.And
+            },
+            {
+              condition: t4,
+              operator: ConditionOperator.And
+            }
+          ])
+        }
+      },
+      EVENT
+    )
+  );
 });

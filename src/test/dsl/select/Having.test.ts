@@ -6,14 +6,13 @@ import {
 import { eq } from "../../../Condition";
 import { val } from "../../../Field";
 import { EVENT } from "../../../testutil/TestSchema";
+import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
 
 test("having sets SelectState.having", async () => {
   const condition = eq(val(1), val(2));
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: expectSelectState(state => {
-      expect(state.having).toEqual(condition);
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -22,5 +21,12 @@ test("having sets SelectState.having", async () => {
     .having(condition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        having: condition
+      },
+      EVENT
+    )
+  );
 });

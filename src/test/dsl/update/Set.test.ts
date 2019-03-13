@@ -17,6 +17,7 @@ test("set adds one change to UpdateState.updates", () => {
   dsl
     .update(EVENT)
     .set(EVENT.ID, 123)
+    .withoutWhere()
     .execute();
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({
@@ -37,6 +38,7 @@ test("multiple set adds multiple to UpdateState.updates", () => {
     .set(EVENT.ID, 123)
     .set(EVENT.NAME, "Name")
     .set(EVENT.DESCRIPTION, "Description")
+    .withoutWhere()
     .execute();
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({

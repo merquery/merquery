@@ -8,16 +8,15 @@ import {
 import { SelectState } from "../../../SelectState";
 import { EVENT, USER } from "../../../testutil/TestSchema";
 import { JoinType } from "../../../JoinType";
+import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
+import { JoinedTableWithOnCondition } from "../../../JoinedTable";
 
 test("innerJoin adds inner join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: expectSelectState(state => {
-      expect(state.joins).toEqual([
-        { condition: condition, joinType: JoinType.Inner, table: USER }
-      ]);
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -28,18 +27,27 @@ test("innerJoin adds inner join to SelectState.joins", async () => {
     .on(condition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        joins: OneOrMoreArrayUtil.fromArray<JoinedTableWithOnCondition>([
+          {
+            table: USER,
+            joinType: JoinType.Inner,
+            condition: condition
+          }
+        ])
+      },
+      EVENT
+    )
+  );
 });
 
 test("leftJoin adds left join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: expectSelectState(state => {
-      expect(state.joins).toEqual([
-        { condition: condition, joinType: JoinType.Left, table: USER }
-      ]);
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -50,18 +58,27 @@ test("leftJoin adds left join to SelectState.joins", async () => {
     .on(condition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        joins: OneOrMoreArrayUtil.fromArray<JoinedTableWithOnCondition>([
+          {
+            table: USER,
+            joinType: JoinType.Left,
+            condition: condition
+          }
+        ])
+      },
+      EVENT
+    )
+  );
 });
 
-test("rightJoin adds right join to SelectState.joins", async () => {
+test("rightJoin adds left join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
 
   const queryRunner = StubQueryRunner({
-    executeSelectState: expectSelectState(state => {
-      expect(state.joins).toEqual([
-        { condition: condition, joinType: JoinType.Right, table: USER }
-      ]);
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -72,5 +89,18 @@ test("rightJoin adds right join to SelectState.joins", async () => {
     .on(condition)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable(
+      {
+        joins: OneOrMoreArrayUtil.fromArray<JoinedTableWithOnCondition>([
+          {
+            table: USER,
+            joinType: JoinType.Right,
+            condition: condition
+          }
+        ])
+      },
+      EVENT
+    )
+  );
 });

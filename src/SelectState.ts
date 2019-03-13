@@ -11,17 +11,18 @@ import { Field } from "./Field";
 import { FromPart } from "./FromPart";
 import { ConditionCollection, Condition } from "./Condition";
 import { LockMode } from "./LockMode";
+import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 
 export interface SelectState<R extends Row> {
   recordTable?: Table<R>;
-  from: TableLikeOrTableLikeAlias<any>[];
+  from?: OneOrMoreArray<TableLikeOrTableLikeAlias<any>>;
   condition?: ConditionCollection;
   limit?: number;
   offset?: number;
-  groupBy?: FieldCollection;
-  orderBy: OrderByWithDirection[];
+  groupBy?: OneOrMoreArray<Field<any>>;
+  orderBy?: OneOrMoreArray<OrderByWithDirection>;
   temporaryJoinedTable?: TemporaryJoinedTable;
-  joins: JoinedTableWithOnCondition[];
+  joins?: OneOrMoreArray<JoinedTableWithOnCondition>;
   columns: Field<any>[];
   having?: Condition;
   lockMode?: LockMode;

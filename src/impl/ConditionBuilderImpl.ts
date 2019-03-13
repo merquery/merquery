@@ -1,6 +1,8 @@
 import { Condition, ConditionCollection } from "../Condition";
 import { ConditionBuilder } from "../ConditionBuilder";
 import { ConditionOperator } from "../ConditionOperator";
+import { OneOrMoreArrayUtil } from "./OneOrMoreArray";
+import { ConditionWithOperator } from "../ConditionWithOperator";
 export class ConditionBuilderImpl implements ConditionBuilder {
   getCondition(): ConditionCollection {
     return this.conditionCollection;
@@ -9,7 +11,9 @@ export class ConditionBuilderImpl implements ConditionBuilder {
   static initial(condition: Condition) {
     return new ConditionBuilderImpl({
       kind: "ConditionCollection",
-      conditions: [{ condition: condition, operator: ConditionOperator.And }]
+      conditions: OneOrMoreArrayUtil.fromArray<ConditionWithOperator>([
+        { condition: condition, operator: ConditionOperator.And }
+      ])
     });
   }
 
@@ -22,19 +26,19 @@ export class ConditionBuilderImpl implements ConditionBuilder {
   and(condition: Condition): ConditionBuilderImpl {
     return new ConditionBuilderImpl({
       kind: "ConditionCollection",
-      conditions: [
-        ...this.conditionCollection.conditions,
-        { condition: condition, operator: ConditionOperator.And }
-      ]
+      conditions: OneOrMoreArrayUtil.append(
+        this.conditionCollection.conditions,
+        [{ condition: condition, operator: ConditionOperator.And }]
+      )
     });
   }
   or(condition: Condition): ConditionBuilderImpl {
     return new ConditionBuilderImpl({
       kind: "ConditionCollection",
-      conditions: [
-        ...this.conditionCollection.conditions,
-        { condition: condition, operator: ConditionOperator.Or }
-      ]
+      conditions: OneOrMoreArrayUtil.append(
+        this.conditionCollection.conditions,
+        [{ condition: condition, operator: ConditionOperator.Or }]
+      )
     });
   }
 }

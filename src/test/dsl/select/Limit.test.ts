@@ -1,14 +1,11 @@
 import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
+import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
 
 test("limit sets SelectState.limit for 0", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.limit).toBe(0);
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -17,12 +14,14 @@ test("limit sets SelectState.limit for 0", async () => {
     .limit(0)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable({ limit: 0 }, EVENT)
+  );
 });
 
 test("limit throws Exception when count is nonnegative", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn()
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -36,10 +35,7 @@ test("limit throws Exception when count is nonnegative", async () => {
 
 test("limit sets SelectState.limit for positive integer", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.limit).toBe(22);
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -49,16 +45,14 @@ test("limit sets SelectState.limit for positive integer", async () => {
     .limit(22)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable({ limit: 22 }, EVENT)
+  );
 });
 
 test("offset sets SelectState.offset for 0", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.offset).toBe(0);
-
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -68,12 +62,14 @@ test("offset sets SelectState.offset for 0", async () => {
     .offset(0)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable({ offset: 0, limit: 0 }, EVENT)
+  );
 });
 
 test("offset throws Exception when count is nonnegative", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn()
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -90,10 +86,7 @@ test("offset throws Exception when count is nonnegative", async () => {
 
 test("offset sets SelectState.offset for positive integer", async () => {
   const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn(async (state: SelectState<any>) => {
-      expect(state.offset).toBe(22);
-      return [];
-    })
+    executeSelectState: jest.fn().mockResolvedValue([])
   });
 
   const dsl = TestDSL(queryRunner);
@@ -104,5 +97,7 @@ test("offset sets SelectState.offset for positive integer", async () => {
     .offset(22)
     .fetchAll();
 
-  expect(queryRunner.executeSelectState).toBeCalled();
+  expect(queryRunner.executeSelectState).toBeCalledWith(
+    createSelectStateWithRecordTable({ limit: 11, offset: 22 }, EVENT)
+  );
 });

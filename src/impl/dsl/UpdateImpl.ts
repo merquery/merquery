@@ -22,6 +22,10 @@ export class UpdateImpl<R extends Row>
     private readonly queryRunner: QueryRunner
   ) {}
 
+  withoutWhere(): UpdateFinalStep<R> {
+    return this;
+  }
+
   execute(): Promise<void> {
     return this.queryRunner.executeUpdateState(this.state);
   }

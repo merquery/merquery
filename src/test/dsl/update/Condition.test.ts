@@ -3,6 +3,7 @@ import { USER } from "../../../testutil/TestSchema";
 import { UpdateState } from "../../../UpdateState";
 import { eqValue } from "../../../Condition";
 import { ConditionOperator } from "../../../ConditionOperator";
+import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("where sets UpdateState.condition", () => {
   const queryRunner = StubQueryRunner({
@@ -22,7 +23,9 @@ test("where sets UpdateState.condition", () => {
     table: USER,
     condition: {
       kind: "ConditionCollection",
-      conditions: [{ condition: condition, operator: ConditionOperator.And }]
+      conditions: OneOrMoreArrayUtil.fromArray([
+        { condition: condition, operator: ConditionOperator.And }
+      ])
     },
     updates: [[USER.ID, 1]]
   });
@@ -48,16 +51,16 @@ test("where().and() sets two conditions connected by and UpdateState.condition",
     table: USER,
     condition: {
       kind: "ConditionCollection",
-      conditions: [
+      conditions: OneOrMoreArrayUtil.fromArray([
         { condition: condition, operator: ConditionOperator.And },
         { condition: condition2, operator: ConditionOperator.And }
-      ]
+      ])
     },
     updates: [[USER.ID, 1]]
   });
 });
 
-test("where().and() sets two conditions connected by and UpdateState.condition", () => {
+test("where().or() sets two conditions connected by or UpdateState.condition", () => {
   const queryRunner = StubQueryRunner({
     executeUpdateState: jest.fn()
   });
@@ -77,10 +80,10 @@ test("where().and() sets two conditions connected by and UpdateState.condition",
     table: USER,
     condition: {
       kind: "ConditionCollection",
-      conditions: [
+      conditions: OneOrMoreArrayUtil.fromArray([
         { condition: condition, operator: ConditionOperator.And },
         { condition: condition2, operator: ConditionOperator.Or }
-      ]
+      ])
     },
     updates: [[USER.ID, 1]]
   });

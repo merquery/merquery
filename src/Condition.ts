@@ -3,6 +3,7 @@ import { Table } from "./TableLike";
 import { Field, val } from "./Field";
 import { ConditionWithOperator } from "./ConditionWithOperator";
 import { ConditionBuilderFinalStep } from "./ConditionBuilderFinalStep";
+import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 
 export type Comperator = "=" | ">=" | "<=";
 
@@ -15,7 +16,7 @@ export interface ComperatorCondition {
 
 export interface ConditionCollection {
   kind: "ConditionCollection";
-  conditions: ConditionWithOperator[];
+  conditions: OneOrMoreArray<ConditionWithOperator>;
 }
 
 export type Condition = ComperatorCondition | ConditionCollection;

@@ -20,7 +20,7 @@ export interface DSLContext {
    * Select individual columns
    * @param fields - Fields to select
    */
-  select(...fields: Field<any>[]): SelectFromStep<Row>;
+  select(field: Field<any>, ...fields: Field<any>[]): SelectFromStep<Row>;
 
   transaction<R>(cb: (configuration: DSLConfig) => Promise<R>): Promise<R>;
 

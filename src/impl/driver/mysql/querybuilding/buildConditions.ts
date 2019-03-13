@@ -1,10 +1,11 @@
 import { ConditionCollection } from "../../../../Condition";
 import { buildConditionOperatorString } from "./buildConditionOperatorString";
 import { buildCondition } from "./buildCondition";
+import { OneOrMoreArrayUtil } from "../../../OneOrMoreArray";
 export function buildConditions(c: ConditionCollection) {
   const conditions = c.conditions;
-  if (conditions.length === 0) throw new Error("Need atleast one condition");
-  return conditions
+
+  return OneOrMoreArrayUtil.toArray(conditions)
     .reduce((str, condition, i) => {
       let conditionStr = ``;
       if (i > 0) {
@@ -12,7 +13,7 @@ export function buildConditions(c: ConditionCollection) {
       }
       conditionStr += ` ${buildCondition(
         condition.condition,
-        conditions.length
+        OneOrMoreArrayUtil.length(conditions)
       )}`;
       return str + conditionStr;
     }, "")
