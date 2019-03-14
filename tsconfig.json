@@ -2,10 +2,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",
-    "rootDir": "src",
     "outDir": "dist",
     "target": "es6",
-    "lib": ["es2015"],
-    "strict": true
-  }
+    "lib": ["es6"],
+    "strict": true,
+    "declaration": true
+  },
+  "exclude": ["node_modules"]
 }
