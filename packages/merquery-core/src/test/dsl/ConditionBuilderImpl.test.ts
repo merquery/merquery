@@ -4,7 +4,7 @@ import { EVENT } from "../../testutil/TestSchema";
 import { ConditionOperator } from "../../ConditionOperator";
 import { OneOrMoreArrayUtil } from "../../impl/OneOrMoreArray";
 test("getCondition of initial returns ConditionCollection with initial condition with and", () => {
-  const initialCondition = eqValue(EVENT.ID, 1);
+  const initialCondition = eqValue(EVENT.ID.FIELD, 1);
   const builder = ConditionBuilderImpl.initial(initialCondition);
 
   expect(builder.getCondition()).toEqual({
@@ -16,8 +16,8 @@ test("getCondition of initial returns ConditionCollection with initial condition
 });
 
 test("getCondition of initial.and returns ConditionCollection with appended and condition", () => {
-  const initialCondition = eqValue(EVENT.ID, 1);
-  const testCondition = eqValue(EVENT.ID, 2);
+  const initialCondition = eqValue(EVENT.ID.FIELD, 1);
+  const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const builder = ConditionBuilderImpl.initial(initialCondition).and(
     testCondition
@@ -39,8 +39,8 @@ test("getCondition of initial.and returns ConditionCollection with appended and 
 });
 
 test("getCondition of initial.or returns ConditionCollection with appended or condition", () => {
-  const initialCondition = eqValue(EVENT.ID, 1);
-  const testCondition = eqValue(EVENT.ID, 2);
+  const initialCondition = eqValue(EVENT.ID.FIELD, 1);
+  const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const builder = ConditionBuilderImpl.initial(initialCondition).or(
     testCondition

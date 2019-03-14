@@ -14,7 +14,7 @@ test("orderByAscending adds a ascending order to SelectState.orderBy", async () 
 
   await dsl
     .selectFrom(EVENT)
-    .orderByAscending(EVENT.ID)
+    .orderByAscending(EVENT.ID.FIELD)
     .fetchAll();
 
   expect(queryBuilder.executeSelectState).toBeCalledWith(
@@ -22,7 +22,7 @@ test("orderByAscending adds a ascending order to SelectState.orderBy", async () 
       {
         orderBy: OneOrMoreArrayUtil.just({
           direction: OrderDirection.Ascending,
-          field: EVENT.ID
+          field: EVENT.ID.FIELD
         })
       },
       EVENT
@@ -39,7 +39,7 @@ test("orderByDescending adds a descending order to SelectState.orderBy", async (
 
   await dsl
     .selectFrom(EVENT)
-    .orderByDescending(EVENT.ID)
+    .orderByDescending(EVENT.ID.FIELD)
     .fetchAll();
 
   expect(queryBuilder.executeSelectState).toBeCalledWith(
@@ -47,7 +47,7 @@ test("orderByDescending adds a descending order to SelectState.orderBy", async (
       {
         orderBy: OneOrMoreArrayUtil.just({
           direction: OrderDirection.Descending,
-          field: EVENT.ID
+          field: EVENT.ID.FIELD
         })
       },
       EVENT
@@ -64,8 +64,8 @@ test("multiple orderBys adds multiple order to SelectState.orderBy", async () =>
 
   await dsl
     .selectFrom(EVENT)
-    .orderByDescending(EVENT.ID)
-    .orderByAscending(EVENT.ID)
+    .orderByDescending(EVENT.ID.FIELD)
+    .orderByAscending(EVENT.ID.FIELD)
     .fetchAll();
 
   expect(queryBuilder.executeSelectState).toBeCalledWith(
@@ -74,11 +74,11 @@ test("multiple orderBys adds multiple order to SelectState.orderBy", async () =>
         orderBy: OneOrMoreArrayUtil.just(
           {
             direction: OrderDirection.Descending,
-            field: EVENT.ID
+            field: EVENT.ID.FIELD
           },
           {
             direction: OrderDirection.Ascending,
-            field: EVENT.ID
+            field: EVENT.ID.FIELD
           }
         )
       },

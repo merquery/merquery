@@ -16,13 +16,13 @@ test("set adds one change to UpdateState.updates", () => {
 
   dsl
     .update(EVENT)
-    .set(EVENT.ID, 123)
+    .set(EVENT.ID.FIELD, 123)
     .withoutWhere()
     .execute();
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
-    updates: [[EVENT.ID, 123]]
+    updates: [[EVENT.ID.FIELD, 123]]
   });
 });
 
@@ -35,18 +35,18 @@ test("multiple set adds multiple to UpdateState.updates", () => {
 
   dsl
     .update(EVENT)
-    .set(EVENT.ID, 123)
-    .set(EVENT.NAME, "Name")
-    .set(EVENT.DESCRIPTION, "Description")
+    .set(EVENT.ID.FIELD, 123)
+    .set(EVENT.NAME.FIELD, "Name")
+    .set(EVENT.DESCRIPTION.FIELD, "Description")
     .withoutWhere()
     .execute();
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
     updates: [
-      [EVENT.ID, 123],
-      [EVENT.NAME, "Name"],
-      [EVENT.DESCRIPTION, "Description"]
+      [EVENT.ID.FIELD, 123],
+      [EVENT.NAME.FIELD, "Name"],
+      [EVENT.DESCRIPTION.FIELD, "Description"]
     ]
   });
 });

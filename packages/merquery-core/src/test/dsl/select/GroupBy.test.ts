@@ -12,13 +12,13 @@ test("groupBy with one parameter adds one field to SelectState.groupBy", async (
 
   await dsl
     .selectFrom(EVENT)
-    .groupBy(EVENT.ID)
+    .groupBy(EVENT.ID.FIELD)
     .fetchAll();
 
   expect(runner.executeSelectState).toBeCalledWith(
     createSelectStateWithRecordTable(
       {
-        groupBy: OneOrMoreArrayUtil.just(EVENT.ID)
+        groupBy: OneOrMoreArrayUtil.just(EVENT.ID.FIELD)
       },
       EVENT
     )
@@ -30,16 +30,16 @@ test("groupBy with multiple parameters adds multiple fields to SelectState.group
 
   await dsl
     .selectFrom(EVENT)
-    .groupBy(EVENT.ID, EVENT.NAME, EVENT.DESCRIPTION)
+    .groupBy(EVENT.ID.FIELD, EVENT.NAME.FIELD, EVENT.DESCRIPTION.FIELD)
     .fetchAll();
 
   expect(runner.executeSelectState).toBeCalledWith(
     createSelectStateWithRecordTable(
       {
         groupBy: OneOrMoreArrayUtil.fromArray([
-          EVENT.ID,
-          EVENT.NAME,
-          EVENT.DESCRIPTION
+          EVENT.ID.FIELD,
+          EVENT.NAME.FIELD,
+          EVENT.DESCRIPTION.FIELD
         ])
       },
       EVENT

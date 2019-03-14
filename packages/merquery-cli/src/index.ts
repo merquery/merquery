@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as minimist from "minimist";
 import { readFileSync } from "fs";
 import Project from "ts-morph";
@@ -5,10 +7,10 @@ import { MysqlDriver, Driver, generate } from "merquery-core";
 
 function createDriver(config: any): Driver {
   return new MysqlDriver({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "projectclub"
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database
   });
 }
 

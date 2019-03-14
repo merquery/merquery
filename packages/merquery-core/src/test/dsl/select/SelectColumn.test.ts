@@ -6,10 +6,10 @@ import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 test("select sets SelectState.columns with one column", async () => {
   const { dsl, runner } = TestSetup();
 
-  await dsl.select(EVENT.ID).fetchAllMapped(x => ({}));
+  await dsl.select(EVENT.ID.FIELD).fetchAllMapped(x => ({}));
 
   expect(runner.executeSelectState).toBeCalledWith(
-    createSelectState({ columns: [EVENT.ID] })
+    createSelectState({ columns: [EVENT.ID.FIELD] })
   );
 });
 
@@ -17,10 +17,12 @@ test("select sets SelectState.columns with multiple columns", async () => {
   const { dsl, runner } = TestSetup();
 
   await dsl
-    .select(EVENT.ID, EVENT.NAME, EVENT.DESCRIPTION)
+    .select(EVENT.ID.FIELD, EVENT.NAME.FIELD, EVENT.DESCRIPTION.FIELD)
     .fetchAllMapped(x => ({}));
 
   expect(runner.executeSelectState).toBeCalledWith(
-    createSelectState({ columns: [EVENT.ID, EVENT.NAME, EVENT.DESCRIPTION] })
+    createSelectState({
+      columns: [EVENT.ID.FIELD, EVENT.NAME.FIELD, EVENT.DESCRIPTION.FIELD]
+    })
   );
 });

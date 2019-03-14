@@ -7,16 +7,16 @@ test("onDuplicateKeyUpdate and set sets the correct InsertState.duplicateKey and
     executeInsertState: jest.fn(async (state: InsertState<any>) => {
       expect(state.duplicateKey).toEqual({
         kind: "OnDuplicateKeyUpdate",
-        updates: [[EVENT.ID, 2]]
+        updates: [[EVENT.ID.FIELD, 2]]
       });
     })
   });
 
   const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID)
+    .insertInto(EVENT, EVENT.ID.FIELD)
     .onDuplicateKeyUpdate()
-    .set(EVENT.ID, 2)
+    .set(EVENT.ID.FIELD, 2)
     .execute();
 
   expect(queryRunner.executeInsertState).toBeCalled();
@@ -27,17 +27,17 @@ test("onDuplicateKeyUpdate and multiple set sets the correct InsertState.duplica
     executeInsertState: jest.fn(async (state: InsertState<any>) => {
       expect(state.duplicateKey).toEqual({
         kind: "OnDuplicateKeyUpdate",
-        updates: [[EVENT.ID, 3], [EVENT.NAME, "Test"]]
+        updates: [[EVENT.ID.FIELD, 3], [EVENT.NAME.FIELD, "Test"]]
       });
     })
   });
 
   const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID, EVENT.NAME)
+    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
     .onDuplicateKeyUpdate()
-    .set(EVENT.ID, 3)
-    .set(EVENT.NAME, "Test")
+    .set(EVENT.ID.FIELD, 3)
+    .set(EVENT.NAME.FIELD, "Test")
     .execute();
 
   expect(queryRunner.executeInsertState).toBeCalled();
@@ -54,7 +54,7 @@ test("onDuplicateKeyIgnore sets the correct InsertState.duplicateKey", async () 
 
   const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID, EVENT.NAME)
+    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
     .onDuplicateKeyIgnore()
     .execute();
 

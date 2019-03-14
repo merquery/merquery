@@ -7,7 +7,7 @@ test("buildInCondition builds IN condition", () => {
   expect(
     buildInCondition({
       kind: "InCondition",
-      field: EVENT.ID,
+      field: EVENT.ID.FIELD,
       values: OneOrMoreArrayUtil.just(val("123"), val("456"))
     })
   ).toBe("`projectclub`.`event`.`id` IN ('123', '456')");

@@ -2,8 +2,9 @@ import { Row } from "./Row";
 import { ComperatorCondition, InCondition } from "./Condition";
 import { FieldAlias, TableField, Field } from "./Field";
 
-export interface GeneratedTableField<R extends Row, T>
-  extends TableField<R, T> {
+export interface GeneratedTableField<R extends Row, T> {
+  FIELD: TableField<R, T>;
+
   equals(value: T): ComperatorCondition;
   equalsField(field: Field<T>): ComperatorCondition;
 

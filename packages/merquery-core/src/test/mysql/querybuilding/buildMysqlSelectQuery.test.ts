@@ -28,7 +28,7 @@ test("buildMysqlSelectQuery selects all columns when column array is empty", () 
 test("buildMysqlSelectQuery with recordTable and columns selects all columns", () => {
   expect(
     buildMysqlSelectQuery(
-      createSelectStateWithRecordTable({ columns: [EVENT.ID] }, EVENT)
+      createSelectStateWithRecordTable({ columns: [EVENT.ID.FIELD] }, EVENT)
     )
   ).toBe("SELECT * FROM `projectclub`.`event`");
 });
@@ -36,7 +36,7 @@ test("buildMysqlSelectQuery with recordTable and columns selects all columns", (
 test("buildMysqlSelectQuery selects columns with column array", () => {
   expect(
     buildMysqlSelectQuery(
-      createSelectState({ columns: [EVENT.ID, EVENT.NAME] }, EVENT)
+      createSelectState({ columns: [EVENT.ID.FIELD, EVENT.NAME.FIELD] }, EVENT)
     )
   ).toBe(
     "SELECT `projectclub`.`event`.`id`, `projectclub`.`event`.`name` FROM `projectclub`.`event`"
@@ -95,7 +95,10 @@ test("buildMysqlSelectQuery with SelectState.groupBy adds group by expression", 
     buildMysqlSelectQuery(
       createSelectStateWithRecordTable(
         {
-          groupBy: OneOrMoreArrayUtil.just<any>(EVENT.ID, EVENT.NAME)
+          groupBy: OneOrMoreArrayUtil.just<any>(
+            EVENT.ID.FIELD,
+            EVENT.NAME.FIELD
+          )
         },
         EVENT
       )
@@ -112,7 +115,7 @@ test("buildMysqlSelectQuery with SelectState.orderBy adds order by expression", 
         {
           orderBy: OneOrMoreArrayUtil.just({
             direction: OrderDirection.Ascending,
-            field: EVENT.ID
+            field: EVENT.ID.FIELD
           })
         },
         EVENT
@@ -195,7 +198,7 @@ test("buildMysqlSelectQuery with all present builds all clauses", () => {
       createSelectState(
         {
           lockMode: LockMode.ForUpdate,
-          columns: [EVENT.ID],
+          columns: [EVENT.ID.FIELD],
           limit: 10,
           offset: 11,
           joins: OneOrMoreArrayUtil.just({
@@ -205,10 +208,10 @@ test("buildMysqlSelectQuery with all present builds all clauses", () => {
           }),
           orderBy: OneOrMoreArrayUtil.just({
             direction: OrderDirection.Ascending,
-            field: EVENT.ID
+            field: EVENT.ID.FIELD
           }),
           having: eq(val(1), val(2)),
-          groupBy: OneOrMoreArrayUtil.just(EVENT.ID),
+          groupBy: OneOrMoreArrayUtil.just(EVENT.ID.FIELD),
           condition: {
             kind: "ConditionCollection",
             conditions: OneOrMoreArrayUtil.just({

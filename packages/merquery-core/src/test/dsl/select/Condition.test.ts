@@ -15,7 +15,7 @@ import {
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
-  const condition = eqValue(EVENT.ID, 1);
+  const condition = eqValue(EVENT.ID.FIELD, 1);
 
   const queryRunner = StubQueryRunner({
     executeSelectState: jest.fn().mockReturnValue([])
@@ -46,8 +46,8 @@ test("where adds a condition to SelectState.conditions with AND operator", async
 });
 
 test("and adds a condition to SelectState.conditions with AND operator", async () => {
-  const firstCondition = eqValue(EVENT.ID, 1);
-  const testCondition = eqValue(EVENT.ID, 2);
+  const firstCondition = eqValue(EVENT.ID.FIELD, 1);
+  const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const queryRunner = StubQueryRunner({
     executeSelectState: jest.fn().mockResolvedValue([])
@@ -83,8 +83,8 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
 });
 
 test("or adds a condition to SelectState.conditions with OR operator", async () => {
-  const firstCondition = eqValue(EVENT.ID, 1);
-  const testCondition = eqValue(EVENT.ID, 2);
+  const firstCondition = eqValue(EVENT.ID.FIELD, 1);
+  const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const queryRunner = StubQueryRunner({
     executeSelectState: jest.fn().mockResolvedValue([])
@@ -120,10 +120,10 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
 });
 
 test("combinations of and or builds a ConditionCollection", async () => {
-  const t1 = eqValue(EVENT.ID, 1);
-  const t2 = eqValue(EVENT.NAME, "Test");
-  const t3 = eqValue(EVENT.ID, 5);
-  const t4 = eqValue(EVENT.NAME, "Hallo");
+  const t1 = eqValue(EVENT.ID.FIELD, 1);
+  const t2 = eqValue(EVENT.NAME.FIELD, "Test");
+  const t3 = eqValue(EVENT.ID.FIELD, 5);
+  const t4 = eqValue(EVENT.NAME.FIELD, "Hallo");
 
   const queryRunner = StubQueryRunner({
     executeSelectState: jest.fn().mockResolvedValue([])

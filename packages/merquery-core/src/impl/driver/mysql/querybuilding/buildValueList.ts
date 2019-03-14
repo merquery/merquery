@@ -1,9 +1,10 @@
-import { ValueField } from "../../../../Field";
+import { ValueField, Field } from "../../../../Field";
 import { buildValueField } from "./buildValueField";
 import { OneOrMoreArray, OneOrMoreArrayUtil } from "../../../OneOrMoreArray";
+import { buildField } from "./buildField";
 
-export function buildValueList(values: OneOrMoreArray<ValueField<any>>) {
+export function buildFieldList(values: OneOrMoreArray<Field<any>>) {
   return `(${OneOrMoreArrayUtil.toArray(values)
-    .map(buildValueField)
+    .map(buildField)
     .join(", ")})`;
 }

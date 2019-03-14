@@ -15,44 +15,36 @@ import { OneOrMoreArrayUtil } from "./OneOrMoreArray";
 
 export class TableFieldImpl<R extends Row, T>
   implements GeneratedTableField<R, T> {
-  kind!: "TableField";
-  table!: FieldOwner;
-  column!: string;
-  type!: DataTypeProps;
-  rowKind!: R["__ROW_KIND__"];
-
-  constructor(private field: TableField<R, T>) {
-    Object.assign(this, field);
-  }
+  constructor(public readonly FIELD: TableField<R, T>) {}
 
   equals(value: T): ComperatorCondition {
-    return compare(this.field, "=", val(value));
+    return compare(this.FIELD, "=", val(value));
   }
 
   equalsField(field: Field<T>): ComperatorCondition {
-    return compare(this.field, "=", field);
+    return compare(this.FIELD, "=", field);
   }
 
   lessThan(value: T): ComperatorCondition {
-    return compare(this.field, "<=", val(value));
+    return compare(this.FIELD, "<=", val(value));
   }
 
   lessThanField(field: Field<T>): ComperatorCondition {
-    return compare(this.field, "<=", field);
+    return compare(this.FIELD, "<=", field);
   }
 
   greaterThan(value: T): ComperatorCondition {
-    return compare(this.field, ">=", val(value));
+    return compare(this.FIELD, ">=", val(value));
   }
 
   greaterThanField(field: Field<T>): ComperatorCondition {
-    return compare(this.field, ">=", field);
+    return compare(this.FIELD, ">=", field);
   }
 
   in(value: T, ...values: T[]): InCondition {
     return {
       kind: "InCondition",
-      field: this.field,
+      field: this.FIELD,
       values: OneOrMoreArrayUtil.fromArray([value, ...values].map(val))
     };
   }
@@ -60,7 +52,7 @@ export class TableFieldImpl<R extends Row, T>
   alias(name: string): FieldAlias<T> {
     return {
       alias: name,
-      field: this.field,
+      field: this.FIELD,
       kind: "FieldAlias"
     };
   }

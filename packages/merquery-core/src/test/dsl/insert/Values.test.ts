@@ -12,7 +12,7 @@ test("insert without values has empty values array in InsertState", async () => 
   });
 
   const dsl = TestDSL(queryRunner);
-  await dsl.insertInto(EVENT, EVENT.ID, EVENT.NAME).execute();
+  await dsl.insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD).execute();
 
   expect(queryRunner.executeInsertState).toBeCalled();
 });
@@ -28,7 +28,7 @@ test("insert with one values has 1 values entry in array in InsertState", async 
 
   const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID, EVENT.NAME)
+    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
     .values(1, "Test")
     .execute();
 
@@ -47,7 +47,7 @@ test("insert with 2 values has 2 values entry in array in InsertState", async ()
 
   const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID, EVENT.NAME)
+    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
     .values(1, "Test")
     .values(2, "Test2")
     .execute();
