@@ -1,9 +1,7 @@
 import * as minimist from "minimist";
-import { generate } from "./codegen/generate";
 import { readFileSync } from "fs";
 import Project from "ts-morph";
-import { MysqlDriver } from "./driver/mysql/MysqlDriver";
-import { Driver } from "../Driver";
+import { MysqlDriver, Driver, generate } from "merquery-core";
 
 function createDriver(config: any): Driver {
   return new MysqlDriver({

@@ -1,0 +1,21 @@
+{
+  "name": "merquery-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "merquery-core": "^1.0.0",
+    "minimist": "^1.2.0",
+    "ts-morph": "^1.3.0",
+    "typescript": "^3.3.3333"
+  },
+  "devDependencies": {
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^11.11.3"
+  }
+}
