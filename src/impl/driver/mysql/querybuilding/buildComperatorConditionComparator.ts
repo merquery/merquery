@@ -1,12 +1,12 @@
 import { assertNever } from "../../../Util";
-import { Comperator } from "../../../../Condition";
+import { Comparator } from "../../../../Condition";
 
 /**
  *
  * @param operator Operator of the comparison
  * @returns String representation of the comparator
  */
-export function buildComperatorConditionComparator(operator: Comperator) {
+export function buildComperatorConditionComparator(operator: Comparator) {
   switch (operator) {
     case "=":
       return "=";

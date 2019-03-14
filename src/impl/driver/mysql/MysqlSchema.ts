@@ -71,6 +71,8 @@ export class MysqlSchema implements Schema {
       schemaTables.push(schemaTable);
     }
 
+    queryRunner.release();
+
     return schemaTables;
   }
 }

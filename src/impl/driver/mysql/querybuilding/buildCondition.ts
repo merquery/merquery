@@ -20,6 +20,10 @@ export function buildCondition(
       } else {
         return buildConditions(condition);
       }
+
+    case "InCondition":
+      return;
+
     default:
       return assertNever(condition);
   }

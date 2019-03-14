@@ -1,17 +1,24 @@
 import { QueryPartInternal } from "./QueryPart";
 import { Table } from "./TableLike";
-import { Field, val } from "./Field";
+import { Field, val, ValueField } from "./Field";
 import { ConditionWithOperator } from "./ConditionWithOperator";
 import { ConditionBuilderFinalStep } from "./ConditionBuilderFinalStep";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
+import { EVENT } from "./merquery";
 
-export type Comperator = "=" | ">=" | "<=";
+export type Comparator = "=" | ">=" | "<=";
+
+export interface InCondition {
+  kind: "InCondition";
+  field: Field<any>;
+  values: OneOrMoreArray<ValueField<any>>;
+}
 
 export interface ComperatorCondition {
   kind: "ComperatorCondition";
   field1: Field<any>;
   field2: Field<any>;
-  comperator: Comperator;
+  comperator: Comparator;
 }
 
 export interface ConditionCollection {
@@ -19,11 +26,11 @@ export interface ConditionCollection {
   conditions: OneOrMoreArray<ConditionWithOperator>;
 }
 
-export type Condition = ComperatorCondition | ConditionCollection;
+export type Condition = ComperatorCondition | ConditionCollection | InCondition;
 
 export function compare<T1, T2>(
   field1: Field<T1>,
-  comperator: Comperator,
+  comperator: Comparator,
   field2: Field<T2>
 ): ComperatorCondition {
   return {

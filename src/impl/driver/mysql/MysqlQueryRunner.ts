@@ -2,7 +2,7 @@ import { QueryRunner } from "../../../QueryRunner";
 import { SelectState } from "../../../SelectState";
 import { Table } from "../../../TableLike";
 import { assertNever } from "../../Util";
-import { Condition, ComperatorCondition, Comperator } from "../../../Condition";
+import { Condition, ComperatorCondition, Comparator } from "../../../Condition";
 import { Field, ValueField, TableField } from "../../../Field";
 import { ConditionOperator } from "../../../ConditionOperator";
 import _ = require("lodash");

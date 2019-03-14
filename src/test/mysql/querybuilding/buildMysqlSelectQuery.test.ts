@@ -95,7 +95,7 @@ test("buildMysqlSelectQuery with SelectState.groupBy adds group by expression", 
     buildMysqlSelectQuery(
       createSelectStateWithRecordTable(
         {
-          groupBy: OneOrMoreArrayUtil.just(EVENT.ID, EVENT.NAME)
+          groupBy: OneOrMoreArrayUtil.just<any>(EVENT.ID, EVENT.NAME)
         },
         EVENT
       )

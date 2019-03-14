@@ -1,6 +1,6 @@
 import { Table } from "../../TableLike";
 import { Row } from "../../Row";
-import { TableField, Field, val } from "../../Field";
+import { TableField, Field, val, ValueField } from "../../Field";
 import { InsertState } from "../../InsertState";
 import { InsertValuesStep1 } from "../../InsertValuesStep1";
 import { InsertValuesStep2 } from "../../InsertValuesStep2";
@@ -11,6 +11,7 @@ import { SubQuery } from "../../SubQuery";
 import { InsertOnDuplicateKeySetStep } from "../../InsertOnDuplicateKeySetStep";
 import { InsertOnDuplicateKeyStep } from "../../InsertOnDuplicateKeyStep";
 import { InsertOnDuplicateKeySetMoreStep } from "../../InsertOnDuplicateKeySetMoreStep";
+import { OneOrMoreArrayUtil } from "../OneOrMoreArray";
 
 export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
   implements
@@ -70,10 +71,10 @@ export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
     return this.addValues(values);
   }
 
-  private addFields(values: Field<any>[]) {
+  private addFields(values: ValueField<any>[]) {
     return this.create({
       ...this.state,
-      values: [...this.state.values, values]
+      values: [...this.state.values, OneOrMoreArrayUtil.fromArray(values)]
     });
   }
 

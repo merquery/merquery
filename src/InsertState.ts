@@ -1,6 +1,7 @@
 import { Row } from "./Row";
 import { Table } from "./TableLike";
-import { TableField, Field } from "./Field";
+import { TableField, Field, ValueField } from "./Field";
+import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 
 interface OnDuplicateKeyIgnore {
   kind: "OnDuplicateKeyIgnore";
@@ -14,6 +15,6 @@ interface OnDuplicateKeyUpdate<R extends Row> {
 export interface InsertState<R extends Row> {
   table: Table<R>;
   fields: TableField<R, any>[];
-  values: Field<any>[][];
+  values: OneOrMoreArray<ValueField<any>>[];
   duplicateKey?: OnDuplicateKeyIgnore | OnDuplicateKeyUpdate<R>;
 }

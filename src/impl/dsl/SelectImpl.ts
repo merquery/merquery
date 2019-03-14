@@ -1,6 +1,6 @@
 import { SelectWhereStep } from "../../SelectWhereStep";
 import { SelectConditionStep } from "../../SelectConditionStep";
-import { Condition, ComperatorCondition, Comperator } from "../../Condition";
+import { Condition, ComperatorCondition, Comparator } from "../../Condition";
 import { Table, TableLike, TableLikeOrTableLikeAlias } from "../../TableLike";
 import { SelectFinalStep } from "../../SelectFinalStep";
 import { assertNever } from "../Util";

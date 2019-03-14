@@ -1,0 +1,4 @@
+{
+  "merqueryModule": "..",
+  "outFile": "src/testutil/TestSchema.ts"
+}
