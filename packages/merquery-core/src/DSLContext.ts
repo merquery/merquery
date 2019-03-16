@@ -14,14 +14,22 @@ import { InsertValuesStep } from "./InsertValuesStep";
 import { UpdateSetStep } from "./UpdateSetStep";
 
 export interface DSLContext {
+  /**
+   * Select from a table
+   * @param table
+   */
   selectFrom<R extends Row>(table: Table<R>): SelectJoinStep<R>;
 
   /**
    * Select individual columns
-   * @param fields - Fields to select
+   * @param field The first field
+   * @param fields Other fields
    */
   select(field: Field<any>, ...fields: Field<any>[]): SelectFromStep<Row>;
 
+  /**
+   * @param cb Callback to be run in transaction context. Automatically commits after the returned promise is resolved.
+   */
   transaction<R>(cb: (configuration: DSLConfig) => Promise<R>): Promise<R>;
 
   insertInto<R extends Row, T1>(

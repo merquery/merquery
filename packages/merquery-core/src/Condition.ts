@@ -1,8 +1,5 @@
-import { QueryPartInternal } from "./QueryPart";
-import { Table } from "./TableLike";
-import { Field, val, ValueField } from "./Field";
 import { ConditionWithOperator } from "./ConditionWithOperator";
-import { ConditionBuilderFinalStep } from "./ConditionBuilderFinalStep";
+import { Field, val, ValueField } from "./Field";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 
 export type Comparator = "=" | ">=" | "<=";

@@ -8,7 +8,6 @@ import {
 } from "./JoinedTable";
 import { Row } from "./Row";
 import { Field } from "./Field";
-import { FromPart } from "./FromPart";
 import { ConditionCollection, Condition } from "./Condition";
 import { LockMode } from "./LockMode";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";

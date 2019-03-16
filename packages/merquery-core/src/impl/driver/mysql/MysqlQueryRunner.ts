@@ -1,20 +1,6 @@
-import { QueryRunner } from "../../../QueryRunner";
-import { SelectState } from "../../../SelectState";
-import { Table } from "../../../TableLike";
-import { assertNever } from "../../Util";
-import { Condition, ComperatorCondition, Comparator } from "../../../Condition";
-import { Field, ValueField, TableField } from "../../../Field";
-import { ConditionOperator } from "../../../ConditionOperator";
-import _ = require("lodash");
-import { ConditionWithOperator } from "../../../ConditionWithOperator";
-import { FieldCollection } from "../../../FieldCollection";
-import { OrderByWithDirection } from "../../../OrderByWithDirection";
-import { OrderDirection } from "../../../OrderDirection";
 import { MysqlDriver } from "./MysqlDriver";
-import { Row } from "../../../Row";
 import { ResultRow } from "../../../QueryResult";
 import { PoolConnection, QueryOptions } from "mysql";
-import { FromPart, TableFromPart, SubQueryFromPart } from "../../../FromPart";
 import * as SqlString from "sqlstring";
 import { buildMysqlSelectQuery } from "./querybuilding/buildMysqlSelectQuery";
 import { InsertState } from "../../../InsertState";
@@ -22,6 +8,8 @@ import { buildMysqlInsertQuery } from "./querybuilding/buildMysqlInsertQuery";
 import { buildIdentifier } from "./querybuilding/buildIdentifier";
 import { UpdateState } from "../../../UpdateState";
 import { buildMysqlUpdateQuery } from "./querybuilding/buildMysqlUpdateQuery";
+import { QueryRunner } from "../../../QueryRunner";
+import { SelectState } from "../../../SelectState";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
