@@ -6,15 +6,18 @@ export interface DataTypeIntegerProps {
   type: "INTEGER";
   length: number;
   signed: boolean;
+  nullable: boolean;
 }
 
 export interface DataTypeEnumProps<T extends string> {
   type: "ENUM";
   options: T[];
+  nullable: boolean;
 }
 
 export interface DataTypeStringProps {
   type: "STRING";
+  nullable: boolean;
 }
 
 export type DataTypeProps =

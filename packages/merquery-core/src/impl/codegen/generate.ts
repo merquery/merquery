@@ -19,7 +19,7 @@ export function snakeCaseToCamelCase(str: string) {
     .join("");
 }
 
-export function tsTypeFromColumnType(columnType: DataTypeProps): string {
+function primaryTsTypeFromColumnType(columnType: DataTypeProps): string {
   switch (columnType.type) {
     case "INTEGER":
       return "number";
@@ -30,6 +30,12 @@ export function tsTypeFromColumnType(columnType: DataTypeProps): string {
   }
 
   return "any";
+}
+
+export function tsTypeFromColumnType(columnType: DataTypeProps): string {
+  const primary = primaryTsTypeFromColumnType(columnType);
+
+  return columnType.nullable ? `${primary} | null` : primary;
 }
 
 export interface GenerateConfig {
@@ -125,7 +131,7 @@ export async function generate({
     fields.forEach(field => {
       tableDefString += `${JSON.stringify(
         field.column.toUpperCase()
-      )}: new TableFieldImpl<${rowKind}, ${tsTypeFromColumnType(
+      )}: new TableFieldImpl<${rowKind}, ${primaryTsTypeFromColumnType(
         field.type
       )}>(${JSON.stringify(field)}),`;
     });

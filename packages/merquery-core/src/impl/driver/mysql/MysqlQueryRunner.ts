@@ -30,6 +30,7 @@ export interface TableDef {
 export interface TableColumn {
   Field: string;
   Type: string;
+  Null: "YES" | "NO";
 }
 
 export class MysqlQueryRunner implements QueryRunner {

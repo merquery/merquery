@@ -7,36 +7,42 @@ import {
   DataTypeIntegerProps
 } from "../../../DataType";
 
-const STRING_TYPE: DataTypeStringProps = {
-  type: "STRING"
-};
-
 export class MysqlSchema implements Schema {
   constructor(private driver: MysqlDriver, private schemaName: string) {}
 
-  getIntType(length: number, signed: boolean): DataTypeIntegerProps {
+  getIntType(
+    length: number,
+    signed: boolean,
+    nullable: boolean
+  ): DataTypeIntegerProps {
     return {
       type: "INTEGER",
       length: length,
-      signed: signed
+      signed: signed,
+      nullable: nullable
     };
   }
 
-  getStringType() {
-    return STRING_TYPE;
+  getStringType(nullable: boolean): DataTypeStringProps {
+    return {
+      type: "STRING",
+      nullable: nullable
+    };
   }
 
   getTypeFromColumn(tableColumn: TableColumn): DataTypeProps {
     const typeIdentifier = tableColumn.Type.split("(")[0].toUpperCase();
 
+    const nullable = tableColumn.Null === "YES";
+
     switch (typeIdentifier) {
       case "VARCHAR":
       case "TEXT":
       case "DATE":
-        return this.getStringType();
+        return this.getStringType(nullable);
       case "INT":
       case "BIGINT":
-        return this.getIntType(0, true);
+        return this.getIntType(0, true, nullable);
     }
 
     throw new Error(`Unsupported data type ${typeIdentifier}`);

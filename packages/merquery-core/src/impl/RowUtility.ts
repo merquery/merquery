@@ -5,9 +5,10 @@ import { ResultRow } from "../QueryResult";
 import { isDataType } from "../DataType";
 import { assertNever } from "./Util";
 import { FieldOwner } from "../FieldOwner";
+import { buildTableField } from "./driver/mysql/querybuilding/buildTableField";
 
 function buildTableFieldName<R extends Row, T>(field: TableField<R, T>) {
-  return [field.column].map(str => `\`${str}\``).join(".");
+  return buildTableField(field);
 }
 
 export class RowUtility {
@@ -91,6 +92,10 @@ export class RowUtility {
 
     if (typeof res === "undefined") {
       return undefined;
+    }
+
+    if (field.type.nullable && res === null) {
+      return null;
     }
 
     if (!isDataType<T>(field.type, res)) {
