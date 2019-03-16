@@ -4,7 +4,7 @@ const driver = new MysqlDriver({
   host: "localhost",
   user: "root",
   password: "",
-  database: "projectclub"
+  database: "merquerysample"
 });
 
 async function main() {
