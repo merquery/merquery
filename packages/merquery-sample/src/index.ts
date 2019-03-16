@@ -1,30 +1,19 @@
 import { MysqlDriver, DSL } from "merquery-core";
-import { USER, UserRow } from "./merquery";
-
+import { UserRepository } from "./UserRepository";
 const driver = new MysqlDriver({
   host: "localhost",
   user: "root",
   password: "",
-  database: "merquerysample"
+  database: "projectclub"
 });
 
-const dsl = DSL.withDriver(driver);
-
 async function main() {
-  await dsl
-    .insertInto(USER, USER.ID.FIELD, USER.USERNAME.FIELD, USER.LAST_LOGIN.FIELD)
-    .values("123", "Test", 3)
-    .onDuplicateKeyIgnore()
-    .execute();
+  const dsl = DSL.withDriver(driver);
+  const repository = new UserRepository(dsl);
 
-  const row = await dsl
-    .selectFrom(USER)
-    .where(USER.ID.equals("123"))
-    .fetchOne();
-
-  if (row) {
-    console.log(row);
-  }
+  await repository.createUser("1", "Bob");
+  await repository.upgradeToPremium("1");
+  console.log(await repository.fetchPaidUsers());
 }
 
 main().catch(console.error);

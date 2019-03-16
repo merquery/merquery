@@ -13,7 +13,7 @@ function buildTableFieldName<R extends Row, T>(field: TableField<R, T>) {
 
 export class RowUtility {
   static buildRow<R extends Row>(table: Table<R>, result: ResultRow) {
-    const obj: any = { __row_kind__: table.rowKind };
+    const obj: any = { __ROW_KIND__: table.rowKind };
     table.fields.forEach(field => {
       const value = this.getValueOrUndefined(result, field);
       if (typeof value === "undefined") {
@@ -40,7 +40,7 @@ export class RowUtility {
     table: Table<R>,
     result: ResultRow
   ): Partial<R> {
-    const obj: any = { __row_kind__: table.rowKind };
+    const obj: any = { __ROW_KIND__: table.rowKind };
     table.fields.forEach(field => {
       const value = this.getValueOrUndefined(result, field);
       obj[field.column] = value;

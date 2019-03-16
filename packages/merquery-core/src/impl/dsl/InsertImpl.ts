@@ -23,8 +23,8 @@ export class InsertImpl<R extends Row, T1 = any, T2 = any, T3 = any>
     InsertOnDuplicateKeySetMoreStep<R>,
     InsertFinalStep<R> {
   constructor(
-    private state: InsertState<R>,
-    private queryRunner: QueryRunner
+    readonly state: InsertState<R>,
+    private readonly queryRunner: QueryRunner
   ) {}
   asSqlString(): string {
     return this.queryRunner.representInsertStateAsSqlString(this.state);

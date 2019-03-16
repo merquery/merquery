@@ -4,7 +4,8 @@ import { TableColumn } from "./MysqlQueryRunner";
 import {
   DataTypeProps,
   DataTypeStringProps,
-  DataTypeIntegerProps
+  DataTypeIntegerProps,
+  DataTypeEnumProps
 } from "../../../DataType";
 
 export class MysqlSchema implements Schema {
@@ -30,8 +31,23 @@ export class MysqlSchema implements Schema {
     };
   }
 
+  getEnumType(
+    betweenParenths: string,
+    nullable: boolean
+  ): DataTypeEnumProps<string> {
+    return {
+      nullable: nullable,
+      options: betweenParenths.split(",").map(str => str.slice(1, -1)),
+      type: "ENUM"
+    };
+  }
+
   getTypeFromColumn(tableColumn: TableColumn): DataTypeProps {
     const typeIdentifier = tableColumn.Type.split("(")[0].toUpperCase();
+    const betweenParenths = tableColumn.Type.substring(
+      tableColumn.Type.lastIndexOf("(") + 1,
+      tableColumn.Type.lastIndexOf(")")
+    );
 
     const nullable = tableColumn.Null === "YES";
 
@@ -43,6 +59,8 @@ export class MysqlSchema implements Schema {
       case "INT":
       case "BIGINT":
         return this.getIntType(0, true, nullable);
+      case "ENUM":
+        return this.getEnumType(betweenParenths, nullable);
     }
 
     throw new Error(`Unsupported data type ${typeIdentifier}`);

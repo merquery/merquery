@@ -47,8 +47,8 @@ export class SelectImpl<R extends Row>
     SelectForUpdate<R>,
     SelectFinalStep<R> {
   constructor(
-    private state: SelectState<R>,
-    private queryRunner: QueryRunner
+    readonly state: SelectState<R>,
+    private readonly queryRunner: QueryRunner
   ) {}
 
   forUpdate() {

@@ -4,7 +4,6 @@ import { Field, val, ValueField } from "./Field";
 import { ConditionWithOperator } from "./ConditionWithOperator";
 import { ConditionBuilderFinalStep } from "./ConditionBuilderFinalStep";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
-import { EVENT } from "./merquery";
 
 export type Comparator = "=" | ">=" | "<=";
 

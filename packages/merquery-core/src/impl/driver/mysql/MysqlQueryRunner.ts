@@ -21,6 +21,7 @@ import { InsertState } from "../../../InsertState";
 import { buildMysqlInsertQuery } from "./querybuilding/buildMysqlInsertQuery";
 import { buildIdentifier } from "./querybuilding/buildIdentifier";
 import { UpdateState } from "../../../UpdateState";
+import { buildMysqlUpdateQuery } from "./querybuilding/buildMysqlUpdateQuery";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
@@ -41,15 +42,17 @@ export class MysqlQueryRunner implements QueryRunner {
 
   constructor(private driver: MysqlDriver) {}
 
-  executeUpdateState(query: UpdateState<any>): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
   representInsertStateAsSqlString(state: InsertState<any>): string {
     throw new Error("Method not implemented.");
   }
   representUpdateStateAsSqlString(state: UpdateState<any>): string {
     throw new Error("Method not implemented.");
+  }
+
+  executeUpdateState(query: UpdateState<any>): Promise<void> {
+    const q = buildMysqlUpdateQuery(query);
+
+    return this.query(q).then(() => {});
   }
 
   executeInsertState(query: InsertState<any>): Promise<void> {

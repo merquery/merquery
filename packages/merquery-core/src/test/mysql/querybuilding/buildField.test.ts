@@ -15,7 +15,8 @@ test("buildField builds a table field when a TableField is supplied", () => {
     column: "column",
     rowKind: "XXX",
     type: {
-      type: "STRING"
+      type: "STRING",
+      nullable: false
     }
   };
 

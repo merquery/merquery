@@ -2,7 +2,8 @@ import { InsertState } from "../../../../InsertState";
 import { buildTable } from "./buildTable";
 import { buildFieldList } from "./buildValueList";
 import { OneOrMoreArrayUtil } from "../../../OneOrMoreArray";
-import { buildOnDuplicateKeyUpdate } from "./buildOnDuplicateKeyUpdate";
+import { buildSetList } from "./buildSetList";
+
 export function buildMysqlInsertQuery(state: InsertState<any>) {
   let query = "";
 
@@ -25,8 +26,8 @@ export function buildMysqlInsertQuery(state: InsertState<any>) {
     state.duplicateKey &&
     state.duplicateKey.kind === "OnDuplicateKeyUpdate"
   ) {
-    query += ` ON DUPLICATE KEY ${buildOnDuplicateKeyUpdate(
-      state.duplicateKey
+    query += ` ON DUPLICATE KEY UPDATE ${buildSetList(
+      OneOrMoreArrayUtil.fromArray(state.duplicateKey.updates)
     )}`;
   }
 

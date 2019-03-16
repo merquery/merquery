@@ -5,3 +5,4 @@ export { Table } from "./TableLike";
 export { generate } from "./impl/codegen/generate";
 export { Driver } from "./Driver";
 export { MysqlDriver } from "./impl/driver/mysql/MysqlDriver";
+export { DSLContext } from "./DSLContext";
