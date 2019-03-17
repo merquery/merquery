@@ -1,99 +1,45 @@
-import { Table } from "./TableLike";
 import { Row } from "./Row";
-import { SelectJoinStep } from "./SelectJoinStep";
-import { DSLConfig } from "./DSLConfig";
-import { ResultQuery } from "./ResultQuery";
-import { Field, TableField } from "./Field";
-import { SelectFromStep } from "./SelectFromStep";
-import { SubQuery } from "./SubQuery";
-import { InsertImpl } from "./impl/dsl/InsertImpl";
-import { InsertValuesStep } from "./InsertValuesStep";
-import { UpdateSetStep } from "./UpdateSetStep";
-import {
-  InsertValuesStep1,
-  InsertValuesStep2,
-  InsertValuesStep3,
-  InsertValuesStep7,
-  InsertValuesStep6,
-  InsertValuesStep5,
-  InsertValuesStep4,
-  InsertValuesStep8,
-  InsertValuesStep9,
-  InsertValuesStep10,
-  InsertValuesStep11,
-  InsertValuesStep12,
-  InsertValuesStep13,
-  InsertValuesStep14,
-  InsertValuesStep15,
-  InsertValuesStep16,
-  InsertValuesStep17,
-  InsertValuesStep18,
-  InsertValuesStep19,
-  InsertValuesStep20,
-  InsertValuesStep21,
-  InsertValuesStep22,
-  InsertValuesStep23,
-  InsertValuesStep24,
-  InsertValuesStep25,
-  InsertValuesStep26,
-  InsertValuesStep27,
-  InsertValuesStep28,
-  InsertValuesStep29,
-  InsertValuesStep30
-} from "./InsertValuesStepN";
+import { InsertOnDuplicateKeyStep } from "./InsertOnDuplicateKeyStep";
 
-export interface DSLContext {
-  /**
-   * Select from a table
-   * @param table
-   */
-  selectFrom<R extends Row>(table: Table<R>): SelectJoinStep<R>;
+export interface InsertValuesStep1<R extends Row, T1>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(value1: T1): InsertValuesStep1<R, T1>;
+}
 
-  /**
-   * Select individual columns
-   * @param field The first field
-   * @param fields Other fields
-   */
-  select(field: Field<any>, ...fields: Field<any>[]): SelectFromStep<Row>;
+export interface InsertValuesStep2<R extends Row, T1, T2>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(value1: T1, value2: T2): InsertValuesStep2<R, T1, T2>;
+}
 
-  /**
-   * @param cb Callback to be run in transaction context. Automatically commits after the returned promise is resolved.
-   */
-  transaction<R>(cb: (configuration: DSLConfig) => Promise<R>): Promise<R>;
-  insertInto<R extends Row, T1>(row: R, value1: T1): InsertValuesStep1<R, T1>;
+export interface InsertValuesStep3<R extends Row, T1, T2, T3>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(value1: T1, value2: T2, value3: T3): InsertValuesStep3<R, T1, T2, T3>;
+}
 
-  insertInto<R extends Row, T1, T2>(
-    row: R,
-    value1: T1,
-    value2: T2
-  ): InsertValuesStep2<R, T1, T2>;
-
-  insertInto<R extends Row, T1, T2, T3>(
-    row: R,
-    value1: T1,
-    value2: T2,
-    value3: T3
-  ): InsertValuesStep3<R, T1, T2, T3>;
-
-  insertInto<R extends Row, T1, T2, T3, T4>(
-    row: R,
+export interface InsertValuesStep4<R extends Row, T1, T2, T3, T4>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
     value4: T4
   ): InsertValuesStep4<R, T1, T2, T3, T4>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5>(
-    row: R,
+export interface InsertValuesStep5<R extends Row, T1, T2, T3, T4, T5>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
     value4: T4,
     value5: T5
   ): InsertValuesStep5<R, T1, T2, T3, T4, T5>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6>(
-    row: R,
+export interface InsertValuesStep6<R extends Row, T1, T2, T3, T4, T5, T6>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -101,9 +47,11 @@ export interface DSLContext {
     value5: T5,
     value6: T6
   ): InsertValuesStep6<R, T1, T2, T3, T4, T5, T6>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7>(
-    row: R,
+export interface InsertValuesStep7<R extends Row, T1, T2, T3, T4, T5, T6, T7>
+  extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -112,9 +60,20 @@ export interface DSLContext {
     value6: T6,
     value7: T7
   ): InsertValuesStep7<R, T1, T2, T3, T4, T5, T6, T7>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8>(
-    row: R,
+export interface InsertValuesStep8<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -124,9 +83,21 @@ export interface DSLContext {
     value7: T7,
     value8: T8
   ): InsertValuesStep8<R, T1, T2, T3, T4, T5, T6, T7, T8>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-    row: R,
+export interface InsertValuesStep9<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -137,9 +108,22 @@ export interface DSLContext {
     value8: T8,
     value9: T9
   ): InsertValuesStep9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-    row: R,
+export interface InsertValuesStep10<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -151,9 +135,23 @@ export interface DSLContext {
     value9: T9,
     value10: T10
   ): InsertValuesStep10<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-    row: R,
+export interface InsertValuesStep11<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -166,9 +164,24 @@ export interface DSLContext {
     value10: T10,
     value11: T11
   ): InsertValuesStep11<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>;
+}
 
-  insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-    row: R,
+export interface InsertValuesStep12<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -182,24 +195,25 @@ export interface DSLContext {
     value11: T11,
     value12: T12
   ): InsertValuesStep12<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13
-  >(
-    row: R,
+export interface InsertValuesStep13<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -229,25 +243,26 @@ export interface DSLContext {
     T12,
     T13
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14
-  >(
-    row: R,
+export interface InsertValuesStep14<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -279,26 +294,27 @@ export interface DSLContext {
     T13,
     T14
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15
-  >(
-    row: R,
+export interface InsertValuesStep15<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -332,27 +348,28 @@ export interface DSLContext {
     T14,
     T15
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16
-  >(
-    row: R,
+export interface InsertValuesStep16<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -388,28 +405,29 @@ export interface DSLContext {
     T15,
     T16
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17
-  >(
-    row: R,
+export interface InsertValuesStep17<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -447,29 +465,30 @@ export interface DSLContext {
     T16,
     T17
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18
-  >(
-    row: R,
+export interface InsertValuesStep18<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -509,30 +528,31 @@ export interface DSLContext {
     T17,
     T18
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19
-  >(
-    row: R,
+export interface InsertValuesStep19<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -574,31 +594,32 @@ export interface DSLContext {
     T18,
     T19
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20
-  >(
-    row: R,
+export interface InsertValuesStep20<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -642,32 +663,33 @@ export interface DSLContext {
     T19,
     T20
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21
-  >(
-    row: R,
+export interface InsertValuesStep21<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -713,33 +735,34 @@ export interface DSLContext {
     T20,
     T21
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22
-  >(
-    row: R,
+export interface InsertValuesStep22<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -787,34 +810,35 @@ export interface DSLContext {
     T21,
     T22
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23
-  >(
-    row: R,
+export interface InsertValuesStep23<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -864,35 +888,36 @@ export interface DSLContext {
     T22,
     T23
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24
-  >(
-    row: R,
+export interface InsertValuesStep24<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -944,36 +969,37 @@ export interface DSLContext {
     T23,
     T24
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25
-  >(
-    row: R,
+export interface InsertValuesStep25<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1027,37 +1053,38 @@ export interface DSLContext {
     T24,
     T25
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25,
-    T26
-  >(
-    row: R,
+export interface InsertValuesStep26<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25,
+  T26
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1113,38 +1140,39 @@ export interface DSLContext {
     T25,
     T26
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25,
-    T26,
-    T27
-  >(
-    row: R,
+export interface InsertValuesStep27<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25,
+  T26,
+  T27
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1202,39 +1230,40 @@ export interface DSLContext {
     T26,
     T27
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25,
-    T26,
-    T27,
-    T28
-  >(
-    row: R,
+export interface InsertValuesStep28<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25,
+  T26,
+  T27,
+  T28
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1294,40 +1323,41 @@ export interface DSLContext {
     T27,
     T28
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25,
-    T26,
-    T27,
-    T28,
-    T29
-  >(
-    row: R,
+export interface InsertValuesStep29<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25,
+  T26,
+  T27,
+  T28,
+  T29
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1389,41 +1419,42 @@ export interface DSLContext {
     T28,
     T29
   >;
+}
 
-  insertInto<
-    R extends Row,
-    T1,
-    T2,
-    T3,
-    T4,
-    T5,
-    T6,
-    T7,
-    T8,
-    T9,
-    T10,
-    T11,
-    T12,
-    T13,
-    T14,
-    T15,
-    T16,
-    T17,
-    T18,
-    T19,
-    T20,
-    T21,
-    T22,
-    T23,
-    T24,
-    T25,
-    T26,
-    T27,
-    T28,
-    T29,
-    T30
-  >(
-    row: R,
+export interface InsertValuesStep30<
+  R extends Row,
+  T1,
+  T2,
+  T3,
+  T4,
+  T5,
+  T6,
+  T7,
+  T8,
+  T9,
+  T10,
+  T11,
+  T12,
+  T13,
+  T14,
+  T15,
+  T16,
+  T17,
+  T18,
+  T19,
+  T20,
+  T21,
+  T22,
+  T23,
+  T24,
+  T25,
+  T26,
+  T27,
+  T28,
+  T29,
+  T30
+> extends InsertOnDuplicateKeyStep<R> {
+  values(
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1487,6 +1518,4 @@ export interface DSLContext {
     T29,
     T30
   >;
-
-  update<R extends Row>(table: Table<R>): UpdateSetStep<R>;
 }
