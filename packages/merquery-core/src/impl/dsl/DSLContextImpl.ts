@@ -15,6 +15,8 @@ import { SubQuery } from "../../SubQuery";
 import { InsertImpl } from "./InsertImpl";
 import { UpdateSetStep } from "../../UpdateSetStep";
 import { UpdateImpl } from "./UpdateImpl";
+import { DeleteWhereStep } from "../../DeleteWhereStep";
+import { DeleteImpl } from "./DeleteImpl";
 
 export class DSLContextImpl implements DSLContext {
   private queryRunner: QueryRunner;
@@ -63,5 +65,9 @@ export class DSLContextImpl implements DSLContext {
     } finally {
       if (!this.config.queryRunner) queryRunner.release();
     }
+  }
+
+  deleteFrom<R extends Row>(table: Table<R>): DeleteWhereStep<R> {
+    return DeleteImpl.initial(this.queryRunner, table);
   }
 }

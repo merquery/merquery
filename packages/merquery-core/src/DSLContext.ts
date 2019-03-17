@@ -41,6 +41,7 @@ import {
   InsertValuesStep29,
   InsertValuesStep30
 } from "./InsertValuesStepN";
+import { DeleteWhereStep } from "./DeleteWhereStep";
 
 export interface DSLContext {
   /**
@@ -1498,4 +1499,6 @@ export interface DSLContext {
   >;
 
   update<R extends Row>(table: Table<R>): UpdateSetStep<R>;
+
+  deleteFrom<R extends Row>(table: Table<R>): DeleteWhereStep<R>;
 }
