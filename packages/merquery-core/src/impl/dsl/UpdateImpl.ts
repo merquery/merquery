@@ -1,7 +1,7 @@
 import { UpdateSetStep } from "../../UpdateSetStep";
 import { Row } from "../../Row";
 import { UpdateSetMoreStep } from "../../UpdateSetMoreStep";
-import { TableField } from "../../Field";
+import { TableField, val } from "../../Field";
 import { UpdateState } from "../../UpdateState";
 import { QueryRunner } from "../../QueryRunner";
 import { UpdateConditionStep } from "../../UpdateConditionStep";
@@ -66,7 +66,7 @@ export class UpdateImpl<R extends Row>
   set<T>(column: TableField<R, T>, value: T) {
     return this.create({
       ...this.state,
-      updates: [...this.state.updates, [column, value]]
+      updates: [...this.state.updates, [column, val(value)]]
     });
   }
 

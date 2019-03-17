@@ -6,6 +6,7 @@ import {
 } from "../../../testutil/TestUtil";
 import { EVENT } from "../../../testutil/TestSchema";
 import { UpdateState } from "../../../UpdateState";
+import { val } from "../../../Field";
 
 test("set adds one change to UpdateState.updates", () => {
   const queryRunner = StubQueryRunner({
@@ -22,7 +23,7 @@ test("set adds one change to UpdateState.updates", () => {
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
-    updates: [[EVENT.ID.FIELD, 123]]
+    updates: [[EVENT.ID.FIELD, val(123)]]
   });
 });
 
@@ -44,9 +45,9 @@ test("multiple set adds multiple to UpdateState.updates", () => {
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
     updates: [
-      [EVENT.ID.FIELD, 123],
-      [EVENT.NAME.FIELD, "Name"],
-      [EVENT.DESCRIPTION.FIELD, "Description"]
+      [EVENT.ID.FIELD, val(123)],
+      [EVENT.NAME.FIELD, val("Name")],
+      [EVENT.DESCRIPTION.FIELD, val("Description")]
     ]
   });
 });

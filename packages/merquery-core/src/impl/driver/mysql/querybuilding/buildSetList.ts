@@ -1,15 +1,17 @@
-import { TableField, val } from "../../../../Field";
+import { TableField, val, ValueField } from "../../../../Field";
 import { Row } from "../../../../Row";
 import { buildField } from "./buildField";
 import { buildValueField } from "./buildValueField";
 import { OneOrMoreArray, OneOrMoreArrayUtil } from "../../../OneOrMoreArray";
 
-function buildAssignment<R extends Row, T>(v: [TableField<R, T>, T]) {
-  return `${buildField(v[0])} = ${buildValueField(val(v[1]))}`;
+export type Assignment<R extends Row, T> = [TableField<R, T>, ValueField<T>];
+
+function buildAssignment<R extends Row, T>(v: Assignment<R, T>) {
+  return `${buildField(v[0])} = ${buildValueField(v[1])}`;
 }
 
 export function buildSetList<R extends Row>(
-  assignments: OneOrMoreArray<[TableField<R, any>, any]>
+  assignments: OneOrMoreArray<Assignment<R, any>>
 ) {
   return OneOrMoreArrayUtil.toArray(assignments)
     .map(buildAssignment)
