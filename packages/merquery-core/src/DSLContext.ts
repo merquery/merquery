@@ -60,23 +60,32 @@ export interface DSLContext {
    * @param cb Callback to be run in transaction context. Automatically commits after the returned promise is resolved.
    */
   transaction<R>(cb: (configuration: DSLConfig) => Promise<R>): Promise<R>;
-  insertInto<R extends Row, T1>(row: R, value1: T1): InsertValuesStep1<R, T1>;
+
+  insertInto<R extends Row>(
+    table: Table<R>,
+    ...values: any[]
+  ): InsertValuesStep<R>;
+
+  insertInto<R extends Row, T1>(
+    table: Table<R>,
+    value1: T1
+  ): InsertValuesStep1<R, T1>;
 
   insertInto<R extends Row, T1, T2>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2
   ): InsertValuesStep2<R, T1, T2>;
 
   insertInto<R extends Row, T1, T2, T3>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3
   ): InsertValuesStep3<R, T1, T2, T3>;
 
   insertInto<R extends Row, T1, T2, T3, T4>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -84,7 +93,7 @@ export interface DSLContext {
   ): InsertValuesStep4<R, T1, T2, T3, T4>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -93,7 +102,7 @@ export interface DSLContext {
   ): InsertValuesStep5<R, T1, T2, T3, T4, T5>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -103,7 +112,7 @@ export interface DSLContext {
   ): InsertValuesStep6<R, T1, T2, T3, T4, T5, T6>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -114,7 +123,7 @@ export interface DSLContext {
   ): InsertValuesStep7<R, T1, T2, T3, T4, T5, T6, T7>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -126,7 +135,7 @@ export interface DSLContext {
   ): InsertValuesStep8<R, T1, T2, T3, T4, T5, T6, T7, T8>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -139,7 +148,7 @@ export interface DSLContext {
   ): InsertValuesStep9<R, T1, T2, T3, T4, T5, T6, T7, T8, T9>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -153,7 +162,7 @@ export interface DSLContext {
   ): InsertValuesStep10<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -168,7 +177,7 @@ export interface DSLContext {
   ): InsertValuesStep11<R, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>;
 
   insertInto<R extends Row, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -199,7 +208,7 @@ export interface DSLContext {
     T12,
     T13
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -247,7 +256,7 @@ export interface DSLContext {
     T13,
     T14
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -298,7 +307,7 @@ export interface DSLContext {
     T14,
     T15
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -352,7 +361,7 @@ export interface DSLContext {
     T15,
     T16
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -409,7 +418,7 @@ export interface DSLContext {
     T16,
     T17
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -469,7 +478,7 @@ export interface DSLContext {
     T17,
     T18
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -532,7 +541,7 @@ export interface DSLContext {
     T18,
     T19
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -598,7 +607,7 @@ export interface DSLContext {
     T19,
     T20
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -667,7 +676,7 @@ export interface DSLContext {
     T20,
     T21
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -739,7 +748,7 @@ export interface DSLContext {
     T21,
     T22
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -814,7 +823,7 @@ export interface DSLContext {
     T22,
     T23
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -892,7 +901,7 @@ export interface DSLContext {
     T23,
     T24
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -973,7 +982,7 @@ export interface DSLContext {
     T24,
     T25
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1057,7 +1066,7 @@ export interface DSLContext {
     T25,
     T26
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1144,7 +1153,7 @@ export interface DSLContext {
     T26,
     T27
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1234,7 +1243,7 @@ export interface DSLContext {
     T27,
     T28
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1327,7 +1336,7 @@ export interface DSLContext {
     T28,
     T29
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,
@@ -1423,7 +1432,7 @@ export interface DSLContext {
     T29,
     T30
   >(
-    row: R,
+    table: Table<R>,
     value1: T1,
     value2: T2,
     value3: T3,

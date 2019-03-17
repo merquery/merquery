@@ -13,9 +13,6 @@ import { SelectFromStep } from "../../SelectFromStep";
 import { Field, TableField } from "../../Field";
 import { SubQuery } from "../../SubQuery";
 import { InsertImpl } from "./InsertImpl";
-import { InsertValuesStep1 } from "../../InsertValuesStep1";
-import { InsertValuesStep2 } from "../../InsertValuesStep2";
-import { InsertValuesStep3 } from "../../InsertValuesStep3";
 import { UpdateSetStep } from "../../UpdateSetStep";
 import { UpdateImpl } from "./UpdateImpl";
 
@@ -33,7 +30,7 @@ export class DSLContextImpl implements DSLContext {
   insertInto<R extends Row>(
     table: Table<R>,
     ...fields: TableField<R, any>[]
-  ): InsertImpl<R, any, any, any> {
+  ): InsertImpl<R> {
     return InsertImpl.initial(this.queryRunner, table, ...fields);
   }
 
