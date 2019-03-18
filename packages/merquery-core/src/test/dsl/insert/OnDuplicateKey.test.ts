@@ -1,66 +1,79 @@
 import {
   StubQueryRunner,
   TestDSL,
-  TestSetup
+  TestSetup,
+  StubQueryBuilder
 } from "../../../testutil/TestUtil";
 import { InsertState } from "../../../InsertState";
 import { EVENT } from "../../../testutil/TestSchema";
 import { val } from "../../../impl/util/val";
+import { InsertImpl } from "../../../impl/dsl/InsertImpl";
 
 test("onDuplicateKeyUpdate and set sets the correct InsertState.duplicateKey and single update", async () => {
-  const { dsl, runner } = TestSetup();
+  const insertDsl = InsertImpl.initial(
+    StubQueryRunner(),
+    StubQueryBuilder(),
+    EVENT
+  );
 
-  await dsl
-    .insertInto(EVENT, EVENT.ID.FIELD)
-    .onDuplicateKeyUpdate()
-    .set(EVENT.ID.FIELD, 2)
-    .execute();
-
-  expect(runner.executeInsertState).toBeCalledWith({
-    duplicateKey: {
-      kind: "OnDuplicateKeyUpdate",
-      updates: [[EVENT.ID.FIELD, val(2)]]
-    },
-    fields: [EVENT.ID.FIELD],
-    table: EVENT,
-    values: []
-  });
+  expect(insertDsl.onDuplicateKeyUpdate().set(EVENT.ID.FIELD, 2).state).toEqual(
+    {
+      duplicateKey: {
+        kind: "OnDuplicateKeyUpdate",
+        updates: [[EVENT.ID.FIELD, val(2)]]
+      },
+      fields: [],
+      table: EVENT,
+      values: []
+    }
+  );
 });
 
 test("onDuplicateKeyUpdate and multiple set sets the correct InsertState.duplicateKey and updates", async () => {
-  const { dsl, runner } = TestSetup();
+  const insertDsl = InsertImpl.initial(
+    StubQueryRunner(),
+    StubQueryBuilder(),
+    EVENT
+  );
 
-  await dsl
-    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
-    .onDuplicateKeyUpdate()
-    .set(EVENT.ID.FIELD, 3)
-    .set(EVENT.NAME.FIELD, "Test")
-    .execute();
-
-  expect(runner.executeInsertState).toBeCalledWith({
+  expect(
+    insertDsl
+      .onDuplicateKeyUpdate()
+      .set(EVENT.ID.FIELD, 3)
+      .set(EVENT.NAME.FIELD, "Test").state
+  ).toEqual({
     duplicateKey: {
       kind: "OnDuplicateKeyUpdate",
       updates: [[EVENT.ID.FIELD, val(3)], [EVENT.NAME.FIELD, val("Test")]]
     },
-    fields: [EVENT.ID.FIELD, EVENT.NAME.FIELD],
+    fields: [],
     table: EVENT,
     values: []
   });
 });
 
+test("set throws error if no OnDuplicateKeyUpdate", async () => {
+  const insertDsl = InsertImpl.initial(
+    StubQueryRunner(),
+    StubQueryBuilder(),
+    EVENT
+  );
+
+  expect(() => insertDsl.set(EVENT.ID.FIELD, 3)).toThrowError("Invalid state");
+});
+
 test("onDuplicateKeyIgnore sets the correct InsertState.duplicateKey", async () => {
-  const { dsl, runner } = TestSetup();
+  const insertDsl = InsertImpl.initial(
+    StubQueryRunner(),
+    StubQueryBuilder(),
+    EVENT
+  );
 
-  await dsl
-    .insertInto(EVENT, EVENT.ID.FIELD)
-    .onDuplicateKeyIgnore()
-    .execute();
-
-  expect(runner.executeInsertState).toBeCalledWith({
+  expect(insertDsl.onDuplicateKeyIgnore().state).toEqual({
     duplicateKey: {
       kind: "OnDuplicateKeyIgnore"
     },
-    fields: [EVENT.ID.FIELD],
+    fields: [],
     table: EVENT,
     values: []
   });
