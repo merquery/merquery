@@ -23,7 +23,7 @@ export function expectSelectState(cb: (state: SelectState<any>) => void) {
   return a;
 }
 
-export function StubQueryRunner(props: Partial<QueryRunner>): QueryRunner {
+export function StubQueryRunner(props?: Partial<QueryRunner>): QueryRunner {
   return {
     beginTransaction: NOT_IMPLEMENTED,
     commit: NOT_IMPLEMENTED,
@@ -50,16 +50,20 @@ export function TestSetup() {
   };
 }
 
-export function TestDSL(runner: QueryRunner, queryBuilder?: QueryBuilder) {
+export function StubQueryBuilder(methods?: Partial<QueryBuilder>) {
+  return {
+    representDeleteStateAsSqlString: NOT_IMPLEMENTED,
+    representInsertStateAsSqlString: NOT_IMPLEMENTED,
+    representSelectStateAsSqlString: NOT_IMPLEMENTED,
+    representUpdateStateAsSqlString: NOT_IMPLEMENTED,
+    ...methods
+  };
+}
+
+export function TestDSL(runner?: QueryRunner, queryBuilder?: QueryBuilder) {
   return DSL.withDriver({
-    createQueryRunner: () => runner,
-    createQueryBuilder: () =>
-      queryBuilder || {
-        representDeleteStateAsSqlString: NOT_IMPLEMENTED,
-        representInsertStateAsSqlString: NOT_IMPLEMENTED,
-        representSelectStateAsSqlString: NOT_IMPLEMENTED,
-        representUpdateStateAsSqlString: NOT_IMPLEMENTED
-      },
+    createQueryRunner: () => runner || StubQueryRunner(),
+    createQueryBuilder: () => queryBuilder || StubQueryBuilder(),
     createSchema: NOT_IMPLEMENTED
   });
 }
