@@ -3,10 +3,10 @@ import {
   expectSelectState,
   TestDSL
 } from "../../../testutil/TestUtil";
-import { eq } from "../../../Condition";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { EVENT } from "../../../testutil/TestSchema";
 import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import { eq } from "../../../impl/util/eq";
 
 test("having sets SelectState.having", async () => {
   const condition = eq(val(1), val(2));

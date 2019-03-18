@@ -1,4 +1,4 @@
-import { TableField } from "../../../../Field";
+import { TableField } from "../../../../TableField";
 import { buildIdentifier } from "./buildIdentifier";
 import { buildFieldOwnerName } from "./buildFieldOwnerName";
 export function buildTableField<T>(field: TableField<any, T>) {

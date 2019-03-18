@@ -1,12 +1,11 @@
-import { Schema, SchemaTable } from "../../../Schema";
+import { Schema } from "../../../Schema";
+import { SchemaTable } from "../../../SchemaTable";
 import { MysqlDriver } from "./MysqlDriver";
 import { TableColumn } from "./MysqlQueryRunner";
-import {
-  DataTypeProps,
-  DataTypeStringProps,
-  DataTypeIntegerProps,
-  DataTypeEnumProps
-} from "../../../DataType";
+import { DataTypeProps } from "../../../DataTypeProps";
+import { DataTypeStringProps } from "../../../DataTypeStringProps";
+import { DataTypeEnumProps } from "../../../DataTypeEnumProps";
+import { DataTypeIntegerProps } from "../../../DataTypeIntegerProps";
 
 export class MysqlSchema implements Schema {
   constructor(private driver: MysqlDriver, private schemaName: string) {}

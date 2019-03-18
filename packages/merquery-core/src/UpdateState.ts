@@ -1,7 +1,7 @@
 import { Table } from "./TableLike";
 import { Row } from "./Row";
-import { TableField } from "./Field";
-import { ConditionCollection } from "./Condition";
+import { TableField } from "./TableField";
+import { ConditionCollection } from "./ConditionCollection";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 import { Assignment } from "./impl/driver/mysql/querybuilding/buildSetList";
 

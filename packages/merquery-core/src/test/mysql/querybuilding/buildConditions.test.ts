@@ -1,11 +1,11 @@
 import { buildCondition } from "../../../impl/driver/mysql/querybuilding/buildCondition";
 import { ConditionOperator } from "../../../ConditionOperator";
-import { eq } from "../../../Condition";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { ConditionBuilderImpl } from "../../../impl/ConditionBuilderImpl";
 import { buildConditions } from "../../../impl/driver/mysql/querybuilding/buildConditions";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { ConditionWithOperator } from "../../../ConditionWithOperator";
+import { eq } from "../../../impl/util/eq";
 
 test("buildConditions returns the condition if its the only one", () => {
   expect(

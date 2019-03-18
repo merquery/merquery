@@ -14,6 +14,7 @@ async function main() {
   await repository.createUser("1", "Bob");
   await repository.upgradeToPremium("1");
   console.log(await repository.fetchPaidUsers());
+  await repository.deleteUser("1");
 }
 
 main().catch(console.error);

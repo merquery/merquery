@@ -1,7 +1,4 @@
-export interface TableRow {
-  [column: string]: any;
-}
-
+import { TableRow } from "./TableRow";
 export interface ResultRow {
   [table: string]: TableRow;
 }

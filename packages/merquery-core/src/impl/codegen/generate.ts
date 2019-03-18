@@ -1,8 +1,8 @@
 import { Driver } from "../../Driver";
 import { Project, VariableDeclarationKind } from "ts-morph";
 import { MysqlDriver } from "../driver/mysql/MysqlDriver";
-import { DataTypeProps } from "../../DataType";
-import { TableField } from "../../Field";
+import { DataTypeProps } from "../../DataTypeProps";
+import { TableField } from "../../TableField";
 import { Table } from "../../TableLike";
 import { Schema } from "../../Schema";
 

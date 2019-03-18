@@ -1,4 +1,4 @@
-import { InCondition } from "../../../../Condition";
+import { InCondition } from "../../../../InCondition";
 import { buildField } from "./buildField";
 import { buildFieldList } from "./buildValueList";
 

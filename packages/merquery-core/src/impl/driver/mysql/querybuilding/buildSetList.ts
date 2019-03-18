@@ -1,4 +1,6 @@
-import { TableField, val, ValueField } from "../../../../Field";
+import { val } from "../../../util/val";
+import { ValueField } from "../../../../ValueField";
+import { TableField } from "../../../../TableField";
 import { Row } from "../../../../Row";
 import { buildField } from "./buildField";
 import { buildValueField } from "./buildValueField";

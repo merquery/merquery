@@ -1,4 +1,4 @@
-import { ConditionCollection } from "../../../../Condition";
+import { ConditionCollection } from "../../../../ConditionCollection";
 import { buildConditionOperatorString } from "./buildConditionOperatorString";
 import { buildCondition } from "./buildCondition";
 import { OneOrMoreArrayUtil } from "../../../OneOrMoreArray";

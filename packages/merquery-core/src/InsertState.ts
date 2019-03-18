@@ -1,6 +1,8 @@
 import { Row } from "./Row";
 import { Table } from "./TableLike";
-import { TableField, Field, ValueField } from "./Field";
+import { Field } from "./Field";
+import { ValueField } from "./ValueField";
+import { TableField } from "./TableField";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
 import { Assignment } from "./impl/driver/mysql/querybuilding/buildSetList";
 

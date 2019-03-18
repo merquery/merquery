@@ -1,6 +1,9 @@
 import { Table } from "../../TableLike";
 import { Row } from "../../Row";
-import { TableField, Field, val, ValueField } from "../../Field";
+import { val } from "../util/val";
+import { Field } from "../../Field";
+import { ValueField } from "../../ValueField";
+import { TableField } from "../../TableField";
 import { InsertState } from "../../InsertState";
 import { InsertFinalStep } from "../../InsertFinalStep";
 import { QueryRunner } from "../../QueryRunner";
@@ -41,6 +44,7 @@ import {
   InsertValuesStep29,
   InsertValuesStep30
 } from "../../InsertValuesStepN";
+import { QueryBuilder } from "../../QueryBuilder";
 
 export class InsertImpl<
   R extends Row,
@@ -535,10 +539,12 @@ export class InsertImpl<
     InsertFinalStep<R> {
   constructor(
     readonly state: InsertState<R>,
-    private readonly queryRunner: QueryRunner
+    private readonly queryRunner: QueryRunner,
+    private readonly queryBuilder: QueryBuilder
   ) {}
+
   asSqlString(): string {
-    return this.queryRunner.representInsertStateAsSqlString(this.state);
+    return this.queryBuilder.representInsertStateAsSqlString(this.state);
   }
 
   onDuplicateKeyUpdate() {
@@ -595,6 +601,7 @@ export class InsertImpl<
 
   static initial<R extends Row>(
     queryRunner: QueryRunner,
+    queryBuilder: QueryBuilder,
     table: Table<R>,
     ...fields: TableField<R, any>[]
   ) {
@@ -604,11 +611,16 @@ export class InsertImpl<
         fields: fields,
         values: []
       },
-      queryRunner
+      queryRunner,
+      queryBuilder
     );
   }
 
   private create(state: InsertState<R>) {
-    return new InsertImpl<R, T1, T2, T3>(state, this.queryRunner);
+    return new InsertImpl<R, T1, T2, T3>(
+      state,
+      this.queryRunner,
+      this.queryBuilder
+    );
   }
 }

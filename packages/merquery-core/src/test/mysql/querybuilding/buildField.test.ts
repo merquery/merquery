@@ -1,7 +1,8 @@
 import { buildField } from "../../../impl/driver/mysql/querybuilding/buildField";
 import { EVENT } from "../../../testutil/TestSchema";
 import { buildTableField } from "../../../impl/driver/mysql/querybuilding/buildTableField";
-import { TableField, ValueField } from "../../../Field";
+import { ValueField } from "../../../ValueField";
+import { TableField } from "../../../TableField";
 import { buildValueField } from "../../../impl/driver/mysql/querybuilding/buildValueField";
 
 test("buildField builds a table field when a TableField is supplied", () => {

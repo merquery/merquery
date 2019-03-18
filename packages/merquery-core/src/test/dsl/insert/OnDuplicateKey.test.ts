@@ -5,7 +5,7 @@ import {
 } from "../../../testutil/TestUtil";
 import { InsertState } from "../../../InsertState";
 import { EVENT } from "../../../testutil/TestSchema";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 
 test("onDuplicateKeyUpdate and set sets the correct InsertState.duplicateKey and single update", async () => {
   const { dsl, runner } = TestSetup();

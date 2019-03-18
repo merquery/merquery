@@ -5,13 +5,13 @@ import {
 } from "../../../impl/createSelectState";
 import { EVENT, USER } from "../../../testutil/TestSchema";
 import { ConditionOperator } from "../../../ConditionOperator";
-import { eqValue, eq } from "../../../Condition";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { JoinType } from "../../../JoinType";
 import { OrderDirection } from "../../../OrderDirection";
 import { LockMode } from "../../../LockMode";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { ConditionWithOperator } from "../../../ConditionWithOperator";
+import { eq } from "../../../impl/util/eq";
 
 test("buildMysqlSelectQuery selects all columns when recordTable is set", () => {
   expect(

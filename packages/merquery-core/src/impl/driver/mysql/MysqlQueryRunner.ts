@@ -1,5 +1,5 @@
 import { MysqlDriver } from "./MysqlDriver";
-import { ResultRow } from "../../../QueryResult";
+import { ResultRow } from "../../../ResultRow";
 import { PoolConnection, QueryOptions } from "mysql";
 import * as SqlString from "sqlstring";
 import { buildMysqlSelectQuery } from "./querybuilding/buildMysqlSelectQuery";
@@ -10,6 +10,8 @@ import { UpdateState } from "../../../UpdateState";
 import { buildMysqlUpdateQuery } from "./querybuilding/buildMysqlUpdateQuery";
 import { QueryRunner } from "../../../QueryRunner";
 import { SelectState } from "../../../SelectState";
+import { DeleteState } from "../../../DeleteState";
+import { MysqlQueryBuilder } from "./MysqlQueryBuilder";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
@@ -27,30 +29,34 @@ export class MysqlQueryRunner implements QueryRunner {
   private connection?: PoolConnection;
   private released: boolean = false;
   private isTransactionActive: boolean = false;
+  private queryBuilder: MysqlQueryBuilder;
 
-  constructor(private driver: MysqlDriver) {}
-
-  representInsertStateAsSqlString(state: InsertState<any>): string {
-    throw new Error("Method not implemented.");
+  constructor(private driver: MysqlDriver) {
+    this.queryBuilder = driver.createQueryBuilder();
   }
-  representUpdateStateAsSqlString(state: UpdateState<any>): string {
-    throw new Error("Method not implemented.");
+
+  executeDeleteState(query: DeleteState<any>): Promise<void> {
+    return this.query(
+      this.queryBuilder.representDeleteStateAsSqlString(query)
+    ).then(() => {});
   }
 
   executeUpdateState(query: UpdateState<any>): Promise<void> {
-    const q = buildMysqlUpdateQuery(query);
-
-    return this.query(q).then(() => {});
+    return this.query(
+      this.queryBuilder.representUpdateStateAsSqlString(query)
+    ).then(() => {});
   }
 
   executeInsertState(query: InsertState<any>): Promise<void> {
-    const q = buildMysqlInsertQuery(query);
-
-    return this.query(q).then(() => {});
+    return this.query(
+      this.queryBuilder.representInsertStateAsSqlString(query)
+    ).then(() => {});
   }
 
-  representSelectStateAsSqlString(state: SelectState<any>): string {
-    return buildMysqlSelectQuery(state);
+  executeSelectState(query: SelectState<any>): Promise<ResultRow[]> {
+    return this.queryResult(
+      this.queryBuilder.representSelectStateAsSqlString(query)
+    );
   }
 
   fetchTableDefinitions(schema: string): Promise<TableDef[]> {
@@ -142,9 +148,5 @@ export class MysqlQueryRunner implements QueryRunner {
 
     await this.queryResult("ROLLBACK");
     this.isTransactionActive = false;
-  }
-
-  async executeSelectState(query: SelectState<any>): Promise<ResultRow[]> {
-    return this.queryResult(this.representSelectStateAsSqlString(query));
   }
 }

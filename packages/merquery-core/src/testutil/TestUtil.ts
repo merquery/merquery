@@ -1,6 +1,7 @@
 import { QueryRunner } from "../QueryRunner";
 import { DSL } from "../impl/dsl/DSL";
 import { SelectState } from "../SelectState";
+import { QueryBuilder } from "../QueryBuilder";
 export const NOT_IMPLEMENTED = () => {
   throw new Error("Not implemented");
 };
@@ -30,10 +31,8 @@ export function StubQueryRunner(props: Partial<QueryRunner>): QueryRunner {
     release: NOT_IMPLEMENTED,
     executeSelectState: NOT_IMPLEMENTED,
     executeUpdateState: NOT_IMPLEMENTED,
-    representSelectStateAsSqlString: NOT_IMPLEMENTED,
     executeInsertState: NOT_IMPLEMENTED,
-    representInsertStateAsSqlString: NOT_IMPLEMENTED,
-    representUpdateStateAsSqlString: NOT_IMPLEMENTED,
+    executeDeleteState: NOT_IMPLEMENTED,
     ...props
   };
 }
@@ -51,9 +50,16 @@ export function TestSetup() {
   };
 }
 
-export function TestDSL(runner: QueryRunner) {
+export function TestDSL(runner: QueryRunner, queryBuilder?: QueryBuilder) {
   return DSL.withDriver({
     createQueryRunner: () => runner,
+    createQueryBuilder: () =>
+      queryBuilder || {
+        representDeleteStateAsSqlString: NOT_IMPLEMENTED,
+        representInsertStateAsSqlString: NOT_IMPLEMENTED,
+        representSelectStateAsSqlString: NOT_IMPLEMENTED,
+        representUpdateStateAsSqlString: NOT_IMPLEMENTED
+      },
     createSchema: NOT_IMPLEMENTED
   });
 }

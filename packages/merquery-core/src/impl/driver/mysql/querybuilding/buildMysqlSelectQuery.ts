@@ -1,5 +1,7 @@
 import { SelectState } from "../../../../SelectState";
-import { TableField, ValueField, Field } from "../../../../Field";
+import { Field } from "../../../../Field";
+import { ValueField } from "../../../../ValueField";
+import { TableField } from "../../../../TableField";
 import * as SqlString from "sqlstring";
 import { buildFromPartList } from "./buildFromPartList";
 import { buildFieldCollection } from "./buildFieldCollection";

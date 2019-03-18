@@ -1,5 +1,5 @@
 import { buildValueField } from "../../../impl/driver/mysql/querybuilding/buildValueField";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 test("buildValueField returns integer like it is", () => {
   expect(buildValueField(val(1))).toBe("1");
 });

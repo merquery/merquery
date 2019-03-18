@@ -4,7 +4,7 @@ import {
 } from "../../../impl/driver/mysql/querybuilding/buildSetList";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { EVENT } from "../../../testutil/TestSchema";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 
 test("buildSetList builds fields and values connected by equals", () => {
   const assignments = OneOrMoreArrayUtil.fromArray<Assignment<any, any>>([

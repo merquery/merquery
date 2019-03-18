@@ -6,7 +6,7 @@ import {
 } from "../../../testutil/TestUtil";
 import { EVENT } from "../../../testutil/TestSchema";
 import { UpdateState } from "../../../UpdateState";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 
 test("set adds one change to UpdateState.updates", () => {
   const queryRunner = StubQueryRunner({

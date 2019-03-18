@@ -1,5 +1,5 @@
 import { assertNever } from "../../../Util";
-import { Comparator } from "../../../../Condition";
+import { Comparator } from "../../../../Comparator";
 
 /**
  *

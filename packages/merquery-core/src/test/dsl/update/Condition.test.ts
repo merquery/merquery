@@ -1,10 +1,10 @@
 import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
 import { USER } from "../../../testutil/TestSchema";
 import { UpdateState } from "../../../UpdateState";
-import { eqValue } from "../../../Condition";
 import { ConditionOperator } from "../../../ConditionOperator";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
+import { eqValue } from "../../../impl/util/eqValue";
 
 test("where sets UpdateState.condition", () => {
   const queryRunner = StubQueryRunner({

@@ -1,8 +1,9 @@
 import { Table, TableLikeOrTableLikeAlias } from "../TableLike";
 import { Row } from "../Row";
-import { TableField, val } from "../Field";
-import { ResultRow } from "../QueryResult";
-import { isDataType } from "../DataType";
+import { val } from "./util/val";
+import { TableField } from "../TableField";
+import { ResultRow } from "../ResultRow";
+import { isDataType } from "./util/datatype/isDataType";
 import { assertNever } from "./Util";
 import { FieldOwner } from "../FieldOwner";
 import { buildTableField } from "./driver/mysql/querybuilding/buildTableField";

@@ -7,20 +7,30 @@ import { DeleteConditionStep } from "../../DeleteConditionStep";
 import { DeleteFinalStep } from "../../DeleteFinalStep";
 import { Condition } from "../../Condition";
 import { ConditionBuilderImpl } from "../ConditionBuilderImpl";
+import { QueryBuilder } from "../../QueryBuilder";
 
 export class DeleteImpl<R extends Row>
   implements DeleteWhereStep<R>, DeleteConditionStep<R>, DeleteFinalStep<R> {
   constructor(
     readonly state: DeleteState<R>,
-    private readonly queryRunner: QueryRunner
+    private readonly queryRunner: QueryRunner,
+    private readonly queryBuilder: QueryBuilder
   ) {}
 
-  static initial<R extends Row>(queryRunner: QueryRunner, table: Table<R>) {
-    return new DeleteImpl({ table: table }, queryRunner);
+  asSqlString(): string {
+    return this.queryBuilder.representDeleteStateAsSqlString(this.state);
+  }
+
+  static initial<R extends Row>(
+    queryRunner: QueryRunner,
+    queryBuilder: QueryBuilder,
+    table: Table<R>
+  ) {
+    return new DeleteImpl({ table: table }, queryRunner, queryBuilder);
   }
 
   create(state: DeleteState<R>) {
-    return new DeleteImpl(state, this.queryRunner);
+    return new DeleteImpl(state, this.queryRunner, this.queryBuilder);
   }
 
   and(condition: Condition): DeleteImpl<R> {
@@ -57,6 +67,6 @@ export class DeleteImpl<R extends Row>
   }
 
   execute(): Promise<void> {
-    throw new Error("Method not implemented.");
+    return this.queryRunner.executeDeleteState(this.state);
   }
 }

@@ -1,7 +1,7 @@
 import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
 import { InsertState } from "../../../InsertState";
 import { EVENT } from "../../../testutil/TestSchema";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("insert without values has empty values array in InsertState", async () => {

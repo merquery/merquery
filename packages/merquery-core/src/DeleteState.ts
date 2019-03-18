@@ -1,6 +1,6 @@
 import { Row } from "./Row";
 import { Table } from "./TableLike";
-import { ConditionCollection } from "./Condition";
+import { ConditionCollection } from "./ConditionCollection";
 
 export interface DeleteState<R extends Row> {
   table: Table<R>;

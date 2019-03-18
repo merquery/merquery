@@ -1,8 +1,8 @@
 import { buildJoinedTableWithOnCondition } from "../../../impl/driver/mysql/querybuilding/buildJoinedTableWithOnCondition";
-import { eq } from "../../../Condition";
 import { JoinType } from "../../../JoinType";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { EVENT } from "../../../testutil/TestSchema";
+import { eq } from "../../../impl/util/eq";
 
 test("buildJoinedTableWithOnCondition", () => {
   expect(

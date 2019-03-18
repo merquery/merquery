@@ -1,6 +1,6 @@
 import { buildInCondition } from "../../../impl/driver/mysql/querybuilding/buildInCondition";
 import { EVENT } from "../../../testutil/TestSchema";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 
 test("buildInCondition builds IN condition", () => {

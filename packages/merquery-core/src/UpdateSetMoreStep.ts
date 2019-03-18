@@ -1,5 +1,5 @@
 import { Row } from "./Row";
-import { TableField } from "./Field";
+import { TableField } from "./TableField";
 import { UpdateWhereStep } from "./UpdateWhereStep";
 
 export interface UpdateSetMoreStep<R extends Row> extends UpdateWhereStep<R> {

@@ -40,4 +40,11 @@ export class UserRepository {
       .set(USER.ACCOUNT_STATUS.FIELD, "FREE")
       .execute();
   }
+
+  async deleteUser(id: string): Promise<void> {
+    return this.dsl
+      .deleteFrom(USER)
+      .where(USER.ID.equals(id))
+      .execute();
+  }
 }

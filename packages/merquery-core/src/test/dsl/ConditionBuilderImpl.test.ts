@@ -1,8 +1,9 @@
 import { ConditionBuilderImpl } from "../../impl/ConditionBuilderImpl";
-import { eqValue, ConditionCollection } from "../../Condition";
+import { ConditionCollection } from "../../ConditionCollection";
 import { EVENT } from "../../testutil/TestSchema";
 import { ConditionOperator } from "../../ConditionOperator";
 import { OneOrMoreArrayUtil } from "../../impl/OneOrMoreArray";
+import { eqValue } from "../../impl/util/eqValue";
 test("getCondition of initial returns ConditionCollection with initial condition with and", () => {
   const initialCondition = eqValue(EVENT.ID.FIELD, 1);
   const builder = ConditionBuilderImpl.initial(initialCondition);
