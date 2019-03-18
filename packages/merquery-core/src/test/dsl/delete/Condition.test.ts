@@ -109,3 +109,15 @@ test("and throws error when no initial condition is set", () => {
     "No initial condition set."
   );
 });
+
+test("withoutWhere is noop", () => {
+  const deleteDsl = DeleteImpl.initial(
+    StubQueryRunner(),
+    StubQueryBuilder(),
+    EVENT
+  );
+
+  expect(deleteDsl.withoutWhere().state).toEqual({
+    table: EVENT
+  });
+});
