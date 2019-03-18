@@ -1,26 +1,17 @@
-import { QueryRunner } from "../../../QueryRunner";
-import { SelectState } from "../../../SelectState";
-import { Table } from "../../../TableLike";
-import { assertNever } from "../../Util";
-import { Condition, ComperatorCondition, Comparator } from "../../../Condition";
-import { Field, ValueField, TableField } from "../../../Field";
-import { ConditionOperator } from "../../../ConditionOperator";
-import _ = require("lodash");
-import { ConditionWithOperator } from "../../../ConditionWithOperator";
-import { FieldCollection } from "../../../FieldCollection";
-import { OrderByWithDirection } from "../../../OrderByWithDirection";
-import { OrderDirection } from "../../../OrderDirection";
 import { MysqlDriver } from "./MysqlDriver";
-import { Row } from "../../../Row";
-import { ResultRow } from "../../../QueryResult";
+import { ResultRow } from "../../../ResultRow";
 import { PoolConnection, QueryOptions } from "mysql";
-import { FromPart, TableFromPart, SubQueryFromPart } from "../../../FromPart";
 import * as SqlString from "sqlstring";
 import { buildMysqlSelectQuery } from "./querybuilding/buildMysqlSelectQuery";
 import { InsertState } from "../../../InsertState";
 import { buildMysqlInsertQuery } from "./querybuilding/buildMysqlInsertQuery";
 import { buildIdentifier } from "./querybuilding/buildIdentifier";
 import { UpdateState } from "../../../UpdateState";
+import { buildMysqlUpdateQuery } from "./querybuilding/buildMysqlUpdateQuery";
+import { QueryRunner } from "../../../QueryRunner";
+import { SelectState } from "../../../SelectState";
+import { DeleteState } from "../../../DeleteState";
+import { MysqlQueryBuilder } from "./MysqlQueryBuilder";
 
 export interface TableDef {
   TABLE_SCHEMA: string;
@@ -30,6 +21,7 @@ export interface TableDef {
 export interface TableColumn {
   Field: string;
   Type: string;
+  Null: "YES" | "NO";
 }
 
 export class MysqlQueryRunner implements QueryRunner {
@@ -37,28 +29,34 @@ export class MysqlQueryRunner implements QueryRunner {
   private connection?: PoolConnection;
   private released: boolean = false;
   private isTransactionActive: boolean = false;
+  private queryBuilder: MysqlQueryBuilder;
 
-  constructor(private driver: MysqlDriver) {}
+  constructor(private driver: MysqlDriver) {
+    this.queryBuilder = driver.createQueryBuilder();
+  }
+
+  executeDeleteState(query: DeleteState<any>): Promise<void> {
+    return this.query(
+      this.queryBuilder.representDeleteStateAsSqlString(query)
+    ).then(() => {});
+  }
 
   executeUpdateState(query: UpdateState<any>): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  representInsertStateAsSqlString(state: InsertState<any>): string {
-    throw new Error("Method not implemented.");
-  }
-  representUpdateStateAsSqlString(state: UpdateState<any>): string {
-    throw new Error("Method not implemented.");
+    return this.query(
+      this.queryBuilder.representUpdateStateAsSqlString(query)
+    ).then(() => {});
   }
 
   executeInsertState(query: InsertState<any>): Promise<void> {
-    const q = buildMysqlInsertQuery(query);
-
-    return this.query(q).then(() => {});
+    return this.query(
+      this.queryBuilder.representInsertStateAsSqlString(query)
+    ).then(() => {});
   }
 
-  representSelectStateAsSqlString(state: SelectState<any>): string {
-    return buildMysqlSelectQuery(state);
+  executeSelectState(query: SelectState<any>): Promise<ResultRow[]> {
+    return this.queryResult(
+      this.queryBuilder.representSelectStateAsSqlString(query)
+    );
   }
 
   fetchTableDefinitions(schema: string): Promise<TableDef[]> {
@@ -150,9 +148,5 @@ export class MysqlQueryRunner implements QueryRunner {
 
     await this.queryResult("ROLLBACK");
     this.isTransactionActive = false;
-  }
-
-  async executeSelectState(query: SelectState<any>): Promise<ResultRow[]> {
-    return this.queryResult(this.representSelectStateAsSqlString(query));
   }
 }

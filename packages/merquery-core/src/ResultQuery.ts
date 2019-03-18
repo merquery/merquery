@@ -1,6 +1,6 @@
 import { Row } from "./Row";
 import { Query } from "./Query";
-import { ResultRow } from "./QueryResult";
+import { ResultRow } from "./ResultRow";
 export interface ResultQuery<R extends Row> extends Query<R> {
   /**
    * Fetches all rows.

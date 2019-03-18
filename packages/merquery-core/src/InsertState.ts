@@ -1,20 +1,25 @@
 import { Row } from "./Row";
 import { Table } from "./TableLike";
-import { TableField, Field, ValueField } from "./Field";
+import { Field } from "./Field";
+import { ValueField } from "./ValueField";
+import { TableField } from "./TableField";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
+import { Assignment } from "./impl/driver/mysql/querybuilding/buildSetList";
 
-interface OnDuplicateKeyIgnore {
+export interface OnDuplicateKeyIgnore {
   kind: "OnDuplicateKeyIgnore";
 }
 
-interface OnDuplicateKeyUpdate<R extends Row> {
+export interface OnDuplicateKeyUpdate<R extends Row> {
   kind: "OnDuplicateKeyUpdate";
-  updates: [TableField<R, any>, any][];
+  updates: Assignment<R, any>[];
 }
+
+export type OnDuplicateKey = OnDuplicateKeyIgnore | OnDuplicateKeyUpdate<any>;
 
 export interface InsertState<R extends Row> {
   table: Table<R>;
   fields: TableField<R, any>[];
-  values: OneOrMoreArray<ValueField<any>>[];
-  duplicateKey?: OnDuplicateKeyIgnore | OnDuplicateKeyUpdate<R>;
+  values: ValueField<any>[][];
+  duplicateKey?: OnDuplicateKey;
 }

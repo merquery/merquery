@@ -1,12 +1,4 @@
-export interface TableFieldOwner {
-  kind: "TableFieldOwner";
-  schema: string;
-  table: string;
-}
-
-export interface AliasFieldOwner {
-  kind: "AliasFieldOwner";
-  alias: string;
-}
+import { TableFieldOwner } from "./TableFieldOwner";
+import { AliasFieldOwner } from "./AliasFieldOwner";
 
 export type FieldOwner = TableFieldOwner | AliasFieldOwner;

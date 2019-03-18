@@ -1,4 +1,4 @@
-import { TableField } from "./Field";
+import { TableField } from "./TableField";
 import { Row } from "./Row";
 import { SelectLimitStep } from "./SelectLimitStep";
 

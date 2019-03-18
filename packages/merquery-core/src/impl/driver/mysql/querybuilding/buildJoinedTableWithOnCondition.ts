@@ -1,4 +1,4 @@
-import { JoinedTableWithOnCondition } from "../../../../JoinedTable";
+import { JoinedTableWithOnCondition } from "../../../../JoinedTableWithOnCondition";
 import { buildTableLike } from "./buildTableLike";
 import { buildJoinType } from "./buildJoinType";
 import { buildCondition } from "./buildCondition";

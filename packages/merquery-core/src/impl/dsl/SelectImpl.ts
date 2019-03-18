@@ -1,10 +1,14 @@
 import { SelectWhereStep } from "../../SelectWhereStep";
 import { SelectConditionStep } from "../../SelectConditionStep";
-import { Condition, ComperatorCondition, Comparator } from "../../Condition";
+import { Condition } from "../../Condition";
+import { ComparatorCondition } from "../../ComparatorCondition";
+import { Comparator } from "../../Comparator";
 import { Table, TableLike, TableLikeOrTableLikeAlias } from "../../TableLike";
 import { SelectFinalStep } from "../../SelectFinalStep";
 import { assertNever } from "../Util";
-import { Field, TableField, ValueField } from "../../Field";
+import { Field } from "../../Field";
+import { ValueField } from "../../ValueField";
+import { TableField } from "../../TableField";
 import * as _ from "lodash";
 import { SelectState } from "../../SelectState";
 import { ConditionOperator } from "../../ConditionOperator";
@@ -22,7 +26,7 @@ import { ResultQuery } from "../../ResultQuery";
 import { SelectFromStep } from "../../SelectFromStep";
 import { Row } from "../../Row";
 import { Record } from "../../Record";
-import { ResultRow } from "../../QueryResult";
+import { ResultRow } from "../../ResultRow";
 import { SubQuery } from "../../SubQuery";
 import { ConditionBuilderImpl } from "../ConditionBuilderImpl";
 import { ConditionBuilder } from "../../ConditionBuilder";
@@ -31,6 +35,7 @@ import { SelectForUpdate } from "../../SelectForUpdate";
 import { LockMode } from "../../LockMode";
 import { OneOrMoreArrayUtil } from "../OneOrMoreArray";
 import { createSelectState } from "../createSelectState";
+import { QueryBuilder } from "../../QueryBuilder";
 
 export class SelectImpl<R extends Row>
   implements
@@ -47,8 +52,9 @@ export class SelectImpl<R extends Row>
     SelectForUpdate<R>,
     SelectFinalStep<R> {
   constructor(
-    private state: SelectState<R>,
-    private queryRunner: QueryRunner
+    readonly state: SelectState<R>,
+    private readonly queryRunner: QueryRunner,
+    private readonly queryBuilder: QueryBuilder
   ) {}
 
   forUpdate() {
@@ -71,9 +77,11 @@ export class SelectImpl<R extends Row>
       having: condition
     });
   }
+
   asSqlString(): string {
-    return this.queryRunner.representSelectStateAsSqlString(this.state);
+    return this.queryBuilder.representSelectStateAsSqlString(this.state);
   }
+
   select(...fields: Field<any>[]): SelectFromStep<R> {
     return this.create({
       ...this.state,
@@ -192,12 +200,15 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  static initial<R extends Row>(executor: QueryRunner) {
-    return new SelectImpl<R>(createSelectState(), executor);
+  static initial<R extends Row>(
+    executor: QueryRunner,
+    queryBuilder: QueryBuilder
+  ) {
+    return new SelectImpl<R>(createSelectState(), executor, queryBuilder);
   }
 
   private create(state: SelectState<R>) {
-    return new SelectImpl<R>(state, this.queryRunner);
+    return new SelectImpl<R>(state, this.queryRunner, this.queryBuilder);
   }
 
   from(

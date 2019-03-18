@@ -1,9 +1,10 @@
 import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
 import { USER } from "../../../testutil/TestSchema";
 import { UpdateState } from "../../../UpdateState";
-import { eqValue } from "../../../Condition";
 import { ConditionOperator } from "../../../ConditionOperator";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
+import { val } from "../../../impl/util/val";
+import { eqValue } from "../../../impl/util/eqValue";
 
 test("where sets UpdateState.condition", () => {
   const queryRunner = StubQueryRunner({
@@ -27,7 +28,7 @@ test("where sets UpdateState.condition", () => {
         { condition: condition, operator: ConditionOperator.And }
       ])
     },
-    updates: [[USER.ID.FIELD, 1]]
+    updates: [[USER.ID.FIELD, val(1)]]
   });
 });
 
@@ -56,7 +57,7 @@ test("where().and() sets two conditions connected by and UpdateState.condition",
         { condition: condition2, operator: ConditionOperator.And }
       ])
     },
-    updates: [[USER.ID.FIELD, 1]]
+    updates: [[USER.ID.FIELD, val(1)]]
   });
 });
 
@@ -85,6 +86,6 @@ test("where().or() sets two conditions connected by or UpdateState.condition", (
         { condition: condition2, operator: ConditionOperator.Or }
       ])
     },
-    updates: [[USER.ID.FIELD, 1]]
+    updates: [[USER.ID.FIELD, val(1)]]
   });
 });

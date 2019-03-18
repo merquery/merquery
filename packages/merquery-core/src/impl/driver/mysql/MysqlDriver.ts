@@ -10,6 +10,8 @@ import {
 } from "mysql";
 import { Schema } from "../../../Schema";
 import { MysqlSchema } from "./MysqlSchema";
+import { QueryBuilder } from "../../../QueryBuilder";
+import { MysqlQueryBuilder } from "./MysqlQueryBuilder";
 
 export interface MysqlDriverOptions {
   host: string;
@@ -22,6 +24,10 @@ export class MysqlDriver implements Driver {
 
   constructor(private readonly options: PoolConfig) {
     this.pool = createPool(options);
+  }
+
+  createQueryBuilder(): MysqlQueryBuilder {
+    return new MysqlQueryBuilder();
   }
 
   createSchema(): Schema {

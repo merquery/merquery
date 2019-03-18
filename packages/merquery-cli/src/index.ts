@@ -23,7 +23,7 @@ async function generateCmd(argv: minimist.ParsedArgs) {
 
   const outFile = argv["outFile"] || config.outFile || "src/merquery.ts";
   const merqueryModule =
-    argv["merqueryModule"] || config.merqueryModule || "merquery";
+    argv["merqueryModule"] || config.merqueryModule || "merquery-core";
 
   const driver = createDriver(config);
 

@@ -1,7 +1,8 @@
 import { UpdateSetStep } from "../../UpdateSetStep";
 import { Row } from "../../Row";
 import { UpdateSetMoreStep } from "../../UpdateSetMoreStep";
-import { TableField } from "../../Field";
+import { val } from "../util/val";
+import { TableField } from "../../TableField";
 import { UpdateState } from "../../UpdateState";
 import { QueryRunner } from "../../QueryRunner";
 import { UpdateConditionStep } from "../../UpdateConditionStep";
@@ -10,6 +11,7 @@ import { Condition } from "../../Condition";
 import { ConditionBuilderImpl } from "../ConditionBuilderImpl";
 import { UpdateFinalStep } from "../../UpdateFinalStep";
 import { Table } from "../../TableLike";
+import { QueryBuilder } from "../../QueryBuilder";
 export class UpdateImpl<R extends Row>
   implements
     UpdateSetStep<R>,
@@ -19,7 +21,8 @@ export class UpdateImpl<R extends Row>
     UpdateFinalStep<R> {
   constructor(
     readonly state: UpdateState<R>,
-    private readonly queryRunner: QueryRunner
+    private readonly queryRunner: QueryRunner,
+    private readonly queryBuilder: QueryBuilder
   ) {}
 
   withoutWhere(): UpdateFinalStep<R> {
@@ -31,7 +34,7 @@ export class UpdateImpl<R extends Row>
   }
 
   asSqlString(): string {
-    return this.queryRunner.representUpdateStateAsSqlString(this.state);
+    return this.queryBuilder.representUpdateStateAsSqlString(this.state);
   }
 
   where(condition: Condition): UpdateConditionStep<R> {
@@ -66,21 +69,26 @@ export class UpdateImpl<R extends Row>
   set<T>(column: TableField<R, T>, value: T) {
     return this.create({
       ...this.state,
-      updates: [...this.state.updates, [column, value]]
+      updates: [...this.state.updates, [column, val(value)]]
     });
   }
 
   create(state: UpdateState<R>) {
-    return new UpdateImpl(state, this.queryRunner);
+    return new UpdateImpl(state, this.queryRunner, this.queryBuilder);
   }
 
-  static initial<R extends Row>(queryRunner: QueryRunner, table: Table<R>) {
+  static initial<R extends Row>(
+    queryRunner: QueryRunner,
+    queryBuilder: QueryBuilder,
+    table: Table<R>
+  ) {
     return new UpdateImpl(
       {
         table: table,
         updates: []
       },
-      queryRunner
+      queryRunner,
+      queryBuilder
     );
   }
 }

@@ -1,5 +1,5 @@
 import { Row } from "./Row";
-import { TableField } from "./Field";
+import { TableField } from "./TableField";
 import { InsertFinalStep } from "./InsertFinalStep";
 import { InsertOnDuplicateKeySetMoreStep } from "./InsertOnDuplicateKeySetMoreStep";
 

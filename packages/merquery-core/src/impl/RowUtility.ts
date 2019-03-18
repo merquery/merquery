@@ -1,18 +1,20 @@
 import { Table, TableLikeOrTableLikeAlias } from "../TableLike";
 import { Row } from "../Row";
-import { TableField, val } from "../Field";
-import { ResultRow } from "../QueryResult";
-import { isDataType } from "../DataType";
+import { val } from "./util/val";
+import { TableField } from "../TableField";
+import { ResultRow } from "../ResultRow";
+import { isDataType } from "./util/datatype/isDataType";
 import { assertNever } from "./Util";
 import { FieldOwner } from "../FieldOwner";
+import { buildTableField } from "./driver/mysql/querybuilding/buildTableField";
 
 function buildTableFieldName<R extends Row, T>(field: TableField<R, T>) {
-  return [field.column].map(str => `\`${str}\``).join(".");
+  return buildTableField(field);
 }
 
 export class RowUtility {
   static buildRow<R extends Row>(table: Table<R>, result: ResultRow) {
-    const obj: any = { __row_kind__: table.rowKind };
+    const obj: any = { __ROW_KIND__: table.rowKind };
     table.fields.forEach(field => {
       const value = this.getValueOrUndefined(result, field);
       if (typeof value === "undefined") {
@@ -39,7 +41,7 @@ export class RowUtility {
     table: Table<R>,
     result: ResultRow
   ): Partial<R> {
-    const obj: any = { __row_kind__: table.rowKind };
+    const obj: any = { __ROW_KIND__: table.rowKind };
     table.fields.forEach(field => {
       const value = this.getValueOrUndefined(result, field);
       obj[field.column] = value;
@@ -91,6 +93,10 @@ export class RowUtility {
 
     if (typeof res === "undefined") {
       return undefined;
+    }
+
+    if (field.type.nullable && res === null) {
+      return null;
     }
 
     if (!isDataType<T>(field.type, res)) {

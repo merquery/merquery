@@ -1,5 +1,4 @@
-import { eq } from "../../../Condition";
-import { val } from "../../../Field";
+import { val } from "../../../impl/util/val";
 import {
   StubQueryRunner,
   TestDSL,
@@ -10,7 +9,8 @@ import { EVENT, USER } from "../../../testutil/TestSchema";
 import { JoinType } from "../../../JoinType";
 import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
-import { JoinedTableWithOnCondition } from "../../../JoinedTable";
+import { JoinedTableWithOnCondition } from "../../../JoinedTableWithOnCondition";
+import { eq } from "../../../impl/util/eq";
 
 test("innerJoin adds inner join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));

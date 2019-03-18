@@ -1,43 +1,42 @@
-import { TableField, FieldAlias, Field, val } from "../Field";
+import { val } from "./util/val";
+import { Field } from "../Field";
+import { FieldAlias } from "../FieldAlias";
+import { TableField } from "../TableField";
 import { Row } from "../Row";
 import { FieldOwner } from "../FieldOwner";
-import { DataTypeProps } from "../DataType";
-import {
-  eqValue,
-  ComperatorCondition,
-  eq,
-  compare,
-  InCondition
-} from "../Condition";
+import { DataTypeProps } from "../DataTypeProps";
+import { ComparatorCondition } from "../ComparatorCondition";
+import { InCondition } from "../InCondition";
 import { EventRow } from "../testutil/TestSchema";
 import { GeneratedTableField } from "../GeneratedTableField";
 import { OneOrMoreArrayUtil } from "./OneOrMoreArray";
+import { compare } from "./util/compare";
 
 export class TableFieldImpl<R extends Row, T>
   implements GeneratedTableField<R, T> {
   constructor(public readonly FIELD: TableField<R, T>) {}
 
-  equals(value: T): ComperatorCondition {
+  equals(value: T): ComparatorCondition {
     return compare(this.FIELD, "=", val(value));
   }
 
-  equalsField(field: Field<T>): ComperatorCondition {
+  equalsField(field: Field<T>): ComparatorCondition {
     return compare(this.FIELD, "=", field);
   }
 
-  lessThan(value: T): ComperatorCondition {
+  lessThan(value: T): ComparatorCondition {
     return compare(this.FIELD, "<=", val(value));
   }
 
-  lessThanField(field: Field<T>): ComperatorCondition {
+  lessThanField(field: Field<T>): ComparatorCondition {
     return compare(this.FIELD, "<=", field);
   }
 
-  greaterThan(value: T): ComperatorCondition {
+  greaterThan(value: T): ComparatorCondition {
     return compare(this.FIELD, ">=", val(value));
   }
 
-  greaterThanField(field: Field<T>): ComperatorCondition {
+  greaterThanField(field: Field<T>): ComparatorCondition {
     return compare(this.FIELD, ">=", field);
   }
 

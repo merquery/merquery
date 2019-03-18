@@ -1,38 +1,35 @@
-import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import {
+  StubQueryRunner,
+  TestDSL,
+  TestSetup
+} from "../../../testutil/TestUtil";
 import { InsertState } from "../../../InsertState";
 import { EVENT } from "../../../testutil/TestSchema";
+import { val } from "../../../impl/util/val";
 
 test("onDuplicateKeyUpdate and set sets the correct InsertState.duplicateKey and single update", async () => {
-  const queryRunner = StubQueryRunner({
-    executeInsertState: jest.fn(async (state: InsertState<any>) => {
-      expect(state.duplicateKey).toEqual({
-        kind: "OnDuplicateKeyUpdate",
-        updates: [[EVENT.ID.FIELD, 2]]
-      });
-    })
-  });
+  const { dsl, runner } = TestSetup();
 
-  const dsl = TestDSL(queryRunner);
   await dsl
     .insertInto(EVENT, EVENT.ID.FIELD)
     .onDuplicateKeyUpdate()
     .set(EVENT.ID.FIELD, 2)
     .execute();
 
-  expect(queryRunner.executeInsertState).toBeCalled();
+  expect(runner.executeInsertState).toBeCalledWith({
+    duplicateKey: {
+      kind: "OnDuplicateKeyUpdate",
+      updates: [[EVENT.ID.FIELD, val(2)]]
+    },
+    fields: [EVENT.ID.FIELD],
+    table: EVENT,
+    values: []
+  });
 });
 
 test("onDuplicateKeyUpdate and multiple set sets the correct InsertState.duplicateKey and updates", async () => {
-  const queryRunner = StubQueryRunner({
-    executeInsertState: jest.fn(async (state: InsertState<any>) => {
-      expect(state.duplicateKey).toEqual({
-        kind: "OnDuplicateKeyUpdate",
-        updates: [[EVENT.ID.FIELD, 3], [EVENT.NAME.FIELD, "Test"]]
-      });
-    })
-  });
+  const { dsl, runner } = TestSetup();
 
-  const dsl = TestDSL(queryRunner);
   await dsl
     .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
     .onDuplicateKeyUpdate()
@@ -40,23 +37,31 @@ test("onDuplicateKeyUpdate and multiple set sets the correct InsertState.duplica
     .set(EVENT.NAME.FIELD, "Test")
     .execute();
 
-  expect(queryRunner.executeInsertState).toBeCalled();
+  expect(runner.executeInsertState).toBeCalledWith({
+    duplicateKey: {
+      kind: "OnDuplicateKeyUpdate",
+      updates: [[EVENT.ID.FIELD, val(3)], [EVENT.NAME.FIELD, val("Test")]]
+    },
+    fields: [EVENT.ID.FIELD, EVENT.NAME.FIELD],
+    table: EVENT,
+    values: []
+  });
 });
 
 test("onDuplicateKeyIgnore sets the correct InsertState.duplicateKey", async () => {
-  const queryRunner = StubQueryRunner({
-    executeInsertState: jest.fn(async (state: InsertState<any>) => {
-      expect(state.duplicateKey).toEqual({
-        kind: "OnDuplicateKeyIgnore"
-      });
-    })
-  });
+  const { dsl, runner } = TestSetup();
 
-  const dsl = TestDSL(queryRunner);
   await dsl
-    .insertInto(EVENT, EVENT.ID.FIELD, EVENT.NAME.FIELD)
+    .insertInto(EVENT, EVENT.ID.FIELD)
     .onDuplicateKeyIgnore()
     .execute();
 
-  expect(queryRunner.executeInsertState).toBeCalled();
+  expect(runner.executeInsertState).toBeCalledWith({
+    duplicateKey: {
+      kind: "OnDuplicateKeyIgnore"
+    },
+    fields: [EVENT.ID.FIELD],
+    table: EVENT,
+    values: []
+  });
 });

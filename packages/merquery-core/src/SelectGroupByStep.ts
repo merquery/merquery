@@ -1,6 +1,7 @@
 import { SelectOrderByStep } from "./SelectOrderByStep";
 import { Row } from "./Row";
-import { TableField, Field } from "./Field";
+import { Field } from "./Field";
+import { TableField } from "./TableField";
 import { SelectHavingStep } from "./SelectHavingStep";
 
 export interface SelectGroupByStep<R extends Row> extends SelectHavingStep<R> {

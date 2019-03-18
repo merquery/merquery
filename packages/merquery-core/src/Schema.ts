@@ -1,17 +1,7 @@
-import { DataTypeProps } from "./DataType";
-export interface SchemaColumn {
-  schema: string;
-  table: string;
-  name: string;
-  type: DataTypeProps;
-}
-
-export interface SchemaTable {
-  schema: string;
-  name: string;
-  columns: SchemaColumn[];
-}
-
+import { SchemaTable } from "./SchemaTable";
 export interface Schema {
+  /**
+   * Fetch tables of schema
+   */
   fetchTables(): Promise<SchemaTable[]>;
 }
