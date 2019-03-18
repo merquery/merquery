@@ -20,6 +20,6 @@ export type OnDuplicateKey = OnDuplicateKeyIgnore | OnDuplicateKeyUpdate<any>;
 export interface InsertState<R extends Row> {
   table: Table<R>;
   fields: TableField<R, any>[];
-  values: OneOrMoreArray<ValueField<any>>[];
+  values: ValueField<any>[][];
   duplicateKey?: OnDuplicateKey;
 }

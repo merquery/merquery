@@ -591,7 +591,7 @@ export class InsertImpl<
   private addFields(values: ValueField<any>[]) {
     return this.create({
       ...this.state,
-      values: [...this.state.values, OneOrMoreArrayUtil.fromArray(values)]
+      values: [...this.state.values, values]
     });
   }
 

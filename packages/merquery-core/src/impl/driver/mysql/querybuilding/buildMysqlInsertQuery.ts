@@ -17,10 +17,15 @@ export function buildMysqlInsertQuery(state: InsertState<any>) {
     query += " IGNORE";
   }
 
-  query += ` INTO ${buildTable(state.table)} ${buildFieldList(
-    OneOrMoreArrayUtil.fromArray(state.fields)
-  )}`;
-  query += ` VALUES ${state.values.map(buildFieldList).join(", ")}`;
+  query += ` INTO ${buildTable(state.table)} ${buildFieldList(state.fields)}`;
+  query += ` VALUES ${state.values
+    .map(vals => {
+      if (vals.length !== state.fields.length)
+        throw new Error("Mismatching field count between fields and values.");
+
+      return buildFieldList(vals);
+    })
+    .join(", ")}`;
 
   if (
     state.duplicateKey &&

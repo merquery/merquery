@@ -8,7 +8,7 @@ test("buildInCondition builds IN condition", () => {
     buildInCondition({
       kind: "InCondition",
       field: EVENT.ID.FIELD,
-      values: OneOrMoreArrayUtil.just(val("123"), val("456"))
+      values: OneOrMoreArrayUtil.fromArray([val("123"), val("456")])
     })
   ).toBe("`projectclub`.`event`.`id` IN ('123', '456')");
 });
