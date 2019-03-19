@@ -32,5 +32,5 @@
   },
   "main": "dist/index.js",
   "name": "merquery-core",
-  "version": "0.0.1"
+  "version": "0.1.0"
 }

@@ -1,8 +1,20 @@
 language: node_js
 node_js:
-  - 10
-  - 9
   - 8
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+install:
+  - npm install -g lerna
+  - lerna bootstrap
+
+matrix:
+  include:
+    - name: "Core Pipeline"
+      env: PACKAGE_LOCATION=packages/merquery-core
+    - name: "CLI Pipeline"
+      env: PACKAGE_LOCATION=packages/merquery-cli
+    - name: "Sample Pipeline"
+      env: PACKAGE_LOCATION=packages/merquery-sample
+
+script:
+  - cd $PACKAGE_LOCATION
+  - npm test

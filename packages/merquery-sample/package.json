@@ -1,15 +1,15 @@
 {
   "name": "merquery-sample",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "exit 0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "merquery-cli": "^1.0.0",
-    "merquery-core": "^1.0.0"
+    "merquery-cli": "^0.1.0",
+    "merquery-core": "^0.1.0"
   }
 }
