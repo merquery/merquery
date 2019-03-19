@@ -83,3 +83,5 @@ dist
 .vscode
 .stryker-tmp
 reports
+
+docs
