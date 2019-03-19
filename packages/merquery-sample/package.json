@@ -1,6 +1,6 @@
 {
   "name": "merquery-sample",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "merquery-cli": "^0.1.0",
-    "merquery-core": "^0.1.0"
+    "merquery-cli": "^0.1.0-alpha.0",
+    "merquery-core": "^0.1.0-alpha.0"
   }
 }
