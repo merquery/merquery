@@ -1,6 +1,6 @@
 {
   "name": "merquery",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "> Type safe SQL query builder for TypeScript.",
   "scripts": {
     "test": "lerna run test"
