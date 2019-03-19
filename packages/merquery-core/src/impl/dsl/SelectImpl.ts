@@ -71,7 +71,7 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  having(condition: Condition): SelectOrderByStep<R> {
+  having(condition: Condition) {
     return this.create({
       ...this.state,
       having: condition
@@ -82,7 +82,7 @@ export class SelectImpl<R extends Row>
     return this.queryBuilder.representSelectStateAsSqlString(this.state);
   }
 
-  select(...fields: Field<any>[]): SelectFromStep<R> {
+  select(...fields: Field<any>[]) {
     return this.create({
       ...this.state,
       columns: fields
@@ -90,8 +90,9 @@ export class SelectImpl<R extends Row>
   }
 
   asSubQuery(): SubQuery<R> {
-    return { state: this.getState() };
+    return { state: this.state };
   }
+
   async fetchOne(): Promise<R | undefined> {
     const results = await this.limit(1).fetchAll();
     return results[0];
@@ -120,7 +121,7 @@ export class SelectImpl<R extends Row>
     return this.fetchAllMapped(mapper);
   }
 
-  on(condition: Condition): SelectJoinStep<R> {
+  on(condition: Condition) {
     if (!this.state.temporaryJoinedTable)
       throw new Error("Temporary joined table is not set.");
 
@@ -133,28 +134,24 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  leftJoin(table: Table<any>): SelectJoinOnStep<R> {
+  leftJoin(table: Table<any>) {
     return this.create({
       ...this.state,
       temporaryJoinedTable: { table: table, joinType: JoinType.Left }
     });
   }
 
-  innerJoin(table: Table<any>): SelectJoinOnStep<R> {
+  innerJoin(table: Table<any>) {
     return this.create({
       ...this.state,
       temporaryJoinedTable: { table: table, joinType: JoinType.Inner }
     });
   }
-  rightJoin(table: Table<any>): SelectJoinOnStep<R> {
+  rightJoin(table: Table<any>) {
     return this.create({
       ...this.state,
       temporaryJoinedTable: { table: table, joinType: JoinType.Right }
     });
-  }
-
-  getState(): SelectState<R> {
-    return { ...this.state };
   }
 
   groupBy<T>(field: Field<any>, ...fields: Field<any>[]) {
@@ -165,7 +162,7 @@ export class SelectImpl<R extends Row>
   }
 
   limit(count: number) {
-    if (count < 0) throw new Error("Limit needs to be nonnegative");
+    if (count < 0) throw new Error("Limit needs to be nonnegative.");
 
     return this.create({
       ...this.state,
@@ -192,7 +189,7 @@ export class SelectImpl<R extends Row>
   }
 
   offset(count: number) {
-    if (count < 0) throw new Error("Offset needs to be nonnegative");
+    if (count < 0) throw new Error("Offset needs to be nonnegative.");
 
     return this.create({
       ...this.state,
@@ -229,15 +226,15 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  where(condition: Condition): SelectConditionStep<R> {
+  where(condition: Condition) {
     return this.create({
       ...this.state,
       condition: ConditionBuilderImpl.initial(condition).getCondition()
     });
   }
 
-  and(condition: Condition): SelectConditionStep<R> {
-    if (!this.state.condition) throw new Error("No condition set yet");
+  and(condition: Condition) {
+    if (!this.state.condition) throw new Error("No initial condition set.");
 
     return this.create({
       ...this.state,
@@ -247,8 +244,8 @@ export class SelectImpl<R extends Row>
     });
   }
 
-  or(condition: Condition): SelectConditionStep<R> {
-    if (!this.state.condition) throw new Error("No condition set yet");
+  or(condition: Condition) {
+    if (!this.state.condition) throw new Error("No initial condition set.");
 
     return this.create({
       ...this.state,

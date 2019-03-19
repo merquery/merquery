@@ -3,45 +3,29 @@ import { eq } from "lodash";
 import {
   StubQueryRunner,
   expectSelectState,
-  TestDSL
+  TestDSL,
+  StubQueryBuilder
 } from "../../../testutil/TestUtil";
 import { EVENT } from "../../../testutil/TestSchema";
 import { LockMode } from "../../../LockMode";
-import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import {
+  createSelectStateWithRecordTable,
+  createSelectState
+} from "../../../impl/createSelectState";
+import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("forUpdate sets SelectState.lockMode to LockMode.ForUpdate", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryRunner);
-  await dsl
-    .selectFrom(EVENT)
-    .forUpdate()
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable({ lockMode: LockMode.ForUpdate }, EVENT)
+  expect(selectImpl.forUpdate().state).toEqual(
+    createSelectState({ lockMode: LockMode.ForUpdate })
   );
 });
 
 test("lockInShareMode sets SelectState.lockMode to LockMode.LockInShareMode", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryRunner);
-  await dsl
-    .selectFrom(EVENT)
-    .lockInShareMode()
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        lockMode: LockMode.LockInShareMode
-      },
-      EVENT
-    )
+  expect(selectImpl.lockInShareMode().state).toEqual(
+    createSelectState({ lockMode: LockMode.LockInShareMode })
   );
 });

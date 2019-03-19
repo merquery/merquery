@@ -1,48 +1,43 @@
 import {
   TestDSL,
   StubQueryRunner,
-  TestSetup
+  TestSetup,
+  StubQueryBuilder
 } from "../../../testutil/TestUtil";
 import { EVENT } from "../../../testutil/TestSchema";
-import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import {
+  createSelectStateWithRecordTable,
+  createSelectState
+} from "../../../impl/createSelectState";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
+import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("groupBy with one parameter adds one field to SelectState.groupBy", async () => {
-  const { dsl, runner } = TestSetup();
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  await dsl
-    .selectFrom(EVENT)
-    .groupBy(EVENT.ID.FIELD)
-    .fetchAll();
-
-  expect(runner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        groupBy: OneOrMoreArrayUtil.just(EVENT.ID.FIELD)
-      },
-      EVENT
-    )
+  expect(selectImpl.groupBy(EVENT.ID.FIELD).state).toEqual(
+    createSelectState({
+      groupBy: OneOrMoreArrayUtil.just(EVENT.ID.FIELD)
+    })
   );
 });
 
 test("groupBy with multiple parameters adds multiple fields to SelectState.groupBy", async () => {
-  const { dsl, runner } = TestSetup();
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  await dsl
-    .selectFrom(EVENT)
-    .groupBy(EVENT.ID.FIELD, EVENT.NAME.FIELD, EVENT.DESCRIPTION.FIELD)
-    .fetchAll();
-
-  expect(runner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        groupBy: OneOrMoreArrayUtil.fromArray([
-          EVENT.ID.FIELD,
-          EVENT.NAME.FIELD,
-          EVENT.DESCRIPTION.FIELD
-        ])
-      },
-      EVENT
-    )
+  expect(
+    selectImpl.groupBy(
+      EVENT.ID.FIELD,
+      EVENT.NAME.FIELD,
+      EVENT.DESCRIPTION.FIELD
+    ).state
+  ).toEqual(
+    createSelectState({
+      groupBy: OneOrMoreArrayUtil.fromArray([
+        EVENT.ID.FIELD,
+        EVENT.NAME.FIELD,
+        EVENT.DESCRIPTION.FIELD
+      ])
+    })
   );
 });

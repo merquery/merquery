@@ -1,103 +1,50 @@
-import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import {
+  StubQueryRunner,
+  TestDSL,
+  StubQueryBuilder
+} from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
-import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import {
+  createSelectStateWithRecordTable,
+  createSelectState
+} from "../../../impl/createSelectState";
+import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("limit sets SelectState.limit for 0", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
-
-  const dsl = TestDSL(queryRunner);
-  await dsl
-    .selectFrom(EVENT)
-    .limit(0)
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable({ limit: 0 }, EVENT)
-  );
-});
-
-test("limit throws Exception when count is nonnegative", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
-
-  const dsl = TestDSL(queryRunner);
-
-  expect(() => dsl.selectFrom(EVENT).limit(-22)).toThrowError(
-    "Limit needs to be nonnegative"
-  );
-
-  expect(queryRunner.executeSelectState).not.toBeCalled();
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  expect(selectImpl.limit(0).state).toEqual(createSelectState({ limit: 0 }));
 });
 
 test("limit sets SelectState.limit for positive integer", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  expect(selectImpl.limit(22).state).toEqual(createSelectState({ limit: 22 }));
+});
 
-  const dsl = TestDSL(queryRunner);
+test("limit throws Exception when count is nonnegative", async () => {
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  await dsl
-    .selectFrom(EVENT)
-    .limit(22)
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable({ limit: 22 }, EVENT)
+  expect(() => selectImpl.limit(-22)).toThrowError(
+    "Limit needs to be nonnegative."
   );
 });
 
 test("offset sets SelectState.offset for 0", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
-
-  const dsl = TestDSL(queryRunner);
-  await dsl
-    .selectFrom(EVENT)
-    .limit(0)
-    .offset(0)
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable({ offset: 0, limit: 0 }, EVENT)
-  );
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  expect(selectImpl.offset(0).state).toEqual(createSelectState({ offset: 0 }));
 });
 
 test("offset throws Exception when count is nonnegative", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryRunner);
-
-  expect(() =>
-    dsl
-      .selectFrom(EVENT)
-      .limit(12)
-      .offset(-22)
-  ).toThrowError("Offset needs to be nonnegative");
-
-  expect(queryRunner.executeSelectState).not.toBeCalled();
+  expect(() => selectImpl.offset(-22)).toThrowError(
+    "Offset needs to be nonnegative."
+  );
 });
 
-test("offset sets SelectState.offset for positive integer", async () => {
-  const queryRunner = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
-
-  const dsl = TestDSL(queryRunner);
-
-  await dsl
-    .selectFrom(EVENT)
-    .limit(11)
-    .offset(22)
-    .fetchAll();
-
-  expect(queryRunner.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable({ limit: 11, offset: 22 }, EVENT)
+test("limit sets SelectState.limit for 22", async () => {
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  expect(selectImpl.offset(22).state).toEqual(
+    createSelectState({ offset: 22 })
   );
 });

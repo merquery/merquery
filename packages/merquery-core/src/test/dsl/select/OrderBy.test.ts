@@ -1,88 +1,63 @@
-import { StubQueryRunner, TestDSL } from "../../../testutil/TestUtil";
+import {
+  StubQueryRunner,
+  TestDSL,
+  StubQueryBuilder
+} from "../../../testutil/TestUtil";
 import { DSL } from "../../../impl/dsl/DSL";
 import { EVENT } from "../../../testutil/TestSchema";
-import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import {
+  createSelectStateWithRecordTable,
+  createSelectState
+} from "../../../impl/createSelectState";
 import { OrderDirection } from "../../../OrderDirection";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
+import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("orderByAscending adds a ascending order to SelectState.orderBy", async () => {
-  const queryBuilder = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryBuilder);
-
-  await dsl
-    .selectFrom(EVENT)
-    .orderByAscending(EVENT.ID.FIELD)
-    .fetchAll();
-
-  expect(queryBuilder.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        orderBy: OneOrMoreArrayUtil.just({
-          direction: OrderDirection.Ascending,
-          field: EVENT.ID.FIELD
-        })
-      },
-      EVENT
-    )
+  expect(selectImpl.orderByAscending(EVENT.ID.FIELD).state).toEqual(
+    createSelectState({
+      orderBy: OneOrMoreArrayUtil.just({
+        direction: OrderDirection.Ascending,
+        field: EVENT.ID.FIELD
+      })
+    })
   );
 });
 
 test("orderByDescending adds a descending order to SelectState.orderBy", async () => {
-  const queryBuilder = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryBuilder);
-
-  await dsl
-    .selectFrom(EVENT)
-    .orderByDescending(EVENT.ID.FIELD)
-    .fetchAll();
-
-  expect(queryBuilder.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        orderBy: OneOrMoreArrayUtil.just({
-          direction: OrderDirection.Descending,
-          field: EVENT.ID.FIELD
-        })
-      },
-      EVENT
-    )
+  expect(selectImpl.orderByDescending(EVENT.ID.FIELD).state).toEqual(
+    createSelectState({
+      orderBy: OneOrMoreArrayUtil.just({
+        direction: OrderDirection.Descending,
+        field: EVENT.ID.FIELD
+      })
+    })
   );
 });
 
 test("multiple orderBys adds multiple order to SelectState.orderBy", async () => {
-  const queryBuilder = StubQueryRunner({
-    executeSelectState: jest.fn().mockResolvedValue([])
-  });
+  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
 
-  const dsl = TestDSL(queryBuilder);
-
-  await dsl
-    .selectFrom(EVENT)
-    .orderByDescending(EVENT.ID.FIELD)
-    .orderByAscending(EVENT.ID.FIELD)
-    .fetchAll();
-
-  expect(queryBuilder.executeSelectState).toBeCalledWith(
-    createSelectStateWithRecordTable(
-      {
-        orderBy: OneOrMoreArrayUtil.just(
-          {
-            direction: OrderDirection.Descending,
-            field: EVENT.ID.FIELD
-          },
-          {
-            direction: OrderDirection.Ascending,
-            field: EVENT.ID.FIELD
-          }
-        )
-      },
-      EVENT
-    )
+  expect(
+    selectImpl
+      .orderByDescending(EVENT.ID.FIELD)
+      .orderByAscending(EVENT.ID.FIELD).state
+  ).toEqual(
+    createSelectState({
+      orderBy: OneOrMoreArrayUtil.just(
+        {
+          direction: OrderDirection.Descending,
+          field: EVENT.ID.FIELD
+        },
+        {
+          direction: OrderDirection.Ascending,
+          field: EVENT.ID.FIELD
+        }
+      )
+    })
   );
 });
