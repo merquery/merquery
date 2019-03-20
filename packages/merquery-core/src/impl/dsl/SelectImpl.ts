@@ -39,6 +39,7 @@ import { createSelectState } from "../createSelectState";
 import { QueryBuilder } from "../../QueryBuilder";
 import { MappingContext } from "../../MappingContext";
 import { ConverterFactory } from "../../ConverterFactory";
+import { Converters } from "../../Converters";
 
 export class SelectImpl<R extends Row>
   implements
@@ -56,7 +57,7 @@ export class SelectImpl<R extends Row>
     SelectFinalStep<R> {
   constructor(
     readonly state: SelectState<R>,
-    private readonly converterFactory: ConverterFactory,
+    private readonly converters: Converters,
     private readonly queryRunner: QueryRunner,
     private readonly queryBuilder: QueryBuilder
   ) {}
@@ -112,7 +113,7 @@ export class SelectImpl<R extends Row>
         "executeSelectState didn't return a array. Did you forget to mock the return value?"
       );
 
-    const context: MappingContext = { converterFactory: this.converterFactory };
+    const context: MappingContext = { converters: this.converters };
 
     return results.map(result => mapper(context, result));
   }
@@ -206,13 +207,13 @@ export class SelectImpl<R extends Row>
   }
 
   static initial<R extends Row>(
-    converterFactory: ConverterFactory,
+    converters: Converters,
     executor: QueryRunner,
     queryBuilder: QueryBuilder
   ) {
     return new SelectImpl<R>(
       createSelectState(),
-      converterFactory,
+      converters,
       executor,
       queryBuilder
     );
@@ -221,7 +222,7 @@ export class SelectImpl<R extends Row>
   private create(state: SelectState<R>) {
     return new SelectImpl<R>(
       state,
-      this.converterFactory,
+      this.converters,
       this.queryRunner,
       this.queryBuilder
     );

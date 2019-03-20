@@ -20,6 +20,8 @@ import { EnumConverter } from "./conversion/EnumConverter";
 import { IntegerConverter } from "./conversion/IntegerConverter";
 import { StringConverter } from "./conversion/StringConverter";
 import { MysqlConverterFactory } from "./conversion/MysqlConverterFactory";
+import { Converters } from "../../../Converters";
+import { MysqlConverters } from "./MysqlConverters";
 
 export interface MysqlDriverOptions {
   host: string;
@@ -32,6 +34,10 @@ export class MysqlDriver implements Driver {
 
   constructor(private readonly options: PoolConfig) {
     this.pool = createPool(options);
+  }
+
+  createConverters(): Converters {
+    return MysqlConverters;
   }
 
   createConverter(props: DataTypeProps): BaseConverter<DataTypeProps, any> {

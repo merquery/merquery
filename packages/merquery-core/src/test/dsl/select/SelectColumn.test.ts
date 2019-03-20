@@ -8,10 +8,11 @@ import { EVENT, USER } from "../../../testutil/TestSchema";
 import { createSelectState } from "../../../impl/createSelectState";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("select sets SelectState.columns with one column", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -23,7 +24,7 @@ test("select sets SelectState.columns with one column", async () => {
 
 test("select sets SelectState.columns with multiple columns", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

@@ -13,10 +13,11 @@ import {
 } from "../../../impl/createSelectState";
 import { eq } from "../../../impl/util/eq";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("having sets SelectState.having", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

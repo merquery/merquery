@@ -3,7 +3,6 @@ import { Row } from "../Row";
 import { val } from "./util/val";
 import { TableField } from "../TableField";
 import { ResultRow } from "../ResultRow";
-import { isDataType } from "./util/datatype/isDataType";
 import { assertNever } from "./Util";
 import { FieldOwner } from "../FieldOwner";
 import { buildTableField } from "./driver/mysql/querybuilding/buildTableField";
@@ -11,6 +10,9 @@ import { buildField } from "./driver/mysql/querybuilding/buildField";
 import { Converter } from "../Converter";
 import { MappingContext } from "../MappingContext";
 import { ConverterFactory } from "../ConverterFactory";
+import { Converters } from "../Converters";
+import { DataTypeProps } from "../DataTypeProps";
+import { BaseConverter } from "./driver/mysql/conversion/BaseConverter";
 
 function buildTableFieldName<R extends Row, T>(field: TableField<R, T>) {
   return buildTableField(field);
@@ -28,8 +30,27 @@ export class RowUtility {
     }
   }
 
+  private static getConverter(
+    converters: Converters,
+    dataType: DataTypeProps
+  ): BaseConverter<DataTypeProps, any> {
+    switch (dataType.type) {
+      case "DATE":
+        return converters.date;
+      case "ENUM":
+        return converters.enum;
+      case "INTEGER":
+        return converters.integer;
+      case "STRING":
+        return converters.string;
+
+      default:
+        return assertNever(dataType);
+    }
+  }
+
   static getValueOrUndefined<R extends Row, T>(
-    converterFactory: ConverterFactory,
+    converters: Converters,
     result: ResultRow,
     field: TableField<R, T>
   ) {
@@ -48,10 +69,10 @@ export class RowUtility {
       return null;
     }
 
-    const convertResult = converterFactory(field.type).convertToJavaScript(
-      field.type,
-      res
-    );
+    const convertResult = this.getConverter(
+      converters,
+      field.type
+    ).convertToJavaScript(field.type, res);
     if (convertResult.kind === "ConvertError") {
       throw new Error(
         `Error converting value for field ${buildField(field)}. Reason: ${
@@ -71,11 +92,7 @@ export class RowUtility {
   ) {
     const obj: any = { __ROW_KIND__: table.rowKind };
     table.fields.forEach(field => {
-      const value = this.getValueOrUndefined(
-        context.converterFactory,
-        result,
-        field
-      );
+      const value = this.getValueOrUndefined(context.converters, result, field);
       if (typeof value === "undefined" && preventUndefined) {
         throw new Error(
           `Value for field ${buildTableFieldName(

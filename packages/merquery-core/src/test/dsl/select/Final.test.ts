@@ -7,6 +7,7 @@ import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 import { EVENT, USER } from "../../../testutil/TestSchema";
 import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
 import { MysqlConverterFactory } from "../../../impl/driver/mysql/conversion/MysqlConverterFactory";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("asSqlString returns query builder result", () => {
   const builder = StubQueryBuilder({
@@ -14,7 +15,7 @@ test("asSqlString returns query builder result", () => {
   });
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     builder
   );
@@ -31,7 +32,7 @@ test("fetchAll calls query runner executeSelectState - empty result", async () =
   });
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(EVENT);
@@ -52,7 +53,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -76,7 +77,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -101,7 +102,7 @@ test("fetchAll throws error if no recordTable is set", async () => {
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   );
@@ -117,7 +118,7 @@ test("fetchAllMapped throws error if executeSelectState return value is not arra
   });
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   );
@@ -133,7 +134,7 @@ test("fetchAll calls query runner executeSelectState - one result", async () => 
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -157,7 +158,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -179,7 +180,7 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns ro
   });
 
   const selectImpl = SelectImpl.initial(
-    MysqlConverterFactory,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -200,7 +201,7 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns un
   });
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -213,7 +214,7 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns un
 
 test("asSubQuery returns SubQuery", () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   )

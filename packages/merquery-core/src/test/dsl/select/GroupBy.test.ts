@@ -12,10 +12,11 @@ import {
 } from "../../../impl/createSelectState";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("groupBy with one parameter adds one field to SelectState.groupBy", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -29,7 +30,7 @@ test("groupBy with one parameter adds one field to SelectState.groupBy", async (
 
 test("groupBy with multiple parameters adds multiple fields to SelectState.groupBy", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

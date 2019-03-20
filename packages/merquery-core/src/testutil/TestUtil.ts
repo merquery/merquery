@@ -5,6 +5,8 @@ import { QueryBuilder } from "../QueryBuilder";
 import { Converter } from "../Converter";
 import { MysqlConverterFactory } from "../impl/driver/mysql/conversion/MysqlConverterFactory";
 import { ConverterFactory } from "../ConverterFactory";
+import { Converters } from "../Converters";
+import { MysqlConverters } from "../impl/driver/mysql/MysqlConverters";
 export const NOT_IMPLEMENTED = () => {
   throw new Error("Not implemented");
 };
@@ -66,12 +68,12 @@ export function StubQueryBuilder(methods?: Partial<QueryBuilder>) {
 export function TestDSL(
   runner?: QueryRunner,
   queryBuilder?: QueryBuilder,
-  converterFactory?: ConverterFactory
+  converters?: Converters
 ) {
   return DSL.withDriver({
     createQueryRunner: () => runner || StubQueryRunner(),
     createQueryBuilder: () => queryBuilder || StubQueryBuilder(),
     createSchema: NOT_IMPLEMENTED,
-    createConverter: converterFactory || MysqlConverterFactory
+    createConverters: () => converters || MysqlConverters
   });
 }

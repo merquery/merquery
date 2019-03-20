@@ -14,10 +14,11 @@ import {
   createSelectState
 } from "../../../impl/createSelectState";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("forUpdate sets SelectState.lockMode to LockMode.ForUpdate", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -29,7 +30,7 @@ test("forUpdate sets SelectState.lockMode to LockMode.ForUpdate", async () => {
 
 test("lockInShareMode sets SelectState.lockMode to LockMode.LockInShareMode", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

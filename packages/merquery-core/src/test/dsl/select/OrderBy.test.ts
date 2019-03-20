@@ -13,10 +13,11 @@ import {
 import { OrderDirection } from "../../../OrderDirection";
 import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("orderByAscending adds a ascending order to SelectState.orderBy", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -33,7 +34,7 @@ test("orderByAscending adds a ascending order to SelectState.orderBy", async () 
 
 test("orderByDescending adds a descending order to SelectState.orderBy", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -50,7 +51,7 @@ test("orderByDescending adds a descending order to SelectState.orderBy", async (
 
 test("multiple orderBys adds multiple order to SelectState.orderBy", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

@@ -19,11 +19,12 @@ import { eqValue } from "../../../impl/util/eqValue";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 import { eq } from "../../../impl/util/eq";
 import { val } from "../../../impl/util/val";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
   const condition = eqValue(EVENT.ID.FIELD, 1);
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -48,7 +49,7 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
   const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -77,7 +78,7 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
   const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -103,7 +104,7 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
 
 test("or throws error when no initial condition set", () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -114,7 +115,7 @@ test("or throws error when no initial condition set", () => {
 
 test("and throws error when no initial condition set", () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -130,7 +131,7 @@ test("combinations of and or builds a ConditionCollection", async () => {
   const t4 = eqValue(EVENT.NAME.FIELD, "Hallo");
 
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

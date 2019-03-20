@@ -11,10 +11,11 @@ import {
   createSelectState
 } from "../../../impl/createSelectState";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("limit sets SelectState.limit for 0", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -23,7 +24,7 @@ test("limit sets SelectState.limit for 0", async () => {
 
 test("limit sets SelectState.limit for positive integer", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -32,7 +33,7 @@ test("limit sets SelectState.limit for positive integer", async () => {
 
 test("limit throws Exception when count is nonnegative", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -44,7 +45,7 @@ test("limit throws Exception when count is nonnegative", async () => {
 
 test("offset sets SelectState.offset for 0", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -53,7 +54,7 @@ test("offset sets SelectState.offset for 0", async () => {
 
 test("offset throws Exception when count is nonnegative", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -65,7 +66,7 @@ test("offset throws Exception when count is nonnegative", async () => {
 
 test("limit sets SelectState.limit for 22", async () => {
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );

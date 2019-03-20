@@ -17,11 +17,12 @@ import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { JoinedTableWithOnCondition } from "../../../JoinedTableWithOnCondition";
 import { eq } from "../../../impl/util/eq";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
+import { MysqlConverters } from "../../../impl/driver/mysql/MysqlConverters";
 
 test("innerJoin adds inner join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -42,7 +43,7 @@ test("innerJoin adds inner join to SelectState.joins", async () => {
 test("leftJoin adds left join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -63,7 +64,7 @@ test("leftJoin adds left join to SelectState.joins", async () => {
 test("rightJoin adds right join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
@@ -84,7 +85,7 @@ test("rightJoin adds right join to SelectState.joins", async () => {
 test("on throws error if not in correct state", async () => {
   const condition = eq(val(1), val(2));
   const selectImpl = SelectImpl.initial(
-    NOT_IMPLEMENTED,
+    MysqlConverters,
     StubQueryRunner(),
     StubQueryBuilder()
   );
