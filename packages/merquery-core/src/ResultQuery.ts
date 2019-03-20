@@ -1,6 +1,8 @@
 import { Row } from "./Row";
 import { Query } from "./Query";
 import { ResultRow } from "./ResultRow";
+import { Converter } from "./Converter";
+import { MappingContext } from "./MappingContext";
 export interface ResultQuery<R extends Row> extends Query<R> {
   /**
    * Fetches all rows.
@@ -21,5 +23,7 @@ export interface ResultQuery<R extends Row> extends Query<R> {
    * @param mapper
    * @returns A promise which eventually returns an array, after it has been mapped
    */
-  fetchAllMapped<M>(mapper: (row: ResultRow) => M): Promise<M[]>;
+  fetchAllMapped<M>(
+    mapper: (context: MappingContext, row: ResultRow) => M
+  ): Promise<M[]>;
 }

@@ -2,7 +2,8 @@ import {
   StubQueryRunner,
   TestDSL,
   expectState,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
@@ -21,7 +22,11 @@ import { val } from "../../../impl/util/val";
 
 test("where adds a condition to SelectState.conditions with AND operator", async () => {
   const condition = eqValue(EVENT.ID.FIELD, 1);
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.where(condition).state).toEqual(
     createSelectState({
@@ -42,7 +47,11 @@ test("and adds a condition to SelectState.conditions with AND operator", async (
   const firstCondition = eqValue(EVENT.ID.FIELD, 1);
   const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.where(firstCondition).and(testCondition).state).toEqual(
     createSelectState({
@@ -67,7 +76,11 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
   const firstCondition = eqValue(EVENT.ID.FIELD, 1);
   const testCondition = eqValue(EVENT.ID.FIELD, 2);
 
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.where(firstCondition).or(testCondition).state).toEqual(
     createSelectState({
@@ -89,14 +102,22 @@ test("or adds a condition to SelectState.conditions with OR operator", async () 
 });
 
 test("or throws error when no initial condition set", () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(() => selectImpl.or(EVENT.ID.equals(1))).toThrowError(
     "No initial condition set."
   );
 });
 
 test("and throws error when no initial condition set", () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(() => selectImpl.and(EVENT.ID.equals(1))).toThrowError(
     "No initial condition set."
   );
@@ -108,7 +129,11 @@ test("combinations of and or builds a ConditionCollection", async () => {
   const t3 = eqValue(EVENT.ID.FIELD, 5);
   const t4 = eqValue(EVENT.NAME.FIELD, "Hallo");
 
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(
     selectImpl

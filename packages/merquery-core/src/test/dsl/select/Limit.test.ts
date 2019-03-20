@@ -1,7 +1,8 @@
 import {
   StubQueryRunner,
   TestDSL,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT } from "../../../testutil/TestSchema";
@@ -12,17 +13,29 @@ import {
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("limit sets SelectState.limit for 0", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(selectImpl.limit(0).state).toEqual(createSelectState({ limit: 0 }));
 });
 
 test("limit sets SelectState.limit for positive integer", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(selectImpl.limit(22).state).toEqual(createSelectState({ limit: 22 }));
 });
 
 test("limit throws Exception when count is nonnegative", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(() => selectImpl.limit(-22)).toThrowError(
     "Limit needs to be nonnegative."
@@ -30,12 +43,20 @@ test("limit throws Exception when count is nonnegative", async () => {
 });
 
 test("offset sets SelectState.offset for 0", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(selectImpl.offset(0).state).toEqual(createSelectState({ offset: 0 }));
 });
 
 test("offset throws Exception when count is nonnegative", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(() => selectImpl.offset(-22)).toThrowError(
     "Offset needs to be nonnegative."
@@ -43,7 +64,11 @@ test("offset throws Exception when count is nonnegative", async () => {
 });
 
 test("limit sets SelectState.limit for 22", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   expect(selectImpl.offset(22).state).toEqual(
     createSelectState({ offset: 22 })
   );

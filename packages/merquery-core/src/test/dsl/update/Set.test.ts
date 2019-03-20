@@ -23,7 +23,9 @@ test("set adds one change to UpdateState.updates", () => {
 
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
-    updates: [[EVENT.ID.FIELD, val(123)]]
+    updates: [
+      { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 123 }
+    ]
   });
 });
 
@@ -45,9 +47,13 @@ test("multiple set adds multiple to UpdateState.updates", () => {
   expect(queryRunner.executeUpdateState).toBeCalledWith({
     table: EVENT,
     updates: [
-      [EVENT.ID.FIELD, val(123)],
-      [EVENT.NAME.FIELD, val("Name")],
-      [EVENT.DESCRIPTION.FIELD, val("Description")]
+      { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 123 },
+      { kind: "TableValueField", tableField: EVENT.NAME.FIELD, value: "Name" },
+      {
+        kind: "TableValueField",
+        tableField: EVENT.DESCRIPTION.FIELD,
+        value: "Description"
+      }
     ]
   });
 });

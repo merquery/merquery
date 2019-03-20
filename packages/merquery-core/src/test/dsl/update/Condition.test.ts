@@ -28,7 +28,7 @@ test("where sets UpdateState.condition", () => {
         { condition: condition, operator: ConditionOperator.And }
       ])
     },
-    updates: [[USER.ID.FIELD, val(1)]]
+    updates: [{ kind: "TableValueField", tableField: USER.ID.FIELD, value: 1 }]
   });
 });
 
@@ -57,7 +57,7 @@ test("where().and() sets two conditions connected by and UpdateState.condition",
         { condition: condition2, operator: ConditionOperator.And }
       ])
     },
-    updates: [[USER.ID.FIELD, val(1)]]
+    updates: [{ kind: "TableValueField", tableField: USER.ID.FIELD, value: 1 }]
   });
 });
 
@@ -86,6 +86,6 @@ test("where().or() sets two conditions connected by or UpdateState.condition", (
         { condition: condition2, operator: ConditionOperator.Or }
       ])
     },
-    updates: [[USER.ID.FIELD, val(1)]]
+    updates: [{ kind: "TableValueField", tableField: USER.ID.FIELD, value: 1 }]
   });
 });

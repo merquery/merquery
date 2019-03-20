@@ -2,6 +2,9 @@ import { QueryRunner } from "../QueryRunner";
 import { DSL } from "../impl/dsl/DSL";
 import { SelectState } from "../SelectState";
 import { QueryBuilder } from "../QueryBuilder";
+import { Converter } from "../Converter";
+import { MysqlConverterFactory } from "../impl/driver/mysql/conversion/MysqlConverterFactory";
+import { ConverterFactory } from "../ConverterFactory";
 export const NOT_IMPLEMENTED = () => {
   throw new Error("Not implemented");
 };
@@ -60,10 +63,15 @@ export function StubQueryBuilder(methods?: Partial<QueryBuilder>) {
   };
 }
 
-export function TestDSL(runner?: QueryRunner, queryBuilder?: QueryBuilder) {
+export function TestDSL(
+  runner?: QueryRunner,
+  queryBuilder?: QueryBuilder,
+  converterFactory?: ConverterFactory
+) {
   return DSL.withDriver({
     createQueryRunner: () => runner || StubQueryRunner(),
     createQueryBuilder: () => queryBuilder || StubQueryBuilder(),
-    createSchema: NOT_IMPLEMENTED
+    createSchema: NOT_IMPLEMENTED,
+    createConverter: converterFactory || MysqlConverterFactory
   });
 }

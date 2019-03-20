@@ -19,14 +19,18 @@ import { UpdateImpl } from "./UpdateImpl";
 import { DeleteWhereStep } from "../../DeleteWhereStep";
 import { DeleteImpl } from "./DeleteImpl";
 import { QueryBuilder } from "../../QueryBuilder";
+import { Converter } from "../../Converter";
+import { ConverterFactory } from "../../ConverterFactory";
 
 export class DSLContextImpl implements DSLContext {
   private queryRunner: QueryRunner;
   private queryBuilder: QueryBuilder;
+  private createConverter: ConverterFactory;
 
   constructor(private config: DSLConfig) {
     this.queryRunner = config.queryRunner || config.driver.createQueryRunner();
     this.queryBuilder = config.driver.createQueryBuilder();
+    this.createConverter = props => config.driver.createConverter(props);
   }
 
   update<R extends Row>(table: Table<R>): UpdateSetStep<R> {
@@ -46,13 +50,16 @@ export class DSLContextImpl implements DSLContext {
   }
 
   select(...field: Field<any>[]): SelectFromStep<Row> {
-    return SelectImpl.initial<Row>(this.queryRunner, this.queryBuilder).select(
-      ...field
-    );
+    return SelectImpl.initial<Row>(
+      this.createConverter,
+      this.queryRunner,
+      this.queryBuilder
+    ).select(...field);
   }
 
   selectFrom<R extends Row>(table: Table<R>): SelectJoinStep<R> {
     return SelectImpl.initial<R>(
+      this.createConverter,
       this.queryRunner,
       this.queryBuilder
     ).fromRecordTable(table);

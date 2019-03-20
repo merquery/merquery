@@ -7,7 +7,9 @@ test("buildMysqlInsertQuery builds with value", () => {
     buildMysqlInsertQuery({
       table: EVENT,
       fields: [EVENT.ID.FIELD],
-      values: [[val(1)]]
+      values: [
+        [{ kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 1 }]
+      ]
     })
   ).toBe(
     "INSERT INTO `projectclub`.`event` (`projectclub`.`event`.`id`) VALUES (1)"
@@ -29,7 +31,15 @@ test("buildMysqlInsertQuery builds with empty fields and values", () => {
     buildMysqlInsertQuery({
       table: EVENT,
       fields: [],
-      values: [[val("123")]]
+      values: [
+        [
+          {
+            kind: "TableValueField",
+            tableField: EVENT.NAME.FIELD,
+            value: "123"
+          }
+        ]
+      ]
     })
   ).toThrowError("Mismatching field");
 });

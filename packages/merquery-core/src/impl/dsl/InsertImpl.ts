@@ -45,6 +45,7 @@ import {
   InsertValuesStep30
 } from "../../InsertValuesStepN";
 import { QueryBuilder } from "../../QueryBuilder";
+import { TableValueField } from "../../TableValueField";
 
 export class InsertImpl<
   R extends Row,
@@ -575,7 +576,10 @@ export class InsertImpl<
       ...this.state,
       duplicateKey: {
         ...this.state.duplicateKey,
-        updates: [...this.state.duplicateKey.updates, [column, val(value)]]
+        updates: [
+          ...this.state.duplicateKey.updates,
+          { kind: "TableValueField", tableField: column, value: value }
+        ]
       }
     });
   }
@@ -585,18 +589,17 @@ export class InsertImpl<
   }
 
   values(...values: any[]): InsertImpl<R, T1, T2, T3> {
-    return this.addValues(values);
-  }
-
-  private addFields(values: ValueField<any>[]) {
     return this.create({
       ...this.state,
-      values: [...this.state.values, values]
+      values: [
+        ...this.state.values,
+        values.map<TableValueField<R, any>>((value, index) => ({
+          kind: "TableValueField",
+          tableField: this.state.fields[index],
+          value: value
+        }))
+      ]
     });
-  }
-
-  private addValues(valuesArr: any[]) {
-    return this.addFields(valuesArr.map(val));
   }
 
   static initial<R extends Row>(

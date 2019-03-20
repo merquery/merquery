@@ -1,7 +1,8 @@
 import {
   StubQueryRunner,
   TestDSL,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { DSL } from "../../../impl/dsl/DSL";
 import { EVENT } from "../../../testutil/TestSchema";
@@ -14,7 +15,11 @@ import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("orderByAscending adds a ascending order to SelectState.orderBy", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.orderByAscending(EVENT.ID.FIELD).state).toEqual(
     createSelectState({
@@ -27,7 +32,11 @@ test("orderByAscending adds a ascending order to SelectState.orderBy", async () 
 });
 
 test("orderByDescending adds a descending order to SelectState.orderBy", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.orderByDescending(EVENT.ID.FIELD).state).toEqual(
     createSelectState({
@@ -40,7 +49,11 @@ test("orderByDescending adds a descending order to SelectState.orderBy", async (
 });
 
 test("multiple orderBys adds multiple order to SelectState.orderBy", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(
     selectImpl

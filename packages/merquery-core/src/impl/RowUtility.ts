@@ -7,68 +7,16 @@ import { isDataType } from "./util/datatype/isDataType";
 import { assertNever } from "./Util";
 import { FieldOwner } from "../FieldOwner";
 import { buildTableField } from "./driver/mysql/querybuilding/buildTableField";
+import { buildField } from "./driver/mysql/querybuilding/buildField";
+import { Converter } from "../Converter";
+import { MappingContext } from "../MappingContext";
+import { ConverterFactory } from "../ConverterFactory";
 
 function buildTableFieldName<R extends Row, T>(field: TableField<R, T>) {
   return buildTableField(field);
 }
 
 export class RowUtility {
-  static buildRow<R extends Row>(table: Table<R>, result: ResultRow) {
-    const obj: any = { __ROW_KIND__: table.rowKind };
-    table.fields.forEach(field => {
-      const value = this.getValueOrUndefined(result, field);
-      if (typeof value === "undefined") {
-        throw new Error(
-          `Value for field ${buildTableFieldName(
-            field
-          )} was undefined. Consider using buildPartialRow/createPartialMapper instead if you want to allow undefined values.`
-        );
-      }
-
-      obj[field.column] = value;
-    });
-
-    return obj as R;
-  }
-
-  static createMapper<R extends Row>(
-    table: Table<R>
-  ): (result: ResultRow) => R {
-    return result => this.buildRow(table, result);
-  }
-
-  static buildPartialRow<R extends Row>(
-    table: Table<R>,
-    result: ResultRow
-  ): Partial<R> {
-    const obj: any = { __ROW_KIND__: table.rowKind };
-    table.fields.forEach(field => {
-      const value = this.getValueOrUndefined(result, field);
-      obj[field.column] = value;
-    });
-
-    return obj as Partial<R>;
-  }
-
-  static createPartialMapper<R extends Row>(
-    table: Table<R>
-  ): (result: ResultRow) => Partial<R> {
-    return result => this.buildPartialRow(table, result);
-  }
-
-  static getValue<R extends Row, T>(
-    result: ResultRow,
-    field: TableField<R, T>
-  ) {
-    const value = this.getValueOrUndefined(result, field);
-    if (typeof value === "undefined")
-      throw new Error(
-        `Value for field ${buildTableFieldName(field)} is undefined.`
-      );
-
-    return value;
-  }
-
   private static getTableNameOrAlias(fieldOwner: FieldOwner) {
     switch (fieldOwner.kind) {
       case "TableFieldOwner":
@@ -81,6 +29,7 @@ export class RowUtility {
   }
 
   static getValueOrUndefined<R extends Row, T>(
+    converterFactory: ConverterFactory,
     result: ResultRow,
     field: TableField<R, T>
   ) {
@@ -99,16 +48,73 @@ export class RowUtility {
       return null;
     }
 
-    if (!isDataType<T>(field.type, res)) {
+    const convertResult = converterFactory(field.type).convertToJavaScript(
+      field.type,
+      res
+    );
+    if (convertResult.kind === "ConvertError") {
       throw new Error(
-        `Invalid value for table field "${buildTableFieldName(
-          field
-        )}". Value ${JSON.stringify(res)} is not assignable to type ${
-          field.type.type
-        }.`
+        `Error converting value for field ${buildField(field)}. Reason: ${
+          convertResult.reason
+        }. Value was ${JSON.stringify(res)}.`
       );
     }
 
-    return res;
+    return convertResult.value;
+  }
+
+  private static baseBuildRow<R extends Row>(
+    context: MappingContext,
+    table: Table<R>,
+    result: ResultRow,
+    preventUndefined: boolean
+  ) {
+    const obj: any = { __ROW_KIND__: table.rowKind };
+    table.fields.forEach(field => {
+      const value = this.getValueOrUndefined(
+        context.converterFactory,
+        result,
+        field
+      );
+      if (typeof value === "undefined" && preventUndefined) {
+        throw new Error(
+          `Value for field ${buildTableFieldName(
+            field
+          )} was undefined. Consider using buildPartialRow/createPartialMapper instead if you want to allow undefined values.`
+        );
+      }
+
+      obj[field.column] = value;
+    });
+
+    return obj;
+  }
+
+  static buildRow<R extends Row>(
+    context: MappingContext,
+    table: Table<R>,
+    result: ResultRow
+  ) {
+    return this.baseBuildRow(context, table, result, true) as R;
+  }
+
+  static buildPartialRow<R extends Row>(
+    context: MappingContext,
+    table: Table<R>,
+    result: ResultRow
+  ): Partial<R> {
+    return this.baseBuildRow(context, table, result, false) as Partial<R>;
+  }
+
+  static createPartialMapper<R extends Row>(
+    table: Table<R>
+  ): (context: MappingContext, result: ResultRow) => Partial<R> {
+    return (context, result) => this.buildPartialRow(context, table, result);
+  }
+
+  static createMapper<R extends Row>(
+    table: Table<R>
+  ): (context: MappingContext, result: ResultRow) => R {
+    return (converter, result) => this.buildRow(converter, table, result);
   }
 }

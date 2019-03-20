@@ -69,7 +69,10 @@ export class UpdateImpl<R extends Row>
   set<T>(column: TableField<R, T>, value: T) {
     return this.create({
       ...this.state,
-      updates: [...this.state.updates, [column, val(value)]]
+      updates: [
+        ...this.state.updates,
+        { kind: "TableValueField", tableField: column, value: value }
+      ]
     });
   }
 

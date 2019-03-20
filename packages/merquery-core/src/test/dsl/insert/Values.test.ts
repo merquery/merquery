@@ -36,7 +36,12 @@ test("insert with one values has 1 values entry in array in InsertState", async 
   expect(insertDsl.values(1, "Test").state).toEqual({
     table: EVENT,
     fields: [EVENT.ID.FIELD, EVENT.NAME.FIELD],
-    values: [[val(1), val("Test")]]
+    values: [
+      [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 1 },
+        { kind: "TableValueField", tableField: EVENT.NAME.FIELD, value: "Test" }
+      ]
+    ]
   });
 });
 
@@ -52,6 +57,19 @@ test("insert with 2 values has 2 values entry in array in InsertState", async ()
   expect(insertDsl.values(1, "Test").values(2, "Test2").state).toEqual({
     table: EVENT,
     fields: [EVENT.ID.FIELD, EVENT.NAME.FIELD],
-    values: [[val(1), val("Test")], [val(2), val("Test2")]]
-  });
+    values: [
+      [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 1 },
+        { kind: "TableValueField", tableField: EVENT.NAME.FIELD, value: "Test" }
+      ],
+      [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 2 },
+        {
+          kind: "TableValueField",
+          tableField: EVENT.NAME.FIELD,
+          value: "Test2"
+        }
+      ]
+    ]
+  } as InsertState<any>);
 });

@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     username VARCHAR(256) NOT NULL,
     last_login BIGINT,
     account_status ENUM("FREE", "PREMIUM", "PREMIUMPLUS") NOT NULL,
+    timestamp DATETIME,
     status TEXT,
 
     PRIMARY KEY (id)

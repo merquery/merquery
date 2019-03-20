@@ -2,7 +2,8 @@ import {
   TestDSL,
   StubQueryRunner,
   TestSetup,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { EVENT } from "../../../testutil/TestSchema";
 import {
@@ -13,7 +14,11 @@ import { OneOrMoreArrayUtil } from "../../../impl/OneOrMoreArray";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("groupBy with one parameter adds one field to SelectState.groupBy", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.groupBy(EVENT.ID.FIELD).state).toEqual(
     createSelectState({
@@ -23,7 +28,11 @@ test("groupBy with one parameter adds one field to SelectState.groupBy", async (
 });
 
 test("groupBy with multiple parameters adds multiple fields to SelectState.groupBy", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(
     selectImpl.groupBy(

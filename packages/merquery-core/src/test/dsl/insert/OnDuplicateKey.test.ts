@@ -20,7 +20,9 @@ test("onDuplicateKeyUpdate and set sets the correct InsertState.duplicateKey and
     {
       duplicateKey: {
         kind: "OnDuplicateKeyUpdate",
-        updates: [[EVENT.ID.FIELD, val(2)]]
+        updates: [
+          { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 2 }
+        ]
       },
       fields: [],
       table: EVENT,
@@ -44,7 +46,10 @@ test("onDuplicateKeyUpdate and multiple set sets the correct InsertState.duplica
   ).toEqual({
     duplicateKey: {
       kind: "OnDuplicateKeyUpdate",
-      updates: [[EVENT.ID.FIELD, val(3)], [EVENT.NAME.FIELD, val("Test")]]
+      updates: [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 3 },
+        { kind: "TableValueField", tableField: EVENT.NAME.FIELD, value: "Test" }
+      ]
     },
     fields: [],
     table: EVENT,

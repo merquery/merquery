@@ -6,6 +6,7 @@ import { DataTypeProps } from "../../../DataTypeProps";
 import { DataTypeStringProps } from "../../../DataTypeStringProps";
 import { DataTypeEnumProps } from "../../../DataTypeEnumProps";
 import { DataTypeIntegerProps } from "../../../DataTypeIntegerProps";
+import { DataTypeDateProps } from "../../../DataTypeDateProps";
 
 export class MysqlSchema implements Schema {
   constructor(private driver: MysqlDriver, private schemaName: string) {}
@@ -41,6 +42,13 @@ export class MysqlSchema implements Schema {
     };
   }
 
+  getDateType(nullable: boolean): DataTypeDateProps {
+    return {
+      nullable: nullable,
+      type: "DATE"
+    };
+  }
+
   getTypeFromColumn(tableColumn: TableColumn): DataTypeProps {
     const typeIdentifier = tableColumn.Type.split("(")[0].toUpperCase();
     const betweenParenths = tableColumn.Type.substring(
@@ -60,6 +68,10 @@ export class MysqlSchema implements Schema {
         return this.getIntType(0, true, nullable);
       case "ENUM":
         return this.getEnumType(betweenParenths, nullable);
+      case "DATE":
+      case "DATETIME":
+      case "TIMESTAMP":
+        return this.getDateType(nullable);
     }
 
     throw new Error(`Unsupported data type ${typeIdentifier}`);

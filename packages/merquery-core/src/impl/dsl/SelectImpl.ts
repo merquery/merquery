@@ -22,6 +22,7 @@ import { SelectJoinStep } from "../../SelectJoinStep";
 import { SelectJoinOnStep } from "../../SelectJoinOnStep";
 import { JoinType } from "../../JoinType";
 import { RowUtility } from "../RowUtility";
+import { Converter } from "../../Converter";
 import { ResultQuery } from "../../ResultQuery";
 import { SelectFromStep } from "../../SelectFromStep";
 import { Row } from "../../Row";
@@ -36,6 +37,8 @@ import { LockMode } from "../../LockMode";
 import { OneOrMoreArrayUtil } from "../OneOrMoreArray";
 import { createSelectState } from "../createSelectState";
 import { QueryBuilder } from "../../QueryBuilder";
+import { MappingContext } from "../../MappingContext";
+import { ConverterFactory } from "../../ConverterFactory";
 
 export class SelectImpl<R extends Row>
   implements
@@ -53,6 +56,7 @@ export class SelectImpl<R extends Row>
     SelectFinalStep<R> {
   constructor(
     readonly state: SelectState<R>,
+    private readonly converterFactory: ConverterFactory,
     private readonly queryRunner: QueryRunner,
     private readonly queryBuilder: QueryBuilder
   ) {}
@@ -98,7 +102,9 @@ export class SelectImpl<R extends Row>
     return results[0];
   }
 
-  async fetchAllMapped<M>(mapper: (result: ResultRow) => M): Promise<M[]> {
+  async fetchAllMapped<M>(
+    mapper: (context: MappingContext, result: ResultRow) => M
+  ): Promise<M[]> {
     const results = await this.queryRunner.executeSelectState(this.state);
 
     if (!Array.isArray(results))
@@ -106,7 +112,9 @@ export class SelectImpl<R extends Row>
         "executeSelectState didn't return a array. Did you forget to mock the return value?"
       );
 
-    return results.map(mapper);
+    const context: MappingContext = { converterFactory: this.converterFactory };
+
+    return results.map(result => mapper(context, result));
   }
 
   async fetchAll(): Promise<R[]> {
@@ -198,14 +206,25 @@ export class SelectImpl<R extends Row>
   }
 
   static initial<R extends Row>(
+    converterFactory: ConverterFactory,
     executor: QueryRunner,
     queryBuilder: QueryBuilder
   ) {
-    return new SelectImpl<R>(createSelectState(), executor, queryBuilder);
+    return new SelectImpl<R>(
+      createSelectState(),
+      converterFactory,
+      executor,
+      queryBuilder
+    );
   }
 
   private create(state: SelectState<R>) {
-    return new SelectImpl<R>(state, this.queryRunner, this.queryBuilder);
+    return new SelectImpl<R>(
+      state,
+      this.converterFactory,
+      this.queryRunner,
+      this.queryBuilder
+    );
   }
 
   from(

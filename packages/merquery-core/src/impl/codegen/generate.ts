@@ -27,6 +27,8 @@ function primaryTsTypeFromColumnType(columnType: DataTypeProps): string {
       return "string";
     case "ENUM":
       return columnType.options.map(option => `"${option}"`).join(" | ");
+    case "DATE":
+      return "Date";
   }
 
   return "any";

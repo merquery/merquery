@@ -3,7 +3,8 @@ import {
   StubQueryRunner,
   TestDSL,
   expectSelectState,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { SelectState } from "../../../SelectState";
 import { EVENT, USER } from "../../../testutil/TestSchema";
@@ -19,7 +20,11 @@ import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("innerJoin adds inner join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.innerJoin(USER).on(condition).state).toEqual(
     createSelectState({
@@ -36,7 +41,11 @@ test("innerJoin adds inner join to SelectState.joins", async () => {
 
 test("leftJoin adds left join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.leftJoin(USER).on(condition).state).toEqual(
     createSelectState({
@@ -53,7 +62,11 @@ test("leftJoin adds left join to SelectState.joins", async () => {
 
 test("rightJoin adds right join to SelectState.joins", async () => {
   const condition = eq(val(1), val(2));
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.rightJoin(USER).on(condition).state).toEqual(
     createSelectState({
@@ -70,7 +83,11 @@ test("rightJoin adds right join to SelectState.joins", async () => {
 
 test("on throws error if not in correct state", async () => {
   const condition = eq(val(1), val(2));
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
 
   expect(() => selectImpl.on(condition)).toThrowError(
     "Temporary joined table is not set."

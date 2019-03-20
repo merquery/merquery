@@ -3,10 +3,10 @@ import { Row } from "./Row";
 import { TableField } from "./TableField";
 import { ConditionCollection } from "./ConditionCollection";
 import { OneOrMoreArray } from "./impl/OneOrMoreArray";
-import { Assignment } from "./impl/driver/mysql/querybuilding/buildSetList";
+import { TableValueField } from "./TableValueField";
 
 export interface UpdateState<R extends Row> {
   table: Table<R>;
-  updates: Assignment<R, any>[];
+  updates: TableValueField<R, any>[];
   condition?: ConditionCollection;
 }

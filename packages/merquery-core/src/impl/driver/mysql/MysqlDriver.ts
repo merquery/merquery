@@ -12,6 +12,14 @@ import { Schema } from "../../../Schema";
 import { MysqlSchema } from "./MysqlSchema";
 import { QueryBuilder } from "../../../QueryBuilder";
 import { MysqlQueryBuilder } from "./MysqlQueryBuilder";
+import { Converter } from "../../../Converter";
+import { DataTypeProps } from "../../..";
+import { BaseConverter } from "./conversion/BaseConverter";
+import { DateConverter } from "./conversion/DateConverter";
+import { EnumConverter } from "./conversion/EnumConverter";
+import { IntegerConverter } from "./conversion/IntegerConverter";
+import { StringConverter } from "./conversion/StringConverter";
+import { MysqlConverterFactory } from "./conversion/MysqlConverterFactory";
 
 export interface MysqlDriverOptions {
   host: string;
@@ -24,6 +32,10 @@ export class MysqlDriver implements Driver {
 
   constructor(private readonly options: PoolConfig) {
     this.pool = createPool(options);
+  }
+
+  createConverter(props: DataTypeProps): BaseConverter<DataTypeProps, any> {
+    return MysqlConverterFactory(props);
   }
 
   createQueryBuilder(): MysqlQueryBuilder {

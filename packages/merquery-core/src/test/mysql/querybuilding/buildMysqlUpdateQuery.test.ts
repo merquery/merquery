@@ -9,7 +9,9 @@ test("buildMysqlUpdateQuery builds without condition", () => {
   expect(
     buildMysqlUpdateQuery({
       table: EVENT,
-      updates: [[EVENT.ID.FIELD, val(1)]]
+      updates: [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 1 }
+      ]
     })
   ).toBe("UPDATE `projectclub`.`event` SET `projectclub`.`event`.`id` = 1");
 });
@@ -18,7 +20,9 @@ test("buildMysqlUpdateQuery builds with condition", () => {
   expect(
     buildMysqlUpdateQuery({
       table: EVENT,
-      updates: [[EVENT.ID.FIELD, val(1)]],
+      updates: [
+        { kind: "TableValueField", tableField: EVENT.ID.FIELD, value: 1 }
+      ],
       condition: {
         kind: "ConditionCollection",
         conditions: OneOrMoreArrayUtil.fromArray([

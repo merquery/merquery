@@ -2,7 +2,8 @@ import {
   StubQueryRunner,
   expectSelectState,
   TestDSL,
-  StubQueryBuilder
+  StubQueryBuilder,
+  NOT_IMPLEMENTED
 } from "../../../testutil/TestUtil";
 import { val } from "../../../impl/util/val";
 import { EVENT } from "../../../testutil/TestSchema";
@@ -14,7 +15,11 @@ import { eq } from "../../../impl/util/eq";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 
 test("having sets SelectState.having", async () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  );
   const condition = eq(val(1), val(2));
 
   expect(selectImpl.having(condition).state).toEqual(

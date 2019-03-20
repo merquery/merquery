@@ -37,7 +37,7 @@ export function generateInsertValuesStep(c: number) {
     interfaces.push(interfaceDef);
     insertIntoMethods.push(
       `insertInto<R extends Row, ${genericList}>(table: Table<R>, ${typeParams
-        .map(tcount => `value${tcount}: T${tcount}`)
+        .map(tcount => `field${tcount}: TableField<R, T${tcount}>`)
         .join(", ")}): ${returnType};`
     );
 

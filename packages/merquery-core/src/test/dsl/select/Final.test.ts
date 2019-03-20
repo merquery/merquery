@@ -1,14 +1,23 @@
-import { StubQueryBuilder, StubQueryRunner } from "../../../testutil/TestUtil";
+import {
+  StubQueryBuilder,
+  StubQueryRunner,
+  NOT_IMPLEMENTED
+} from "../../../testutil/TestUtil";
 import { SelectImpl } from "../../../impl/dsl/SelectImpl";
 import { EVENT, USER } from "../../../testutil/TestSchema";
 import { createSelectStateWithRecordTable } from "../../../impl/createSelectState";
+import { MysqlConverterFactory } from "../../../impl/driver/mysql/conversion/MysqlConverterFactory";
 
 test("asSqlString returns query builder result", () => {
   const builder = StubQueryBuilder({
     representSelectStateAsSqlString: jest.fn().mockReturnValue("Select SQL")
   });
 
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), builder);
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    builder
+  );
 
   expect(selectImpl.asSqlString()).toBe("Select SQL");
   expect(builder.representSelectStateAsSqlString).toBeCalledWith(
@@ -22,6 +31,7 @@ test("fetchAll calls query runner executeSelectState - empty result", async () =
   });
 
   const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(EVENT);
@@ -42,6 +52,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -65,6 +76,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -88,7 +100,11 @@ test("fetchAll throws error if no recordTable is set", async () => {
       .mockResolvedValue([{ user: { id: 1, name: "Test" } }])
   });
 
-  const selectImpl = SelectImpl.initial(runner, StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
+    runner,
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.fetchAll()).rejects.toBeDefined();
 });
@@ -100,7 +116,11 @@ test("fetchAllMapped throws error if executeSelectState return value is not arra
     executeSelectState: jest.fn().mockResolvedValue(null)
   });
 
-  const selectImpl = SelectImpl.initial(runner, StubQueryBuilder());
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    runner,
+    StubQueryBuilder()
+  );
 
   expect(selectImpl.fetchAllMapped(() => ({}))).rejects.toBeDefined();
 });
@@ -113,6 +133,7 @@ test("fetchAll calls query runner executeSelectState - one result", async () => 
   });
 
   const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -136,6 +157,7 @@ test("fetchAll calls query runner executeSelectState - multiple result", async (
   });
 
   const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -157,6 +179,7 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns ro
   });
 
   const selectImpl = SelectImpl.initial(
+    MysqlConverterFactory,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -177,6 +200,7 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns un
   });
 
   const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
     runner,
     StubQueryBuilder()
   ).fromRecordTable(USER);
@@ -188,7 +212,11 @@ test("fetchOne calls query runner executeSelectState with limit 1 and returns un
 });
 
 test("asSubQuery returns SubQuery", () => {
-  const selectImpl = SelectImpl.initial(StubQueryRunner(), StubQueryBuilder())
+  const selectImpl = SelectImpl.initial(
+    NOT_IMPLEMENTED,
+    StubQueryRunner(),
+    StubQueryBuilder()
+  )
     .limit(1)
     .offset(33);
 
